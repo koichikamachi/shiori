@@ -1,0 +1,663 @@
+{
+  "schema_version": "2.0",
+  "file": "nodes_survivor.json",
+  "actor_scope": "RELATIVES / LEGAL_HEIR",
+  "note": "遺された人のノード。本人が何も残していない状態を標準の経路とし、入口が見つかった場合を短縮経路とする。exists_if で消えたノードは、前提としては満たされたものとみなす（docs/S03 参照）。",
+  "nodes": [
+    {
+      "id": "SURV_DEATH_NOTICE",
+      "stream": "POST_MORTEM_AFFAIRS",
+      "actor": "RELATIVES",
+      "title": "死亡届と火葬許可の申請",
+      "today_action": "医師から死亡診断書を受け取り、期限内に市区町村の窓口へ提出する。葬儀社が代行できる。",
+      "exists_if": null,
+      "prerequisites": [],
+      "base_urgency": "MUST_IMMEDIATE",
+      "priority": 1,
+      "wait": { "nature": "NONE" },
+      "durability": "PERMANENT",
+      "decided_by_you": false,
+      "deadline": {
+        "days": 7,
+        "months": null,
+        "trigger": "死亡の事実を知った日",
+        "note": "起算日の数え方は要確認"
+      },
+      "legal_metadata": {
+        "verification_status": "SELF_REVIEWED",
+        "verified_at": null,
+        "verified_by": null,
+        "source_draft": "戸籍法第86条",
+        "needs_check": ["提出期限の起算と、国外で死亡した場合の期限"]
+      }
+    },
+    {
+      "id": "SURV_KNOW_SAFE_ACTIONS",
+      "stream": "POST_MORTEM_AFFAIRS",
+      "actor": "RELATIVES",
+      "title": "やってよいことと、慎重にすべきことの線",
+      "today_action": "死亡届を出すこと、火葬をすること、年金を止めることは、相続とは別の話である。これらをしても、放棄の道は閉じない。",
+      "exists_if": null,
+      "prerequisites": [],
+      "base_urgency": "MUST_IMMEDIATE",
+      "priority": 2,
+      "wait": { "nature": "NONE" },
+      "durability": "PERMANENT",
+      "decided_by_you": true,
+      "caution": {
+        "note": "『手続をしたら相続したことになるのではないか』と怯えて、届出すら手が止まる人がいる。線が引かれていれば動ける。"
+      },
+      "legal_metadata": {
+        "verification_status": "SELF_REVIEWED",
+        "verified_at": null,
+        "verified_by": null,
+        "source_draft": "民法第921条第1号（法定単純承認）の該当行為の範囲",
+        "needs_check": ["★重要★ 単純承認にあたる行為・あたらない行為の線引き。ここを誤ると遺族に実害が出る。専門家の確認を必須とする。"]
+      }
+    },
+    {
+      "id": "SURV_WARN_DEPOSIT",
+      "stream": "ESTATE_SUCCESSION",
+      "actor": "RELATIVES",
+      "title": "故人の預金に触る前に知っておくこと",
+      "today_action": "借入や保証の有無が分かるまで、故人の口座から引き出して使わない方針を決める。葬儀費用の出し方も、この方針のなかで決める。",
+      "exists_if": null,
+      "prerequisites": [],
+      "base_urgency": "MUST_IMMEDIATE",
+      "priority": 3,
+      "wait": { "nature": "NONE" },
+      "durability": "PERMANENT",
+      "decided_by_you": true,
+      "irreversibility": {
+        "is_irreversible": true,
+        "lost_option": "相続を放棄する、または限定して承認する権利",
+        "warning_fact": "故人の預金を引き出して使うと、法律上すべてを相続したとみなされることがあります。そうなると、あとから多額の借金や保証が判明しても、放棄できません。",
+        "warning_exception": "ただし、葬儀費用などのために一定の範囲で払い戻しを受けられる仕組みがあります。使う前に、その範囲を確かめてください。"
+      },
+      "legal_metadata": {
+        "verification_status": "SELF_REVIEWED",
+        "verified_at": null,
+        "verified_by": null,
+        "source_draft": "民法第921条第1号（法定単純承認）、民法第909条の2（遺産分割前の預貯金の払戻し）",
+        "needs_check": ["払戻しの上限（相続分に対する割合と、金融機関ごとの上限額）", "葬儀費用への充当が単純承認にあたるかの実務上の扱い"]
+      }
+    },
+    {
+      "id": "SURV_FUNERAL_ARRANGEMENT",
+      "stream": "POST_MORTEM_AFFAIRS",
+      "actor": "RELATIVES",
+      "title": "葬儀の手配と、費用の出し方の方針",
+      "today_action": "葬儀社と打ち合わせる。費用は喪主の立替えか、払戻し制度の範囲か、どちらの方針でいくかを決める。",
+      "exists_if": null,
+      "prerequisites": ["SURV_DEATH_NOTICE"],
+      "base_urgency": "MUST_IMMEDIATE",
+      "priority": 4,
+      "wait": { "nature": "NONE" },
+      "durability": "PERMANENT",
+      "decided_by_you": true,
+      "caution": {
+        "note": "葬儀社との打ち合わせで決める項目は十を超える。しかしその大半は葬儀社が主導し、遺族は返事をするだけである。遺族が自分で方針を決めなければならないのは、費用の出し方だけである。"
+      },
+      "legal_metadata": {
+        "verification_status": "SELF_REVIEWED",
+        "verified_at": null,
+        "verified_by": null,
+        "source_draft": null,
+        "needs_check": []
+      }
+    },
+    {
+      "id": "SURV_FIND_ENTRY",
+      "stream": "POST_MORTEM_AFFAIRS",
+      "actor": "RELATIVES",
+      "title": "本人が残した入口（紙・封筒・記録媒体）を探す",
+      "today_action": "書斎や引き出しから、金融機関名・保険・借入・海外資産などが書かれた紙か、小さな記録媒体を探す。",
+      "exists_if": null,
+      "prerequisites": [],
+      "base_urgency": "MUST_IMMEDIATE",
+      "priority": 5,
+      "wait": { "nature": "NONE" },
+      "durability": "PERMANENT",
+      "decided_by_you": true,
+      "caution": {
+        "note": "見つからなくても構わない。見つからない場合が標準の経路である。見つかれば道が短くなる、というだけのことである。"
+      },
+      "legal_metadata": {
+        "verification_status": "SELF_REVIEWED",
+        "verified_at": null,
+        "verified_by": null,
+        "source_draft": null,
+        "needs_check": []
+      }
+    },
+    {
+      "id": "SURV_FIND_KEY_HOLDER",
+      "stream": "POST_MORTEM_AFFAIRS",
+      "actor": "RELATIVES",
+      "title": "入口を開ける手立てを預かっている人を探す",
+      "today_action": "入口が見つかったが開けられない場合、本人の友人や依頼していた専門家に、封書を預かっていないかを尋ねる。",
+      "exists_if": "condition.entry_found == true && condition.entry_locked == true",
+      "prerequisites": ["SURV_FIND_ENTRY"],
+      "base_urgency": "CAN_WAIT",
+      "priority": 6,
+      "wait": { "nature": "EXTERNAL_WAIT", "reason": "預かっている人からの連絡や、心当たりへの確認の回答を待つ状態です。" },
+      "durability": "PERMANENT",
+      "decided_by_you": true,
+      "legal_metadata": {
+        "verification_status": "SELF_REVIEWED",
+        "verified_at": null,
+        "verified_by": null,
+        "source_draft": null,
+        "needs_check": ["封書の中身が遺言書であった場合の検認の必要性"]
+      }
+    },
+    {
+      "id": "SURV_PENSION_AND_BENEFITS",
+      "stream": "POST_MORTEM_AFFAIRS",
+      "actor": "RELATIVES",
+      "title": "年金の停止と、請求しないともらえないお金",
+      "today_action": "年金の停止を届け出る。あわせて、未支給年金・遺族年金・埋葬料などの請求ができるかを確かめる。",
+      "exists_if": null,
+      "prerequisites": ["SURV_DEATH_NOTICE"],
+      "base_urgency": "CAN_WAIT",
+      "priority": 20,
+      "wait": { "nature": "NONE" },
+      "durability": "PERMANENT",
+      "decided_by_you": true,
+      "caution": {
+        "note": "これらは請求しなければもらえない。それぞれに時効がある。年金を止めるのは相続とは別の話であり、放棄の道を閉じない。"
+      },
+      "legal_metadata": {
+        "verification_status": "SELF_REVIEWED",
+        "verified_at": null,
+        "verified_by": null,
+        "source_draft": "国民年金法・厚生年金保険法、健康保険法（埋葬料）",
+        "needs_check": ["未支給年金・遺族年金・埋葬料・高額療養費のそれぞれの時効", "未支給年金を受け取れる人の範囲と順位"]
+      }
+    },
+    {
+      "id": "SURV_CLAIM_INSURANCE",
+      "stream": "ESTATE_SUCCESSION",
+      "actor": "RELATIVES",
+      "title": "生命保険金の請求",
+      "today_action": "保険会社へ連絡し、死亡保険金を請求する。相続を放棄する場合でも、受取人に指定された人は受け取れるとされている。",
+      "exists_if": "condition.has_insurance == true",
+      "prerequisites": ["SURV_DEATH_NOTICE"],
+      "base_urgency": "CAN_WAIT",
+      "priority": 21,
+      "wait": { "nature": "EXTERNAL_WAIT", "reason": "保険会社の審査と支払いを待つ状態です。通常は数週間です。" },
+      "durability": "PERMANENT",
+      "decided_by_you": true,
+      "caution": {
+        "note": "受け取れることと、税の扱いは別である。税の扱いは税理士に確かめる箇所である。"
+      },
+      "legal_metadata": {
+        "verification_status": "SELF_REVIEWED",
+        "verified_at": null,
+        "verified_by": null,
+        "source_draft": "死亡保険金は受取人固有の財産とする判例（最判昭和40年2月2日ほか）、保険法第95条（消滅時効）",
+        "needs_check": ["受取人が『相続人』と指定されている場合の扱い", "放棄した者への非課税枠の適用可否"]
+      }
+    },
+    {
+      "id": "SURV_FIND_WILL",
+      "stream": "ESTATE_SUCCESSION",
+      "actor": "LEGAL_HEIR",
+      "title": "遺言があるかどうかを調べる",
+      "today_action": "自宅を探すだけでなく、法務局の保管制度と公証役場の検索を使って、遺言が預けられていないかを調べる。",
+      "exists_if": null,
+      "prerequisites": ["SURV_DEATH_NOTICE"],
+      "base_urgency": "CAN_WAIT",
+      "priority": 22,
+      "wait": { "nature": "EXTERNAL_WAIT", "reason": "法務局・公証役場への照会の回答を待つ状態です。" },
+      "durability": "PERMANENT",
+      "decided_by_you": true,
+      "caution": {
+        "note": "先に調べておけば、話し合いが終わったあとに遺言が出てくるという事態を防げる。自宅で見つけた自筆の遺言は、開ける前に手続が必要な場合がある。"
+      },
+      "legal_metadata": {
+        "verification_status": "SELF_REVIEWED",
+        "verified_at": null,
+        "verified_by": null,
+        "source_draft": "法務局における遺言書の保管等に関する法律、民法第1004条（遺言書の検認）",
+        "needs_check": ["自筆証書遺言の検認が要る場合・要らない場合", "公証役場の遺言検索を利用できる人の範囲"]
+      }
+    },
+    {
+      "id": "SURV_COLLECT_KOSEKI",
+      "stream": "ESTATE_SUCCESSION",
+      "actor": "LEGAL_HEIR",
+      "title": "生まれてから亡くなるまでの戸籍を集める",
+      "today_action": "市区町村の窓口で、故人の戸籍を切れ目なく請求する。まず広域交付が使えるかを窓口で確かめる。",
+      "exists_if": null,
+      "prerequisites": ["SURV_DEATH_NOTICE"],
+      "base_urgency": "CAN_WAIT",
+      "priority": 23,
+      "wait": {
+        "nature": "EXTERNAL_WAIT",
+        "reason": "広域交付が使えない戸籍（古い紙のものなど）は、本籍地の自治体へ郵送で請求することになり、その回答を待つ状態です。あなたの落ち度ではありません。"
+      },
+      "durability": "PERMANENT",
+      "decided_by_you": true,
+      "caution": {
+        "note": "これが終わるまで、財産の分け方の話し合いは進められない。ただし、待っているあいだに進められることは他にある。"
+      },
+      "specialist_bridge": {
+        "type": "JUDICIAL_SCRIVENER",
+        "concrete_query": "故人の本籍の移動が多く戸籍の追跡が難しい。戸籍の収集と相続関係説明図の作成をお願いしたい。",
+        "estimated_cost_range": "3万〜5万円程度"
+      },
+      "legal_metadata": {
+        "verification_status": "SELF_REVIEWED",
+        "verified_at": null,
+        "verified_by": null,
+        "source_draft": "戸籍法第120条の2（戸籍の広域交付）",
+        "needs_check": ["★重要★ 広域交付を請求できる人の範囲（直系に限られるか）、対象外となる戸籍、代理人・郵送の可否。ここを誤ると『窓口で断られる』案内になる。"]
+      }
+    },
+    {
+      "id": "SURV_DETERMINE_HEIRS",
+      "stream": "ESTATE_SUCCESSION",
+      "actor": "LEGAL_HEIR",
+      "title": "相続人を確定する",
+      "today_action": "集めた戸籍をもとに相続関係の図を作り、相続人を全員確定させる。",
+      "exists_if": null,
+      "prerequisites": ["SURV_COLLECT_KOSEKI"],
+      "base_urgency": "CAN_WAIT",
+      "priority": 24,
+      "wait": { "nature": "NONE" },
+      "durability": "PERMANENT",
+      "decided_by_you": true,
+      "legal_metadata": {
+        "verification_status": "SELF_REVIEWED",
+        "verified_at": null,
+        "verified_by": null,
+        "source_draft": "民法第887条〜第890条（相続人）",
+        "needs_check": []
+      }
+    },
+    {
+      "id": "SURV_DISCOVER_ACCOUNTS",
+      "stream": "ESTATE_SUCCESSION",
+      "actor": "LEGAL_HEIR",
+      "title": "取引のあった金融機関を探す（標準の経路）",
+      "today_action": "自宅の通帳・郵便物・キャッシュカードを確かめ、取引のあった金融機関を特定して残高証明を請求する。",
+      "exists_if": "condition.has_self_memo != true",
+      "prerequisites": ["SURV_FIND_ENTRY"],
+      "base_urgency": "CAN_WAIT",
+      "priority": 25,
+      "wait": {
+        "nature": "EXTERNAL_WAIT",
+        "reason": "各金融機関の照会回答を待つ状態です。数週間から数か月かかりますが、正常な待ち時間です。"
+      },
+      "durability": "PERMANENT",
+      "decided_by_you": true,
+      "legal_metadata": {
+        "verification_status": "SELF_REVIEWED",
+        "verified_at": null,
+        "verified_by": null,
+        "source_draft": null,
+        "needs_check": ["残高証明の請求に必要な書類（戸籍の範囲）"]
+      }
+    },
+    {
+      "id": "SURV_DISCOVER_DEBT",
+      "stream": "ESTATE_SUCCESSION",
+      "actor": "LEGAL_HEIR",
+      "title": "借入と保証を調べる",
+      "today_action": "信用情報機関へ開示を請求し、郵便物も確かめる。あわせて、故人が事業をしていた場合は保証の有無を金融機関に確かめる。",
+      "exists_if": "condition.has_self_memo != true",
+      "prerequisites": ["SURV_FIND_ENTRY"],
+      "base_urgency": "CAN_WAIT",
+      "priority": 15,
+      "wait": {
+        "nature": "EXTERNAL_WAIT",
+        "reason": "信用情報機関からの開示を待つ状態です。数週間かかります。"
+      },
+      "durability": "PERMANENT",
+      "decided_by_you": true,
+      "caution": {
+        "note": "信用情報の開示では、保証債務が出てこないことがある。主債務者が払っているあいだは、何も届かない。ここは調べても分からないことがある、と知っておくこと。"
+      },
+      "legal_metadata": {
+        "verification_status": "SELF_REVIEWED",
+        "verified_at": null,
+        "verified_by": null,
+        "source_draft": "信用情報機関（JICC・CIC・KSC）の開示制度",
+        "needs_check": ["相続人が開示を請求できる要件と必要書類", "保証債務が開示対象に含まれるかどうか"]
+      }
+    },
+    {
+      "id": "SURV_LIST_ASSETS",
+      "stream": "ESTATE_SUCCESSION",
+      "actor": "LEGAL_HEIR",
+      "title": "財産と負債の一覧を作る",
+      "today_action": "残高証明、固定資産税の課税明細、名寄帳、借入の開示結果をもとに、財産と負債の一覧にまとめる。",
+      "exists_if": null,
+      "prerequisites": ["SURV_DISCOVER_ACCOUNTS", "SURV_DISCOVER_DEBT"],
+      "base_urgency": "CAN_WAIT",
+      "priority": 26,
+      "wait": { "nature": "NONE" },
+      "durability": "PERMANENT",
+      "decided_by_you": true,
+      "legal_metadata": {
+        "verification_status": "SELF_REVIEWED",
+        "verified_at": null,
+        "verified_by": null,
+        "source_draft": null,
+        "needs_check": ["名寄帳で把握できない不動産（未登記建物・他市の物件）の探し方"]
+      }
+    },
+    {
+      "id": "SURV_FOREIGN_PROBATE_START",
+      "stream": "CROSS_BORDER",
+      "actor": "LEGAL_HEIR",
+      "title": "海外の資産について、現地の手続を始める",
+      "today_action": "国別のメモをもとに、現地で裁判所の手続が必要かを確かめ、必要なら現地の専門家に依頼する。",
+      "exists_if": "condition.has_foreign_assets == true",
+      "prerequisites": ["SURV_FIND_ENTRY"],
+      "base_urgency": "CAN_WAIT",
+      "priority": 27,
+      "wait": {
+        "nature": "EXTERNAL_WAIT",
+        "reason": "現地の裁判所の手続を待つ状態です。国によっては年単位でかかります。日本側の手続はこれを待たずに進められます。"
+      },
+      "durability": "PERMANENT",
+      "decided_by_you": true,
+      "caution": {
+        "note": "日本の戸籍や遺産分割協議書は、そのままでは通らない。翻訳と公証が必要になる。"
+      },
+      "specialist_bridge": {
+        "type": "INTERNATIONAL_LAWYER",
+        "concrete_query": "この国にこの資産がある。日本の戸籍・遺言の翻訳と公証、および現地の手続の代行をお願いしたい。",
+        "estimated_cost_range": "30万〜100万円以上（国と規模による）"
+      },
+      "legal_metadata": {
+        "verification_status": "SELF_REVIEWED",
+        "verified_at": null,
+        "verified_by": null,
+        "source_draft": "法の適用に関する通則法第36条、各国の検認制度",
+        "needs_check": ["国別の手続の要否と所要期間", "アポスティーユ・領事認証の要否"]
+      }
+    },
+    {
+      "id": "SURV_DECIDE_ACCEPT_OR_RENOUNCE",
+      "stream": "ESTATE_SUCCESSION",
+      "actor": "LEGAL_HEIR",
+      "title": "相続するか、放棄するか、限定して承認するかを決める",
+      "today_action": "財産と負債を見比べ、負債が上回るなら家庭裁判所へ放棄または限定承認を申し述べる。調べが終わらないなら、先に期間の伸長を申し立てる。",
+      "exists_if": null,
+      "prerequisites": ["SURV_DETERMINE_HEIRS", "SURV_LIST_ASSETS"],
+      "base_urgency": "CAN_WAIT",
+      "priority": 7,
+      "wait": { "nature": "NONE" },
+      "durability": "PERMANENT",
+      "decided_by_you": true,
+      "deadline": {
+        "days": null,
+        "months": 3,
+        "trigger": "自己のために相続の開始があったことを知った時",
+        "note": "月で数える。日数に換算しないこと。"
+      },
+      "irreversibility": {
+        "is_irreversible": true,
+        "lost_option": "相続を放棄する、または限定して承認する権利",
+        "warning_fact": "この期間を過ぎると、原則として、借入や保証をそのまま引き継ぐことになります。",
+        "warning_exception": "ただし、借金の存在をまったく知らなかった場合には、期間の数え始めが後ろにずれると判断された例があります。期限を過ぎたと思っても、あきらめる前に弁護士に相談してください。"
+      },
+      "specialist_bridge": {
+        "type": "LAWYER",
+        "concrete_query": "故人に借入または保証がある可能性がある。放棄または限定承認の手続、あるいは調査が終わらない場合の期間の伸長の申立てをお願いしたい。",
+        "estimated_cost_range": "3万〜5万円程度"
+      },
+      "legal_metadata": {
+        "verification_status": "SELF_REVIEWED",
+        "verified_at": null,
+        "verified_by": null,
+        "source_draft": "民法第915条第1項（熟慮期間およびその伸長）、民法第922条以下（限定承認）",
+        "needs_check": ["★重要★ 熟慮期間の起算点がずれる場合の判例の射程", "限定承認の要件（相続人全員の同意）と、みなし譲渡課税の扱い"]
+      }
+    },
+    {
+      "id": "SURV_EXTEND_DELIBERATION",
+      "stream": "ESTATE_SUCCESSION",
+      "actor": "LEGAL_HEIR",
+      "title": "調べが終わらないときは、期間を延ばす",
+      "today_action": "財産と負債の調べが期限に間に合わないなら、期限が来る前に家庭裁判所へ期間の伸長を申し立てる。",
+      "exists_if": null,
+      "prerequisites": ["SURV_DISCOVER_DEBT"],
+      "base_urgency": "CAN_WAIT",
+      "priority": 8,
+      "wait": { "nature": "NONE" },
+      "durability": "PERMANENT",
+      "decided_by_you": true,
+      "caution": {
+        "note": "この手立ては、あまり知られていない。間に合わないと思ったときの逃げ道がある。ただし、期限が来る前に申し立てること。"
+      },
+      "legal_metadata": {
+        "verification_status": "SELF_REVIEWED",
+        "verified_at": null,
+        "verified_by": null,
+        "source_draft": "民法第915条第1項ただし書（期間の伸長）",
+        "needs_check": ["申立ての方法、認められる期間の目安、費用"]
+      }
+    },
+    {
+      "id": "SURV_ESTATE_DIVISION",
+      "stream": "ESTATE_SUCCESSION",
+      "actor": "LEGAL_HEIR",
+      "title": "財産の分け方を話し合い、合意書を作る",
+      "today_action": "確定した相続人全員で、財産の一覧をもとに分け方を合意し、署名押印する。",
+      "exists_if": "condition.has_will != true",
+      "prerequisites": ["SURV_DETERMINE_HEIRS", "SURV_LIST_ASSETS", "SURV_DECIDE_ACCEPT_OR_RENOUNCE"],
+      "base_urgency": "CAN_WAIT",
+      "priority": 28,
+      "wait": { "nature": "NONE" },
+      "durability": "VOLATILE",
+      "decided_by_you": true,
+      "irreversibility": {
+        "is_irreversible": true,
+        "lost_option": "分け方をやり直す機会",
+        "warning_fact": "全員が署名押印して成立した合意は、原則としてあとから撤回できません。",
+        "warning_exception": "全員が改めて合意すればやり直せる場合があります。ただし、税や登記の扱いが変わることがあります。"
+      },
+      "specialist_bridge": {
+        "type": "JUDICIAL_SCRIVENER",
+        "concrete_query": "作成した遺産分割協議書の案で、不動産の名義変更ができるかどうかを確認してほしい。あわせて登記の申請もお願いしたい。",
+        "estimated_cost_range": "登記を含め 5万〜10万円程度"
+      },
+      "legal_metadata": {
+        "verification_status": "SELF_REVIEWED",
+        "verified_at": null,
+        "verified_by": null,
+        "source_draft": "民法第907条（遺産の分割の協議）",
+        "needs_check": []
+      }
+    },
+    {
+      "id": "SURV_TAX_FILING_NEED",
+      "stream": "ESTATE_SUCCESSION",
+      "actor": "LEGAL_HEIR",
+      "title": "相続税の申告が要るかどうかを判定する",
+      "today_action": "財産の一覧と相続人の人数から、基礎控除を超えるかどうかを見る。超えないなら、申告そのものが要らない。",
+      "exists_if": null,
+      "prerequisites": ["SURV_LIST_ASSETS", "SURV_DETERMINE_HEIRS"],
+      "base_urgency": "CAN_WAIT",
+      "priority": 29,
+      "wait": { "nature": "NONE" },
+      "durability": "PERMANENT",
+      "decided_by_you": true,
+      "caution": {
+        "note": "特例を使って初めて基礎控除以下になる場合は、申告が必要になることがある。"
+      },
+      "legal_metadata": {
+        "verification_status": "SELF_REVIEWED",
+        "verified_at": null,
+        "verified_by": null,
+        "source_draft": "相続税法第15条（基礎控除）、第27条（申告）",
+        "needs_check": ["特例適用により控除内に収まる場合の申告義務"]
+      }
+    },
+    {
+      "id": "SURV_TAX_FILING",
+      "stream": "ESTATE_SUCCESSION",
+      "actor": "LEGAL_HEIR",
+      "title": "相続税の申告と納付",
+      "today_action": "税理士に依頼するか自分で申告する。納付は現金である。",
+      "exists_if": "condition.estate_over_basic_deduction == true",
+      "prerequisites": ["SURV_TAX_FILING_NEED"],
+      "base_urgency": "CAN_WAIT",
+      "priority": 9,
+      "wait": { "nature": "NONE" },
+      "durability": "PERMANENT",
+      "decided_by_you": true,
+      "deadline": {
+        "days": null,
+        "months": 10,
+        "trigger": "相続の開始があったことを知った日の翌日から",
+        "note": "月で数える"
+      },
+      "caution": {
+        "note": "分け方が決まっていなくても、期限は来る。決まっていない場合の申告の仕方がある。"
+      },
+      "specialist_bridge": {
+        "type": "TAX_ACCOUNTANT",
+        "concrete_query": "相続税の申告をお願いしたい。分割が未了の場合の申告方法と、あとから特例を適用する手続もあわせて相談したい。",
+        "estimated_cost_range": "遺産総額の0.5〜1%程度が目安"
+      },
+      "legal_metadata": {
+        "verification_status": "SELF_REVIEWED",
+        "verified_at": null,
+        "verified_by": null,
+        "source_draft": "相続税法第27条（相続税の申告書）",
+        "needs_check": ["未分割で申告する場合の手続（申告期限後3年以内の分割見込書など）"]
+      }
+    },
+    {
+      "id": "SURV_INCOME_TAX_FINAL",
+      "stream": "ESTATE_SUCCESSION",
+      "actor": "LEGAL_HEIR",
+      "title": "故人の所得税の申告",
+      "today_action": "故人に事業所得や不動産所得、一定額以上の年金があった場合、亡くなった年の分の所得税を申告する。",
+      "exists_if": "condition.had_income_to_file == true",
+      "prerequisites": ["SURV_DETERMINE_HEIRS"],
+      "base_urgency": "CAN_WAIT",
+      "priority": 17,
+      "wait": { "nature": "NONE" },
+      "durability": "PERMANENT",
+      "decided_by_you": true,
+      "deadline": {
+        "days": null,
+        "months": 4,
+        "trigger": "相続の開始があったことを知った日の翌日から",
+        "note": "相続税より期限が早い。見落としやすい。"
+      },
+      "legal_metadata": {
+        "verification_status": "SELF_REVIEWED",
+        "verified_at": null,
+        "verified_by": null,
+        "source_draft": "所得税法第125条（準確定申告）",
+        "needs_check": ["申告が必要となる場合の要件", "医療費控除等による還付の可能性"]
+      }
+    },
+    {
+      "id": "SURV_REAL_ESTATE_REGISTRATION",
+      "stream": "ESTATE_SUCCESSION",
+      "actor": "LEGAL_HEIR",
+      "title": "不動産の名義変更",
+      "today_action": "分け方が決まったら、法務局へ名義変更を申請する。決まらない場合にも、先に申し出ておく手立てがある。",
+      "exists_if": "condition.has_real_estate_in_estate == true",
+      "prerequisites": ["SURV_ESTATE_DIVISION"],
+      "base_urgency": "CAN_WAIT",
+      "priority": 30,
+      "wait": { "nature": "NONE" },
+      "durability": "PERMANENT",
+      "decided_by_you": true,
+      "deadline": {
+        "days": null,
+        "months": 36,
+        "trigger": "所有権を取得したことを知った日から",
+        "note": "期限と過料の運用は要確認"
+      },
+      "caution": {
+        "note": "申請には義務があり、怠ると過料の対象になるとされる。分け方が決まらない場合の申し出の手立てもある。"
+      },
+      "legal_metadata": {
+        "verification_status": "SELF_REVIEWED",
+        "verified_at": null,
+        "verified_by": null,
+        "source_draft": "不動産登記法第76条の2（相続登記の申請義務）、第76条の3（相続人申告登記）",
+        "needs_check": ["★重要★ 期限の数え方、過去に発生した相続への適用、過料の運用実態"]
+      }
+    },
+    {
+      "id": "SURV_DIGITAL_CLEANUP",
+      "stream": "POST_MORTEM_AFFAIRS",
+      "actor": "RELATIVES",
+      "title": "携帯と定期サービスの解約",
+      "today_action": "死亡診断書の写しを持って、通信会社の窓口と各サービスの解約手続をする。",
+      "exists_if": null,
+      "prerequisites": ["SURV_DEATH_NOTICE"],
+      "base_urgency": "CAN_WAIT",
+      "priority": 31,
+      "wait": { "nature": "NONE" },
+      "durability": "PERMANENT",
+      "decided_by_you": true,
+      "legal_metadata": {
+        "verification_status": "SELF_REVIEWED",
+        "verified_at": null,
+        "verified_by": null,
+        "source_draft": null,
+        "needs_check": ["解約が単純承認にあたらないかの確認"]
+      }
+    },
+    {
+      "id": "SURV_NOTIFY_OTHER_HEIRS",
+      "stream": "ESTATE_SUCCESSION",
+      "actor": "LEGAL_HEIR",
+      "title": "他の相続人・関係者に伝える",
+      "today_action": "いま何を待っているのか、なぜ急ぐのか、何に署名が必要かを、そのまま送れる文面で伝える。",
+      "exists_if": null,
+      "prerequisites": ["SURV_DETERMINE_HEIRS"],
+      "base_urgency": "CAN_WAIT",
+      "priority": 32,
+      "wait": { "nature": "NONE" },
+      "durability": "REFRESHABLE",
+      "decided_by_you": true,
+      "caution": {
+        "note": "黙っていると、勝手に進めていると思われる。感情を交えず、前後関係と期限だけを共有する。"
+      },
+      "legal_metadata": {
+        "verification_status": "SELF_REVIEWED",
+        "verified_at": null,
+        "verified_by": null,
+        "source_draft": null,
+        "needs_check": []
+      }
+    },
+    {
+      "id": "SURV_NON_HEIR_SCOPE",
+      "stream": "POST_MORTEM_AFFAIRS",
+      "actor": "RELATIVES",
+      "title": "相続人でない私が、できることとできないこと",
+      "today_action": "届出や葬儀は行える。財産の手続には入れない。その線を確かめる。",
+      "exists_if": "condition.viewer_is_legal_heir == false",
+      "prerequisites": [],
+      "base_urgency": "CAN_WAIT",
+      "priority": 18,
+      "wait": { "nature": "NONE" },
+      "durability": "PERMANENT",
+      "decided_by_you": true,
+      "caution": {
+        "note": "分からないまま親族に遠慮しているのが、一番つらい。線がはっきりすれば動ける。"
+      },
+      "legal_metadata": {
+        "verification_status": "SELF_REVIEWED",
+        "verified_at": null,
+        "verified_by": null,
+        "source_draft": null,
+        "needs_check": ["相続人以外の者が行える手続の範囲（死亡届の届出資格を含む）"]
+      }
+    }
+  ]
+}

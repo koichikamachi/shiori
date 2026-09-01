@@ -1,0 +1,77 @@
+"""
+ユーザーの状態と条件 (UserCondition / NodeStatus / UserJourneyState)
+
+ここに個人情報は入らない。氏名・金額・口座番号・住所・生年月日は持たない。
+死亡日そのものも持たず、経過日数の整数（days_since_death）だけを持つ。
+"""
+from enum import Enum
+from typing import Optional, List, Dict, Any
+from pydantic import BaseModel, Field
+
+
+class NodeStatus(str, Enum):
+    """S03 ルール1。二値では「待っている」が表現できないので五つ持つ。"""
+    NOT_READY = "NOT_READY"        # 前提が終わっていない
+    READY = "READY"                # 手をつけられる
+    IN_PROGRESS = "IN_PROGRESS"    # 着手したが終わっていない
+    WAITING = "WAITING"            # 出したが、相手の返事を待っている
+    DONE = "DONE"                  # 済んだ
+
+
+class UserCondition(BaseModel):
+    # 基本情報
+    has_spouse: bool = Field(default=False, description="配偶者がいる")
+    children_count: int = Field(default=0, description="子の人数")
+    has_own_home: bool = Field(default=False, description="持ち家がある")
+    has_other_real_estate: bool = Field(default=False, description="自宅以外の不動産がある")
+    has_leased_land: bool = Field(default=False, description="貸している土地・借りている土地がある")
+    is_business_owner: bool = Field(default=False, description="会社（法人）を営んでいる")
+    is_sole_proprietor: bool = Field(default=False, description="個人で事業を営んでいる")
+    has_foreign_assets: bool = Field(default=False, description="海外に資産がある")
+    has_debt_or_guarantee: bool = Field(default=False, description="借入または保証がある")
+    wishes_donation: bool = Field(default=False, description="家族以外・団体に渡したい")
+    has_unmarried_partner: bool = Field(default=False, description="籍を入れていない相手がいる")
+    has_will: bool = Field(default=False, description="遺言がある")
+    has_pets: bool = Field(default=False, description="ペットがいる")
+
+    # 税の境界（None は「まだ分からない」）
+    estate_over_basic_deduction: Optional[bool] = Field(default=None, description="財産が基礎控除を超えそう")
+
+    # 遺族側の探索状態
+    entry_found: bool = Field(default=False, description="本人が残した入口が見つかった")
+    entry_locked: bool = Field(default=False, description="入口が見つかったが開けられない")
+
+    # 遺族側の事情
+    has_insurance: bool = Field(default=False, description="生命保険があると分かっている")
+    had_income_to_file: bool = Field(default=False, description="故人に申告の要る所得があった")
+    has_real_estate_in_estate: bool = Field(default=False, description="遺産に不動産がある")
+    viewer_is_legal_heir: bool = Field(default=True, description="見ている人が相続人である")
+    days_since_death: Optional[int] = Field(default=None, description="死亡から何日目か（日付そのものは持たない）")
+    events: List[str] = Field(default_factory=list, description="起きた出来事")
+
+    @property
+    def has_self_memo(self) -> bool:
+        """導出。本人が残した一覧の中身が手元にある＝入口が見つかり、かつ開けられた。"""
+        return self.entry_found and not self.entry_locked
+
+    def to_eval_dict(self) -> Dict[str, Any]:
+        d = self.model_dump()
+        d["has_self_memo"] = self.has_self_memo
+        return d
+
+
+class UserJourneyState(BaseModel):
+    """端末のなかだけに置く状態。ノードIDと状態の対応、それだけ。"""
+    actor_scope: str = Field(default="SURVIVOR", description="SELF / FAMILY_CHILD / SURVIVOR")
+    condition: UserCondition = Field(default_factory=UserCondition)
+    statuses: Dict[str, NodeStatus] = Field(default_factory=dict)
+
+    def status_of(self, node_id: str) -> Optional[NodeStatus]:
+        return self.statuses.get(node_id)
+
+    def mark(self, node_id: str, status: NodeStatus) -> None:
+        self.statuses[node_id] = status
+
+    @property
+    def completed_node_ids(self) -> set:
+        return {k for k, v in self.statuses.items() if v == NodeStatus.DONE}

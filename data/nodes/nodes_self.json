@@ -1,0 +1,959 @@
+{
+  "schema_version": "2.0",
+  "file": "nodes_self.json",
+  "actor_scope": "SELF",
+  "note": "本人が、元気なうちに行うノード。mitigates_nodes は本人画面の表示専用であり、遺族側の道筋の計算には使わない。詳細は docs/S03_エンジンの決めごと.md を参照。",
+  "nodes": [
+    {
+      "id": "SELF_BANK_LIST",
+      "stream": "ESTATE_SUCCESSION",
+      "actor": "SELF",
+      "persona_labels": ["ALL"],
+      "title": "口座のある金融機関名のメモ",
+      "today_action": "口座のある銀行・信金・信託・証券会社の名前だけを紙に書く。残高も口座番号も要らない。",
+      "why_only_you": "どこに口座があるかを知っているのは本人だけである。",
+      "exists_if": null,
+      "prerequisites": [],
+      "base_urgency": "CAN_WAIT",
+      "priority": 10,
+      "wait": { "nature": "NONE" },
+      "durability": "PERMANENT",
+      "mitigates_nodes": [
+        {
+          "target_node_id": "SURV_DISCOVER_ACCOUNTS",
+          "effect": "SKIPPED",
+          "explanation": "遺族が通帳を探し、郵便物を待ち、心当たりに照会する数か月の作業が消えます。"
+        }
+      ],
+      "legal_metadata": {
+        "verification_status": "SELF_REVIEWED",
+        "verified_at": null,
+        "verified_by": null,
+        "source_draft": "預貯金の相続実務",
+        "needs_check": []
+      }
+    },
+    {
+      "id": "SELF_INSURANCE_NOTE",
+      "stream": "ESTATE_SUCCESSION",
+      "actor": "SELF",
+      "persona_labels": ["ALL"],
+      "title": "生命保険・共済の会社名メモ",
+      "today_action": "加入している生命保険会社・共済の名前だけを紙に書く。証券番号も金額も要らない。",
+      "why_only_you": "銀行は遺族が戸籍を持って窓口で照会できる。しかし保険は、加入している事実を遺族が知らなければ請求されないまま終わる。",
+      "exists_if": null,
+      "prerequisites": [],
+      "base_urgency": "CAN_WAIT",
+      "priority": 10,
+      "wait": { "nature": "NONE" },
+      "durability": "PERMANENT",
+      "mitigates_nodes": [
+        {
+          "target_node_id": "SURV_CLAIM_INSURANCE",
+          "effect": "RISK_REDUCED",
+          "explanation": "遺族が保険の存在に気づかず、請求しないまま終わる事態を防ぎます。"
+        }
+      ],
+      "legal_metadata": {
+        "verification_status": "SELF_REVIEWED",
+        "verified_at": null,
+        "verified_by": null,
+        "source_draft": "保険法第95条（保険給付請求権の消滅時効）",
+        "needs_check": ["時効の年数と、時効経過後の実務上の取扱い"]
+      }
+    },
+    {
+      "id": "SELF_DIGITAL_PASS_NOTE",
+      "stream": "POST_MORTEM_AFFAIRS",
+      "actor": "SELF",
+      "persona_labels": ["ALL"],
+      "title": "スマホの開け方と、契約中のサービス名のメモ",
+      "today_action": "スマートフォンのロックを解く手順と、毎月払っている定期サービスの名前を紙に書く。",
+      "why_only_you": "本人以外に、契約の全体を知っている人がいない。",
+      "exists_if": null,
+      "prerequisites": [],
+      "base_urgency": "CAN_WAIT",
+      "priority": 20,
+      "wait": { "nature": "NONE" },
+      "durability": "PERMANENT",
+      "mitigates_nodes": [
+        {
+          "target_node_id": "SURV_DIGITAL_CLEANUP",
+          "effect": "SHORTENED",
+          "explanation": "遺族が端末を開けず、課金が続く事態を防ぎます。"
+        }
+      ],
+      "legal_metadata": {
+        "verification_status": "SELF_REVIEWED",
+        "verified_at": null,
+        "verified_by": null,
+        "source_draft": null,
+        "needs_check": []
+      }
+    },
+    {
+      "id": "SELF_DESIGNATE_OPERATOR",
+      "stream": "POST_MORTEM_AFFAIRS",
+      "actor": "SELF",
+      "persona_labels": ["ALL"],
+      "title": "死後の事務を実際に担う人を決めておく",
+      "today_action": "届出・葬儀・片付けを実際に動いてくれる人と、事前に話をしておく。相続人であるとは限らない。",
+      "why_only_you": "誰に頼むかは本人しか決められない。",
+      "exists_if": null,
+      "prerequisites": [],
+      "base_urgency": "CAN_WAIT",
+      "priority": 30,
+      "wait": { "nature": "NONE" },
+      "durability": "PERMANENT",
+      "legal_metadata": {
+        "verification_status": "SELF_REVIEWED",
+        "verified_at": null,
+        "verified_by": null,
+        "source_draft": "死後事務委任契約の実務",
+        "needs_check": ["委任契約の要否と、契約がない場合に近親者ができる範囲"]
+      }
+    },
+    {
+      "id": "SELF_WISHES_EFFECTIVE_OR_NOT",
+      "stream": "POST_MORTEM_AFFAIRS",
+      "actor": "SELF",
+      "persona_labels": ["ALL"],
+      "title": "効く希望と、効かない希望の書き分け",
+      "today_action": "葬儀のやり方、遺骨、ペットの引き取り先などの希望を書き出し、どれが法的に効き、どれが効かないかを確かめる。",
+      "why_only_you": "希望そのものは本人にしか出せない。",
+      "exists_if": null,
+      "prerequisites": [],
+      "base_urgency": "CAN_WAIT",
+      "priority": 40,
+      "wait": { "nature": "NONE" },
+      "durability": "PERMANENT",
+      "caution": {
+        "note": "効かないから無駄なのではない。効き方が違う。遺言に書くのか、付言に添えるのか、別の契約にするのかが変わる。"
+      },
+      "legal_metadata": {
+        "verification_status": "SELF_REVIEWED",
+        "verified_at": null,
+        "verified_by": null,
+        "source_draft": "民法第960条以下（遺言の方式・内容）、負担付遺贈の実務",
+        "needs_check": ["ペットの引き取りを法的に確実にする方法（負担付遺贈・信託・生前契約）"]
+      }
+    },
+    {
+      "id": "SELF_ENTRY_AND_KEY",
+      "stream": "HANDOVER",
+      "actor": "SELF",
+      "persona_labels": ["ALL"],
+      "title": "入口を家族に渡し、開ける手立ては別の人に預ける",
+      "today_action": "①「私に万一のことがあったら、これを見てほしい」と書いた紙か記録媒体を、家族の手が届くところに置く。②それを開く手立てを封筒に入れ、友人か専門家に預け、「私が死んだら渡してほしい」と言い添える。",
+      "why_only_you": "誰に何を預けるかは本人しか決められない。そして本人が死んだあとでは決められない。",
+      "exists_if": null,
+      "prerequisites": ["SELF_EXPORT_SNAPSHOT"],
+      "base_urgency": "CAN_WAIT",
+      "priority": 15,
+      "wait": { "nature": "NONE" },
+      "durability": "PERMANENT",
+      "mitigates_nodes": [
+        {
+          "target_node_id": "SURV_FIND_ENTRY",
+          "effect": "SKIPPED",
+          "explanation": "遺族が家中を探す作業が、預かった人からの連絡に置き換わります。"
+        }
+      ],
+      "caution": {
+        "note": "預けた相手が先に亡くなること、忘れること、失くすことがある。預け先は一つにしない。預けた事実を自分でも記録しておく。"
+      },
+      "legal_metadata": {
+        "verification_status": "SELF_REVIEWED",
+        "verified_at": null,
+        "verified_by": null,
+        "source_draft": null,
+        "needs_check": ["第三者に預けた封書の開封が、遺言書の検認を要する場合にあたらないかの確認"]
+      }
+    },
+    {
+      "id": "SELF_EXPORT_SNAPSHOT",
+      "stream": "HANDOVER",
+      "actor": "SELF",
+      "persona_labels": ["ALL"],
+      "title": "いまの印を一枚に書き出す",
+      "today_action": "済ませたことの一覧を印刷するか、記録媒体に落とす。これがそのまま家族に渡す入口になる。",
+      "why_only_you": "端末を変えれば印は消える。書き出せるのは本人だけである。",
+      "exists_if": null,
+      "prerequisites": [],
+      "base_urgency": "CAN_WAIT",
+      "priority": 14,
+      "wait": { "nature": "NONE" },
+      "durability": "REFRESHABLE",
+      "caution": {
+        "note": "機種変更・故障・紛失で印は消える。書き出しは、控えと引継ぎを兼ねる。"
+      },
+      "legal_metadata": {
+        "verification_status": "SELF_REVIEWED",
+        "verified_at": null,
+        "verified_by": null,
+        "source_draft": null,
+        "needs_check": []
+      }
+    },
+    {
+      "id": "SELF_HOME_TITLE_CHECK",
+      "stream": "ESTATE_SUCCESSION",
+      "actor": "SELF",
+      "persona_labels": ["PENSIONER", "LANDOWNER"],
+      "title": "自宅の名義を確かめる",
+      "today_action": "登記簿で自宅の名義人を確かめる。亡くなった親や祖父の名義のままになっていないかを見る。",
+      "why_only_you": "権利証や過去の経緯を知っているのは本人である。",
+      "exists_if": "condition.has_own_home == true",
+      "prerequisites": [],
+      "base_urgency": "CAN_WAIT",
+      "priority": 25,
+      "wait": { "nature": "NONE" },
+      "durability": "PERMANENT",
+      "caution": {
+        "note": "相続による名義変更には申請の義務と期限があり、怠ると過料の対象になるとされる。財産の多い少ないとは関係なく、持ち家のある人すべてに関わる。"
+      },
+      "legal_metadata": {
+        "verification_status": "SELF_REVIEWED",
+        "verified_at": null,
+        "verified_by": null,
+        "source_draft": "不動産登記法第76条の2（相続登記の申請義務）",
+        "needs_check": ["義務化の施行日、期限の数え方、過去の相続への遡及の有無、過料の運用"]
+      }
+    },
+    {
+      "id": "SELF_TAX_BOUNDARY",
+      "stream": "ESTATE_SUCCESSION",
+      "actor": "SELF",
+      "persona_labels": ["ALL"],
+      "title": "相続税の申告が要るかどうかの境界を見る",
+      "today_action": "家族の人数から基礎控除の枠を出し、財産の合計がそれを超えそうかどうかだけを見る。金額は概算でよい。",
+      "exists_if": null,
+      "prerequisites": [],
+      "base_urgency": "CAN_WAIT",
+      "priority": 35,
+      "wait": { "nature": "NONE" },
+      "durability": "PERMANENT",
+      "caution": {
+        "note": "控除の範囲に収まるなら、家族は申告そのものが要らない。それが分かるだけで心配が一つ消える。"
+      },
+      "legal_metadata": {
+        "verification_status": "SELF_REVIEWED",
+        "verified_at": null,
+        "verified_by": null,
+        "source_draft": "相続税法第15条（遺産に係る基礎控除）",
+        "needs_check": ["基礎控除の算式と、法定相続人の数え方（放棄した人・養子の扱い）"]
+      }
+    },
+    {
+      "id": "SELF_TAX_MAGNITUDE",
+      "stream": "ESTATE_SUCCESSION",
+      "actor": "SELF",
+      "persona_labels": ["ALL"],
+      "title": "納税額の桁を見当づける",
+      "today_action": "自宅と預貯金のおおまかな合計から、納税が数百万円の話か、それ以上かの見当をつける。",
+      "exists_if": "condition.estate_over_basic_deduction == true",
+      "prerequisites": ["SELF_TAX_BOUNDARY"],
+      "base_urgency": "CAN_WAIT",
+      "priority": 36,
+      "wait": { "nature": "NONE" },
+      "durability": "PERMANENT",
+      "legal_metadata": {
+        "verification_status": "SELF_REVIEWED",
+        "verified_at": null,
+        "verified_by": null,
+        "source_draft": null,
+        "needs_check": []
+      }
+    },
+    {
+      "id": "SELF_CASH_FOR_TAX",
+      "stream": "ESTATE_SUCCESSION",
+      "actor": "SELF",
+      "persona_labels": ["LANDOWNER", "BUSINESS_OWNER"],
+      "title": "納税と当面の資金を、現金でどう用意するか",
+      "today_action": "財産が不動産や自社株に偏っていないかを見る。偏っているなら、生命保険の活用など現金を用意する手立てを検討する。",
+      "exists_if": "condition.estate_over_basic_deduction == true",
+      "prerequisites": ["SELF_TAX_MAGNITUDE"],
+      "base_urgency": "CAN_WAIT",
+      "priority": 37,
+      "wait": { "nature": "NONE" },
+      "durability": "PERMANENT",
+      "caution": {
+        "note": "家は売れないのに税だけ来る、ということが起こり得る。"
+      },
+      "specialist_bridge": {
+        "type": "TAX_ACCOUNTANT",
+        "concrete_query": "財産が不動産・自社株に偏っており納税資金が不足する懸念がある。生命保険の非課税枠の活用を含め、現金を用意する手立てを相談したい。",
+        "estimated_cost_range": "初回相談 無料〜1万円程度"
+      },
+      "legal_metadata": {
+        "verification_status": "SELF_REVIEWED",
+        "verified_at": null,
+        "verified_by": null,
+        "source_draft": "相続税法第12条第1項第5号（死亡保険金の非課税）",
+        "needs_check": ["非課税枠の算式と、放棄した人の扱い", "延納・物納の要件"]
+      }
+    },
+    {
+      "id": "SELF_TAX_PREP_ENVELOPE",
+      "stream": "ESTATE_SUCCESSION",
+      "actor": "SELF",
+      "persona_labels": ["ALL"],
+      "title": "税理士に相談するための書類を一つの封筒にまとめる",
+      "today_action": "固定資産税の納税通知書と、金融機関のメモを一つの封筒に入れる。",
+      "exists_if": "condition.estate_over_basic_deduction == true",
+      "prerequisites": ["SELF_TAX_MAGNITUDE"],
+      "base_urgency": "CAN_WAIT",
+      "priority": 38,
+      "wait": { "nature": "NONE" },
+      "durability": "PERMANENT",
+      "specialist_bridge": {
+        "type": "TAX_ACCOUNTANT",
+        "concrete_query": "基礎控除を超える見込みがある。固定資産税納税通知書を持参するので、小規模宅地等の特例が使えるかどうかと、概算の試算をお願いしたい。",
+        "estimated_cost_range": "初回相談 無料〜1万円程度"
+      },
+      "legal_metadata": {
+        "verification_status": "SELF_REVIEWED",
+        "verified_at": null,
+        "verified_by": null,
+        "source_draft": null,
+        "needs_check": []
+      }
+    },
+    {
+      "id": "SELF_INCAPACITY_PLAN",
+      "stream": "POST_MORTEM_AFFAIRS",
+      "actor": "SELF",
+      "persona_labels": ["ALL"],
+      "title": "判断ができなくなったときの、生活費の出し方",
+      "today_action": "自分が入院や認知症で動けなくなったとき、誰がどうやって生活費を引き出すのかを決めておく。",
+      "why_only_you": "本人が元気なうちにしか決められない。判断ができなくなってからでは、選べる手立てが限られる。",
+      "exists_if": null,
+      "prerequisites": [],
+      "base_urgency": "CAN_WAIT",
+      "priority": 26,
+      "wait": { "nature": "NONE" },
+      "durability": "PERMANENT",
+      "caution": {
+        "note": "死んだあとの話より、こちらが先に来ることがある。"
+      },
+      "specialist_bridge": {
+        "type": "LAWYER",
+        "concrete_query": "判断能力が低下した場合に備え、任意後見・財産管理委任・家族信託のどれが自分の事情に合うかを相談したい。",
+        "estimated_cost_range": "初回相談 5千円〜1万円程度"
+      },
+      "legal_metadata": {
+        "verification_status": "SELF_REVIEWED",
+        "verified_at": null,
+        "verified_by": null,
+        "source_draft": "任意後見契約に関する法律、民法上の委任",
+        "needs_check": ["任意後見・財産管理委任・家族信託の使い分けと費用感"]
+      }
+    },
+
+    {
+      "id": "SELF_LAND_ENVELOPE",
+      "stream": "ESTATE_SUCCESSION",
+      "actor": "SELF",
+      "persona_labels": ["PENSIONER", "LANDOWNER"],
+      "title": "不動産の書類を一つの封筒にまとめる",
+      "today_action": "固定資産税の納税通知書、公図、権利証（登記識別情報）を一つの封筒に入れる。",
+      "why_only_you": "どこにしまったかを知っているのは本人だけである。",
+      "exists_if": "condition.has_own_home == true || condition.has_other_real_estate == true",
+      "prerequisites": [],
+      "base_urgency": "CAN_WAIT",
+      "priority": 22,
+      "wait": { "nature": "NONE" },
+      "durability": "PERMANENT",
+      "mitigates_nodes": [
+        {
+          "target_node_id": "SURV_LIST_ASSETS",
+          "effect": "SHORTENED",
+          "explanation": "名寄帳の取り寄せや、私道・山林などの見落としを防ぎ、財産目録づくりが短くなります。"
+        }
+      ],
+      "legal_metadata": {
+        "verification_status": "SELF_REVIEWED",
+        "verified_at": null,
+        "verified_by": null,
+        "source_draft": null,
+        "needs_check": ["名寄帳で把握できる範囲と、把握できない不動産（未登記建物・共有私道など）"]
+      }
+    },
+    {
+      "id": "SELF_LAND_ANCESTOR_TITLE",
+      "stream": "ESTATE_SUCCESSION",
+      "actor": "SELF",
+      "persona_labels": ["LANDOWNER"],
+      "title": "先代の名義のまま残っている土地がないか確かめる",
+      "today_action": "名寄帳と登記簿で、祖父や父の名義のままの土地がないかを確かめる。",
+      "why_only_you": "経緯を知っているのは本人である。本人が死ねば、家族は二世代分の相続人を探すことになる。",
+      "exists_if": "condition.has_other_real_estate == true",
+      "prerequisites": ["SELF_LAND_ENVELOPE"],
+      "base_urgency": "CAN_WAIT",
+      "priority": 23,
+      "wait": { "nature": "NONE" },
+      "durability": "PERMANENT",
+      "caution": {
+        "note": "先代名義のまま残っていると、家族は本人の相続だけでなく先代の相続まで遡って相続人を探すことになる。人数が一気に増え、話し合いがまとまらなくなる。"
+      },
+      "specialist_bridge": {
+        "type": "JUDICIAL_SCRIVENER",
+        "concrete_query": "先代名義のまま残っている土地がある。相続人の調査と、いま名義を整理しておく場合の手順と費用を相談したい。",
+        "estimated_cost_range": "相談 無料〜2万円程度"
+      },
+      "legal_metadata": {
+        "verification_status": "SELF_REVIEWED",
+        "verified_at": null,
+        "verified_by": null,
+        "source_draft": "不動産登記法",
+        "needs_check": ["数次相続の登記手続と、義務化との関係"]
+      }
+    },
+    {
+      "id": "SELF_LAND_BOUNDARY",
+      "stream": "ESTATE_SUCCESSION",
+      "actor": "SELF",
+      "persona_labels": ["LANDOWNER"],
+      "title": "隣との境界が決まっているかを確かめる",
+      "today_action": "境界標があるか、確定測量図があるかを確かめる。なければ、隣家と話せるうちに手を打つ。",
+      "why_only_you": "本人が生きているうちなら、隣家とはまだ話ができる。本人の死後は、家族と隣家が初めて向き合うことになる。",
+      "exists_if": "condition.has_other_real_estate == true",
+      "prerequisites": ["SELF_LAND_ENVELOPE"],
+      "base_urgency": "CAN_WAIT",
+      "priority": 24,
+      "wait": { "nature": "NONE" },
+      "durability": "PERMANENT",
+      "specialist_bridge": {
+        "type": "LAND_SURVEYOR",
+        "concrete_query": "境界が確定していない土地がある。確定測量または筆界特定の手続と、費用と期間を相談したい。",
+        "estimated_cost_range": "確定測量 30万〜80万円程度（規模・隣接数による）"
+      },
+      "legal_metadata": {
+        "verification_status": "SELF_REVIEWED",
+        "verified_at": null,
+        "verified_by": null,
+        "source_draft": "民法第223条（境界標の設置）、不動産登記法第123条以下（筆界特定）",
+        "needs_check": ["確定測量と筆界特定の使い分け、費用の相場"]
+      }
+    },
+    {
+      "id": "SELF_LAND_LEASE_NOTE",
+      "stream": "ESTATE_SUCCESSION",
+      "actor": "SELF",
+      "persona_labels": ["LANDOWNER"],
+      "title": "貸している土地・借りている土地の一覧",
+      "today_action": "誰に何を貸しているか、契約書がどこにあるかを紙に書く。金額は要らない。",
+      "why_only_you": "口約束や古い経緯を知っているのは本人だけである。",
+      "exists_if": "condition.has_leased_land == true",
+      "prerequisites": ["SELF_LAND_ENVELOPE"],
+      "base_urgency": "CAN_WAIT",
+      "priority": 27,
+      "wait": { "nature": "NONE" },
+      "durability": "PERMANENT",
+      "legal_metadata": {
+        "verification_status": "SELF_REVIEWED",
+        "verified_at": null,
+        "verified_by": null,
+        "source_draft": "借地借家法",
+        "needs_check": []
+      }
+    },
+    {
+      "id": "SELF_LAND_SMALL_RESIDENTIAL",
+      "stream": "ESTATE_SUCCESSION",
+      "actor": "SELF",
+      "persona_labels": ["LANDOWNER", "PENSIONER"],
+      "title": "自宅の土地の評価を下げられる特例が使えるか、先に確かめる",
+      "today_action": "誰が自宅を引き継ぐ予定かを整理し、特例の要件に当てはまるかを税理士に確かめる。",
+      "exists_if": "condition.has_own_home == true && condition.estate_over_basic_deduction == true",
+      "prerequisites": ["SELF_TAX_BOUNDARY"],
+      "base_urgency": "CAN_WAIT",
+      "priority": 39,
+      "wait": { "nature": "NONE" },
+      "durability": "PERMANENT",
+      "irreversibility": {
+        "is_irreversible": true,
+        "lost_option": "自宅の土地の評価を大きく下げる特例の適用",
+        "warning_fact": "この特例には、誰が引き継ぐか、そこに住み続けるかといった要件があります。亡くなったあとで要件を作ることはできません。",
+        "warning_exception": "要件は事情によって幅があります。当てはまるかどうかは税理士に確かめてください。"
+      },
+      "specialist_bridge": {
+        "type": "TAX_ACCOUNTANT",
+        "concrete_query": "自宅の土地について小規模宅地等の特例が使えるか、いまのうちに整えておくべきことがあるかを相談したい。",
+        "estimated_cost_range": "初回相談 無料〜1万円程度"
+      },
+      "legal_metadata": {
+        "verification_status": "SELF_REVIEWED",
+        "verified_at": null,
+        "verified_by": null,
+        "source_draft": "租税特別措置法第69条の4（小規模宅地等についての相続税の課税価格の計算の特例）",
+        "needs_check": ["区分ごとの限度面積と減額割合", "同居・生計一・家なき子の各要件"]
+      }
+    },
+
+    {
+      "id": "SELF_BIZ_STOCK_REGISTER",
+      "stream": "BUSINESS_SUCCESSION",
+      "actor": "SELF",
+      "persona_labels": ["BUSINESS_OWNER"],
+      "title": "株主名簿の在処と、株の分かれ方",
+      "today_action": "株主名簿がどこにあるかを紙に書く。あわせて、自分の株が法定どおりに分かれた場合に後継者が過半数を持てるかを確かめる。",
+      "why_only_you": "名義株や過去の経緯を知っているのは本人だけである。",
+      "exists_if": "condition.is_business_owner == true",
+      "prerequisites": [],
+      "base_urgency": "CAN_WAIT",
+      "priority": 12,
+      "wait": { "nature": "NONE" },
+      "durability": "PERMANENT",
+      "caution": {
+        "note": "株が散ると、後継者が会社の意思決定をできなくなる。分け方を決められるのは本人が生きているあいだだけである。"
+      },
+      "legal_metadata": {
+        "verification_status": "SELF_REVIEWED",
+        "verified_at": null,
+        "verified_by": null,
+        "source_draft": "会社法第121条（株主名簿）",
+        "needs_check": ["名義株の整理方法", "定款による譲渡制限と相続人に対する売渡請求（会社法第174条）"]
+      }
+    },
+    {
+      "id": "SELF_BIZ_GUARANTEE_NOTE",
+      "stream": "BUSINESS_SUCCESSION",
+      "actor": "SELF",
+      "persona_labels": ["BUSINESS_OWNER", "DEBT_CONCERN"],
+      "title": "個人で背負っている保証の一覧",
+      "today_action": "会社の借入について個人保証をしている相手先（金融機関名）を紙に書く。金額は書かなくてよい。",
+      "why_only_you": "保証は表に出にくい。本人が書かなければ、家族は何年も気づかない。",
+      "exists_if": "condition.is_business_owner == true || condition.has_debt_or_guarantee == true",
+      "prerequisites": [],
+      "base_urgency": "CAN_WAIT",
+      "priority": 11,
+      "wait": { "nature": "NONE" },
+      "durability": "PERMANENT",
+      "mitigates_nodes": [
+        {
+          "target_node_id": "SURV_DISCOVER_DEBT",
+          "effect": "SKIPPED",
+          "explanation": "信用情報の照会では保証債務が出てこないことがあります。この一覧があれば、遺族は期限内に判断できます。"
+        }
+      ],
+      "caution": {
+        "note": "保証は本人の死で消えない。家族が引き継ぐ。金額によっては、家族は相続そのものを考え直すことになる。"
+      },
+      "specialist_bridge": {
+        "type": "LAWYER",
+        "concrete_query": "会社の借入に個人保証をしている。経営者保証ガイドラインによる解除や、事業承継時の保証の扱いについて相談したい。",
+        "estimated_cost_range": "初回相談 5千円〜1万円程度"
+      },
+      "legal_metadata": {
+        "verification_status": "SELF_REVIEWED",
+        "verified_at": null,
+        "verified_by": null,
+        "source_draft": "経営者保証に関するガイドライン",
+        "needs_check": ["保証債務が相続される範囲（根保証の元本確定を含む）", "経営者保証の解除の実務"]
+      }
+    },
+    {
+      "id": "SELF_BIZ_LOAN_BETWEEN",
+      "stream": "BUSINESS_SUCCESSION",
+      "actor": "SELF",
+      "persona_labels": ["BUSINESS_OWNER"],
+      "title": "会社と自分のあいだの貸し借り",
+      "today_action": "会社に貸しているお金、会社から借りているお金の有無を確かめ、紙に一行書く。",
+      "why_only_you": "帳簿にはあるが、家族は見ない。",
+      "exists_if": "condition.is_business_owner == true",
+      "prerequisites": [],
+      "base_urgency": "CAN_WAIT",
+      "priority": 28,
+      "wait": { "nature": "NONE" },
+      "durability": "PERMANENT",
+      "caution": {
+        "note": "会社に貸したお金は本人の財産になり、相続税の対象になり得る。会社から借りたお金は家族の負債になる。"
+      },
+      "legal_metadata": {
+        "verification_status": "SELF_REVIEWED",
+        "verified_at": null,
+        "verified_by": null,
+        "source_draft": null,
+        "needs_check": ["役員貸付金・借入金の相続税上の評価"]
+      }
+    },
+    {
+      "id": "SELF_BIZ_SUCCESSION_TAX",
+      "stream": "BUSINESS_SUCCESSION",
+      "actor": "SELF",
+      "persona_labels": ["BUSINESS_OWNER"],
+      "title": "事業承継税制（法人版）が使えるか、渡す時期まで含めて確かめる",
+      "today_action": "顧問税理士に二つを確かめる。①特例承継計画を出せる期限（令和9年9月30日）に間に合うか。②実際に株を渡す期限（令和9年12月31日）までに渡し終えられるか。",
+      "why_only_you": "株を誰にいつ渡すかを決められるのは本人だけである。計画を出しても、渡す時期が間に合わなければ意味がない。",
+      "exists_if": "condition.is_business_owner == true",
+      "prerequisites": ["SELF_BIZ_STOCK_REGISTER"],
+      "base_urgency": "CAN_WAIT",
+      "priority": 13,
+      "wait": { "nature": "NONE" },
+      "durability": "PERMANENT",
+      "deadline": {
+        "days": null,
+        "months": null,
+        "absolute_date": "2027-12-31",
+        "trigger": "特例措置の対象となる贈与・相続の期限（法人版）",
+        "note": "計画の提出期限は2027-09-30。渡す期限は2027-12-31。あいだが3か月しかない。急所は計画ではなく、渡すほうの期限である。"
+      },
+      "irreversibility": {
+        "is_irreversible": true,
+        "lost_option": "自社株にかかる贈与税・相続税の納税猶予（特例措置）",
+        "warning_fact": "計画を出せる期限は令和9年9月30日まで延びましたが、実際に株を渡す期限は令和9年12月31日で変わっていません。あいだは3か月しかありません。計画を出しても、その日までに渡し終えていなければ、この特例は使えません。",
+        "warning_exception": "期限は法改正で動きます。いまの期限と、自社が要件を満たすかを、まず税理士に確かめてください。間に合わない場合の別の手立てもあります。"
+      },
+      "specialist_bridge": {
+        "type": "TAX_ACCOUNTANT",
+        "concrete_query": "事業承継税制（法人版・特例措置）について、①特例承継計画の提出（期限 令和9年9月30日）に間に合うか、②令和9年12月31日までに株の贈与を完了できるか、③間に合わない場合の代替（一般措置、株価対策、役員退職金など）を相談したい。",
+        "estimated_cost_range": "顧問報酬内〜別途見積"
+      },
+      "legal_metadata": {
+        "verification_status": "SOURCE_VERIFIED",
+        "verified_at": "2026-08-31",
+        "verified_by": "中小企業庁サイト（法人版事業承継税制・特例措置）",
+        "source_draft": "租税特別措置法第70条の7の5（贈与）、同第70条の7の6（相続）。令和8年度税制改正により特例承継計画の提出期限を令和8年3月31日から令和9年9月30日へ延長。適用期限（令和9年12月31日）は延長されていない。",
+        "source_url": "https://www.chusho.meti.go.jp/zaimu/shoukei/shoukei_enkatsu_zouyo_souzoku.html",
+        "needs_check": ["要件（後継者の数、雇用、代表就任など）は未確認。税理士に確かめる箇所とする。", "令和9年12月31日の適用期限が今後さらに延長されないか、年に一度は確かめる。"]
+      }
+    },
+    {
+      "id": "SELF_BIZ_INDIVIDUAL_SUCCESSION_TAX",
+      "stream": "BUSINESS_SUCCESSION",
+      "actor": "SELF",
+      "persona_labels": ["BUSINESS_OWNER", "LANDOWNER"],
+      "title": "事業承継税制（個人版）が使えるか確かめる",
+      "today_action": "個人で事業をしている場合、事業用の土地・建物・機械を継がせるための税制がある。税理士に、計画の提出（期限 令和10年9月30日）と渡す期限（令和10年12月31日）に間に合うかを確かめる。",
+      "why_only_you": "誰に事業を継がせるかを決められるのは本人だけである。",
+      "exists_if": "condition.is_sole_proprietor == true",
+      "prerequisites": [],
+      "base_urgency": "CAN_WAIT",
+      "priority": 13,
+      "wait": { "nature": "NONE" },
+      "durability": "PERMANENT",
+      "deadline": {
+        "days": null,
+        "months": null,
+        "absolute_date": "2028-12-31",
+        "trigger": "特例措置の対象となる贈与・相続の期限（個人版）",
+        "note": "計画の提出期限は2028-09-30。渡す期限は2028-12-31。法人版とは期限が違う。混同しないこと。"
+      },
+      "irreversibility": {
+        "is_irreversible": true,
+        "lost_option": "事業用資産にかかる贈与税・相続税の納税猶予（個人版）",
+        "warning_fact": "計画を出せる期限は令和10年9月30日まで延びましたが、実際に事業用資産を渡す期限は令和10年12月31日で変わっていません。その日までに渡し終えていなければ、この特例は使えません。",
+        "warning_exception": "期限は法改正で動きます。個人版は法人版と期限が違います。いまの期限と要件を、税理士に確かめてください。"
+      },
+      "specialist_bridge": {
+        "type": "TAX_ACCOUNTANT",
+        "concrete_query": "個人版事業承継税制について、個人事業承継計画の提出（期限 令和10年9月30日）と、令和10年12月31日までの承継が可能かを相談したい。小規模宅地等の特例との選択関係もあわせて確認したい。",
+        "estimated_cost_range": "顧問報酬内〜別途見積"
+      },
+      "legal_metadata": {
+        "verification_status": "SOURCE_VERIFIED",
+        "verified_at": "2026-08-31",
+        "verified_by": "税理士法人による令和8年度税制改正の解説（提出期限の延長）",
+        "source_draft": "令和8年度税制改正により個人事業承継計画の提出期限を令和8年3月31日から令和10年9月30日へ延長。適用期限（令和10年12月31日）は延長されていない。",
+        "source_url": "https://www.yamada-partners.jp/reform/r8/s02-extension-of-deadline-for-submission-of-special-business-succession-tax-plans",
+        "needs_check": ["★ 個人版の期限は中小企業庁の一次資料で再確認すること（現在は税理士法人の解説による）。", "小規模宅地等の特例との併用・選択の関係。"]
+      }
+    },
+    {
+      "id": "SELF_BIZ_CONTINUITY_KIT",
+      "stream": "BUSINESS_SUCCESSION",
+      "actor": "SELF",
+      "persona_labels": ["BUSINESS_OWNER"],
+      "title": "自分が倒れた翌日、会社が支払いをできるか",
+      "today_action": "代表印の在処、銀行取引の権限を持つ人、後継者の候補を紙に書く。",
+      "why_only_you": "権限をどう渡すかは本人しか決められない。",
+      "exists_if": "condition.is_business_owner == true",
+      "prerequisites": [],
+      "base_urgency": "CAN_WAIT",
+      "priority": 16,
+      "wait": { "nature": "NONE" },
+      "durability": "PERMANENT",
+      "caution": {
+        "note": "死んだあとの話より、倒れて判断できなくなったときの話が先に来る。"
+      },
+      "legal_metadata": {
+        "verification_status": "SELF_REVIEWED",
+        "verified_at": null,
+        "verified_by": null,
+        "source_draft": null,
+        "needs_check": []
+      }
+    },
+
+    {
+      "id": "SELF_FOREIGN_COUNTRY_NOTE",
+      "stream": "CROSS_BORDER",
+      "actor": "SELF",
+      "persona_labels": ["FOREIGN_ASSETS"],
+      "title": "海外の資産について、国名と種類だけを書く",
+      "today_action": "どの国に、どんな種類の資産（預金・証券・不動産）があるかを紙に書く。金額は要らない。現地に窓口となる人がいれば、その連絡先も書き添える。",
+      "why_only_you": "海外資産の最大の危険は税額でも手続の複雑さでもなく、遺族がその存在に気づかないまま終わることである。国名を一行書くだけで、それは防げる。",
+      "exists_if": "condition.has_foreign_assets == true",
+      "prerequisites": [],
+      "base_urgency": "CAN_WAIT",
+      "priority": 12,
+      "wait": { "nature": "NONE" },
+      "durability": "PERMANENT",
+      "mitigates_nodes": [
+        {
+          "target_node_id": "SURV_FOREIGN_PROBATE_START",
+          "effect": "SKIPPED",
+          "explanation": "遺族が海外資産の存在に気づかず、現地で放置されたまま終わる事態を防ぎます。"
+        }
+      ],
+      "legal_metadata": {
+        "verification_status": "SELF_REVIEWED",
+        "verified_at": null,
+        "verified_by": null,
+        "source_draft": null,
+        "needs_check": []
+      }
+    },
+    {
+      "id": "SELF_FOREIGN_PROBATE_CHECK",
+      "stream": "CROSS_BORDER",
+      "actor": "SELF",
+      "persona_labels": ["FOREIGN_ASSETS"],
+      "title": "現地の手続が要る国かどうかを確かめる",
+      "today_action": "資産のある国で、亡くなったあとに裁判所の手続（検認）が要るかを確かめる。要るなら、現地の遺言や共同名義など、いま打てる手を相談する。",
+      "why_only_you": "現地の遺言を作れるのは本人が生きているあいだだけである。",
+      "exists_if": "condition.has_foreign_assets == true",
+      "prerequisites": ["SELF_FOREIGN_COUNTRY_NOTE"],
+      "base_urgency": "CAN_WAIT",
+      "priority": 18,
+      "wait": { "nature": "NONE" },
+      "durability": "PERMANENT",
+      "irreversibility": {
+        "is_irreversible": true,
+        "lost_option": "現地の手続を短くする手立て（現地法に沿った遺言、共同名義、信託など）",
+        "warning_fact": "国によっては、亡くなった人の財産を動かすのに裁判所の手続が必要で、年単位でかかることがあります。日本の遺言や遺産分割協議書は、そのままでは通らないことがあります。",
+        "warning_exception": "国によって扱いが大きく違います。資産のある国ごとに、現地の事情を知る専門家に確かめてください。"
+      },
+      "specialist_bridge": {
+        "type": "INTERNATIONAL_TAX_LAWYER",
+        "concrete_query": "この国にこの種類の資産がある。現地で検認手続が必要か、必要ならいま打てる手（現地遺言・共同名義・信託など）と、日本の税務との整合を相談したい。",
+        "estimated_cost_range": "初回相談 3万〜5万円程度"
+      },
+      "legal_metadata": {
+        "verification_status": "SELF_REVIEWED",
+        "verified_at": null,
+        "verified_by": null,
+        "source_draft": "法の適用に関する通則法第36条（相続は被相続人の本国法による）",
+        "needs_check": ["不動産所在地国が自国法を適用する場合の扱い", "国別の検認手続の要否と所要期間", "共同名義や信託を用いた場合の日本の課税上の扱い"]
+      }
+    },
+    {
+      "id": "SELF_FOREIGN_REPORT_CHECK",
+      "stream": "CROSS_BORDER",
+      "actor": "SELF",
+      "persona_labels": ["FOREIGN_ASSETS"],
+      "title": "国外財産の届出をしているか確かめる",
+      "today_action": "一定額を超える国外財産がある場合の毎年の届出について、提出しているかを確かめる。",
+      "exists_if": "condition.has_foreign_assets == true",
+      "prerequisites": ["SELF_FOREIGN_COUNTRY_NOTE"],
+      "base_urgency": "CAN_WAIT",
+      "priority": 29,
+      "wait": { "nature": "NONE" },
+      "durability": "REFRESHABLE",
+      "caution": {
+        "note": "提出していない状態は、本人の死後も残る。"
+      },
+      "legal_metadata": {
+        "verification_status": "SELF_REVIEWED",
+        "verified_at": null,
+        "verified_by": null,
+        "source_draft": "内国税の適正な課税の確保を図るための国外送金等に係る調書の提出等に関する法律（国外送金等調書法）",
+        "needs_check": ["国外財産調書の提出基準額、判定日、提出期限", "未提出・過少記載の場合の加算税の扱い"]
+      }
+    },
+
+    {
+      "id": "SELF_DEBT_LIST_NOTE",
+      "stream": "ESTATE_SUCCESSION",
+      "actor": "SELF",
+      "persona_labels": ["DEBT_CONCERN"],
+      "title": "借入と保証の一覧",
+      "today_action": "借入先と保証先を紙に書く。件数と相手先だけでよい。金額は書かなくてよい。",
+      "why_only_you": "借入は通帳や郵便物から辿れるが、保証は主債務者が払っているあいだ何も届かない。本人が書かなければ、誰も知り得ない。",
+      "exists_if": "condition.has_debt_or_guarantee == true",
+      "prerequisites": [],
+      "base_urgency": "CAN_WAIT",
+      "priority": 11,
+      "wait": { "nature": "NONE" },
+      "durability": "PERMANENT",
+      "mitigates_nodes": [
+        {
+          "target_node_id": "SURV_DISCOVER_DEBT",
+          "effect": "SKIPPED",
+          "explanation": "遺族が期限内に判断するための材料が、はじめから手元にあることになります。"
+        }
+      ],
+      "legal_metadata": {
+        "verification_status": "SELF_REVIEWED",
+        "verified_at": null,
+        "verified_by": null,
+        "source_draft": null,
+        "needs_check": []
+      }
+    },
+    {
+      "id": "SELF_DEBT_LEAVE_INSTRUCTION",
+      "stream": "ESTATE_SUCCESSION",
+      "actor": "SELF",
+      "persona_labels": ["DEBT_CONCERN"],
+      "title": "預金に手をつける前に相談してほしい旨を書き残す",
+      "today_action": "一覧に添えて、こう書く。『私の預金を引き出して使うと、相続を放棄する道が閉じることがあります。この紙を持って、まず弁護士に相談してください。』",
+      "why_only_you": "本人が黙っていると、家族はそれを知らずに閉じる。",
+      "exists_if": "condition.has_debt_or_guarantee == true",
+      "prerequisites": ["SELF_DEBT_LIST_NOTE"],
+      "base_urgency": "CAN_WAIT",
+      "priority": 11,
+      "wait": { "nature": "NONE" },
+      "durability": "PERMANENT",
+      "caution": {
+        "note": "『放棄しなさい』とは書かない。判断は遺族と専門家がする。本人が書くのは、何が起きるかという事実と、相談先である。"
+      },
+      "legal_metadata": {
+        "verification_status": "SELF_REVIEWED",
+        "verified_at": null,
+        "verified_by": null,
+        "source_draft": "民法第915条第1項（熟慮期間）、民法第921条第1号（法定単純承認）",
+        "needs_check": []
+      }
+    },
+    {
+      "id": "SELF_DEBT_INSURANCE_ROUTE",
+      "stream": "ESTATE_SUCCESSION",
+      "actor": "SELF",
+      "persona_labels": ["DEBT_CONCERN"],
+      "title": "放棄されても残る道を用意しておく",
+      "today_action": "生命保険の受取人を確かめる。受取人に指定された人は、相続を放棄しても保険金を受け取れるとされている。",
+      "why_only_you": "受取人を決められるのは本人だけである。",
+      "exists_if": "condition.has_debt_or_guarantee == true",
+      "prerequisites": ["SELF_INSURANCE_NOTE"],
+      "base_urgency": "CAN_WAIT",
+      "priority": 19,
+      "wait": { "nature": "NONE" },
+      "durability": "PERMANENT",
+      "caution": {
+        "note": "受け取れることと、税の扱いは別である。放棄した人には非課税の枠が使えないとされる。ここは税理士に確かめる箇所である。"
+      },
+      "legal_metadata": {
+        "verification_status": "SELF_REVIEWED",
+        "verified_at": null,
+        "verified_by": null,
+        "source_draft": "死亡保険金は受取人固有の財産とする判例（最判昭和40年2月2日ほか）",
+        "needs_check": ["受取人が『相続人』と指定されている場合の扱い", "放棄した者に対する死亡保険金の非課税枠の適用可否"]
+      }
+    },
+
+    {
+      "id": "SELF_RESERVED_SHARE_CHECK",
+      "stream": "ESTATE_SUCCESSION",
+      "actor": "SELF",
+      "persona_labels": ["ALL"],
+      "title": "家族が最低限受け取れる取り分を先に知る",
+      "today_action": "家族以外へ渡したい財産がある場合に、家族に法律上残さねばならない取り分がどれくらいかを確かめる。",
+      "exists_if": "condition.wishes_donation == true || condition.has_unmarried_partner == true || condition.is_business_owner == true",
+      "prerequisites": [],
+      "base_urgency": "CAN_WAIT",
+      "priority": 32,
+      "wait": { "nature": "NONE" },
+      "durability": "PERMANENT",
+      "caution": {
+        "note": "これを知らずに遺言を書くと、本人の死後に家族と渡した相手が争うことになる。それは本人が最も望まないことである。"
+      },
+      "legal_metadata": {
+        "verification_status": "SELF_REVIEWED",
+        "verified_at": null,
+        "verified_by": null,
+        "source_draft": "民法第1042条（遺留分）",
+        "needs_check": ["遺留分の割合と、権利を持つ人の範囲", "請求の期限"]
+      }
+    },
+    {
+      "id": "SELF_BEQUEST_ORG_CHECK",
+      "stream": "ESTATE_SUCCESSION",
+      "actor": "SELF",
+      "persona_labels": ["ALL"],
+      "title": "遺贈したい団体に、受け取ってもらえるか先に聞く",
+      "today_action": "寄付したい団体へ、不動産や現金の遺贈を受け入れているかを、生きているうちに問い合わせる。",
+      "why_only_you": "この問い合わせは本人にしかできない。",
+      "exists_if": "condition.wishes_donation == true",
+      "prerequisites": ["SELF_RESERVED_SHARE_CHECK"],
+      "base_urgency": "CAN_WAIT",
+      "priority": 33,
+      "wait": { "nature": "EXTERNAL_WAIT", "reason": "団体からの回答待ち。数週間かかることがあります。" },
+      "durability": "PERMANENT",
+      "caution": {
+        "note": "現金なら受けてもらえることが多いが、土地や建物は断られることが多い。断られると、その部分は宙に浮く。"
+      },
+      "legal_metadata": {
+        "verification_status": "SELF_REVIEWED",
+        "verified_at": null,
+        "verified_by": null,
+        "source_draft": null,
+        "needs_check": ["換価してから遺贈する場合の課税（譲渡所得の扱い）"]
+      }
+    },
+    {
+      "id": "SELF_DESIGNATE_EXECUTOR",
+      "stream": "ESTATE_SUCCESSION",
+      "actor": "SELF",
+      "persona_labels": ["ALL"],
+      "title": "遺言を実行する人を決めて、引き受けてもらう",
+      "today_action": "遺言のとおりに手続をする人を決め、引き受けてもらえるかを確かめる。あわせて、その人が困らないよう、書類の在処と相手の連絡先を渡しておく。",
+      "why_only_you": "家族に頼むのは酷である。自分の取り分が減る内容を、自分の手で実行させることになる。",
+      "exists_if": "condition.wishes_donation == true || condition.has_will == true || condition.has_unmarried_partner == true",
+      "prerequisites": ["SELF_BEQUEST_ORG_CHECK"],
+      "base_urgency": "CAN_WAIT",
+      "priority": 34,
+      "wait": { "nature": "NONE" },
+      "durability": "PERMANENT",
+      "specialist_bridge": {
+        "type": "LAWYER",
+        "concrete_query": "遺言執行者の就任を引き受けてもらえるか、および家族の取り分を侵害しない遺言の書き方を相談したい。",
+        "estimated_cost_range": "遺言作成 10万〜20万円程度"
+      },
+      "legal_metadata": {
+        "verification_status": "SELF_REVIEWED",
+        "verified_at": null,
+        "verified_by": null,
+        "source_draft": "民法第1006条（遺言執行者の指定）",
+        "needs_check": []
+      }
+    },
+    {
+      "id": "SELF_PARTNER_PROVISION",
+      "stream": "ESTATE_SUCCESSION",
+      "actor": "SELF",
+      "persona_labels": ["ALL"],
+      "title": "籍を入れていない相手に残すための手立て",
+      "today_action": "籍を入れていない相手は相続人にならない。遺言や保険の受取人指定など、どの手立てを使うかを決める。",
+      "why_only_you": "何もしなければ、相手には何も渡らない。手を打てるのは本人だけである。",
+      "exists_if": "condition.has_unmarried_partner == true",
+      "prerequisites": ["SELF_RESERVED_SHARE_CHECK"],
+      "base_urgency": "CAN_WAIT",
+      "priority": 31,
+      "wait": { "nature": "NONE" },
+      "durability": "PERMANENT",
+      "caution": {
+        "note": "相手が住んでいる家の扱い、税の扱い（相続人でない人が受け取る場合の加算）も確かめる箇所である。"
+      },
+      "legal_metadata": {
+        "verification_status": "SELF_REVIEWED",
+        "verified_at": null,
+        "verified_by": null,
+        "source_draft": null,
+        "needs_check": ["相続人以外の者が財産を取得した場合の相続税額の加算", "居住権の確保の手立て"]
+      }
+    }
+  ]
+}

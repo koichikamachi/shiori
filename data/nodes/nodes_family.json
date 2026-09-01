@@ -1,0 +1,128 @@
+{
+  "schema_version": "2.0",
+  "file": "nodes_family.json",
+  "actor_scope": "FAMILY_CHILD",
+  "note": "親や経営者を気にかけているが、まだ何も起きていない立場。S01 の壁4。母数が最も大きい。この立場のノードは、親の協力を前提としないものを含むこと。",
+  "nodes": [
+    {
+      "id": "FAMILY_NARROW_WHAT_TO_ASK",
+      "stream": "FAMILY_BRIDGING",
+      "actor": "FAMILY_CHILD",
+      "persona_labels": ["ALL"],
+      "title": "親にしか答えられないことだけに絞る",
+      "today_action": "聞きたいことを全部書き出し、そのうち『親にしか答えられないこと』だけに印をつける。残りは自分で調べられる。",
+      "exists_if": null,
+      "prerequisites": [],
+      "base_urgency": "CAN_WAIT",
+      "priority": 10,
+      "wait": { "nature": "NONE" },
+      "durability": "PERMANENT",
+      "caution": {
+        "note": "聞くべきことは、思っているよりずっと少ない。全部を聞き出す必要はない。"
+      },
+      "legal_metadata": {
+        "verification_status": "SELF_REVIEWED",
+        "verified_at": null,
+        "verified_by": null,
+        "source_draft": null,
+        "needs_check": []
+      }
+    },
+    {
+      "id": "FAMILY_ASK_DOC_LOCATION",
+      "stream": "FAMILY_BRIDGING",
+      "actor": "FAMILY_CHILD",
+      "persona_labels": ["ALL"],
+      "title": "書類の置き場所だけを聞く言い方",
+      "today_action": "『相続の話をしたい』ではなく、こう言う。『万一のときに困らないよう、保険証券や通帳がどの引き出しにあるかだけ教えておいてほしい。』",
+      "exists_if": null,
+      "prerequisites": ["FAMILY_NARROW_WHAT_TO_ASK"],
+      "base_urgency": "CAN_WAIT",
+      "priority": 11,
+      "wait": { "nature": "NONE" },
+      "durability": "PERMANENT",
+      "caution": {
+        "note": "財産の話ではなく、置き場所の話にする。親は答えやすくなる。"
+      },
+      "legal_metadata": {
+        "verification_status": "SELF_REVIEWED",
+        "verified_at": null,
+        "verified_by": null,
+        "source_draft": null,
+        "needs_check": []
+      }
+    },
+    {
+      "id": "FAMILY_RESEARCH_WITHOUT_PARENT",
+      "stream": "FAMILY_BRIDGING",
+      "actor": "FAMILY_CHILD",
+      "persona_labels": ["ALL"],
+      "title": "親が話してくれなくても、自分で調べられること",
+      "today_action": "親の協力なしに分かることを確かめる。自宅の名義（登記簿は誰でも取れる）、実家の固定資産税の課税明細が届いているか、兄弟の人数と連絡先の整理。",
+      "exists_if": null,
+      "prerequisites": [],
+      "base_urgency": "CAN_WAIT",
+      "priority": 12,
+      "wait": { "nature": "NONE" },
+      "durability": "PERMANENT",
+      "caution": {
+        "note": "何もできずに待つしかない、というわけではない。親の協力を前提にしない道がある。"
+      },
+      "legal_metadata": {
+        "verification_status": "SELF_REVIEWED",
+        "verified_at": null,
+        "verified_by": null,
+        "source_draft": null,
+        "needs_check": ["登記事項証明書を誰でも取得できる範囲", "本人以外が取得できない書類の線引き"]
+      }
+    },
+    {
+      "id": "FAMILY_SUGGEST_ENTRY_AND_KEY",
+      "stream": "FAMILY_BRIDGING",
+      "actor": "FAMILY_CHILD",
+      "persona_labels": ["ALL"],
+      "title": "親に、入口と鍵の渡し方を伝える",
+      "today_action": "『中身は見せなくていい。どこを見ればいいかだけ、どこかに書いておいてほしい』と伝える。",
+      "exists_if": null,
+      "prerequisites": ["FAMILY_ASK_DOC_LOCATION"],
+      "base_urgency": "CAN_WAIT",
+      "priority": 13,
+      "wait": { "nature": "NONE" },
+      "durability": "PERMANENT",
+      "caution": {
+        "note": "中身を見せろと言えば警戒される。入口だけを求めれば、親の側の抵抗はずっと小さい。"
+      },
+      "legal_metadata": {
+        "verification_status": "SELF_REVIEWED",
+        "verified_at": null,
+        "verified_by": null,
+        "source_draft": null,
+        "needs_check": []
+      }
+    },
+    {
+      "id": "FAMILY_PARENT_INCAPACITY_PREP",
+      "stream": "FAMILY_BRIDGING",
+      "actor": "FAMILY_CHILD",
+      "persona_labels": ["ALL"],
+      "title": "親が判断できなくなったときの備えを、先に話す",
+      "today_action": "死んだあとの話より先に来ることがある。入院費や生活費を誰がどう出すのかを、親と話しておく。",
+      "exists_if": null,
+      "prerequisites": ["FAMILY_ASK_DOC_LOCATION"],
+      "base_urgency": "CAN_WAIT",
+      "priority": 14,
+      "wait": { "nature": "NONE" },
+      "durability": "PERMANENT",
+      "caution": {
+        "note": "この話は『死』を持ち出さずに始められる。切り出しやすい入口になることがある。"
+      },
+      "legal_metadata": {
+        "verification_status": "SELF_REVIEWED",
+        "verified_at": null,
+        "verified_by": null,
+        "source_draft": null,
+        "needs_check": ["判断能力低下後に家族が預金を動かせる範囲（金融機関の実務）"]
+      }
+    }
+  ]
+}

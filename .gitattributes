@@ -1,0 +1,18 @@
+# 改行の扱いを固定する。
+# このプロジェクトは最終的に Cloud Run（Linux）で動くため、LF に統一する。
+# これがないと、Windows で作業するたびに CRLF 変換の警告が出て、
+# 差分にも改行だけの変更が混ざる。
+* text=auto eol=lf
+
+# バイナリは変換しない
+*.docx binary
+*.xlsx binary
+*.pptx binary
+*.pdf  binary
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.gif  binary
+*.ico  binary
+*.zip  binary
+*.mp4  binary

@@ -155,16 +155,67 @@ def test_family_child_scope(engine):
 # =============================================================================
 
 def test_survivor_immediate_three_items(engine):
-    """① 死の直後。自分で決めるのは3件まで。"""
+    """① 死の直後。自分で決めるのは3件まで。
+
+    S02 第三部2 は三つを別のものとして渡している。
+      今日やること／今日はやらなくてよいこと／触る前に知っておくこと
+    三つめを「今日やること」に数えると、3件の枠を一つ潰してしまう。
+    """
     cond = UserCondition(days_since_death=1)
     res = run(engine, "SURVIVOR", cond)
     today = ids(res["today_actions"])
     assert len(today) <= 3
     assert "SURV_KNOW_SAFE_ACTIONS" in today
-    assert "SURV_WARN_DEPOSIT" in today
+    assert "SURV_FUNERAL_ARRANGEMENT" in today
     assert "SURV_FIND_ENTRY" in today
+
+    # 触る前の注意は、赤い帯に出る。作業としては数えない
+    assert "SURV_WARN_DEPOSIT" not in today
     warn = {w["node_id"] for w in res["irreversible_warnings"]}
     assert "SURV_WARN_DEPOSIT" in warn
+
+
+def test_survivor_day1_warning_band_is_not_crowded(engine):
+    """死の直後、赤い帯に並ぶのは今かかわりのあるものだけ。
+
+    まだ何か月も先の不可逆（遺産分割のやり直しなど）を直後に並べると、
+    本当に危ない一つが埋もれる。
+    """
+    res = run(engine, "SURVIVOR", UserCondition(days_since_death=1))
+    warn = [w["node_id"] for w in res["irreversible_warnings"]]
+    assert warn[0] == "SURV_WARN_DEPOSIT"
+    assert len(warn) == 1
+    assert "SURV_ESTATE_DIVISION" not in warn
+
+
+def test_self_warnings_are_not_filtered(engine):
+    """本人の側では、まだ手を打てる不可逆こそ先に知らせる（S02 第一部8）。
+
+    遺族と同じ絞り込みをすると、事前の告知という目的そのものが消える。
+    """
+    cond = UserCondition(has_own_home=True, estate_over_basic_deduction=True,
+                         is_business_owner=True)
+    res = run(engine, "SELF", cond)
+    warn = {w["node_id"] for w in res["irreversible_warnings"]}
+    assert "SELF_LAND_SMALL_RESIDENTIAL" in warn   # 前提が未了でも出る
+    assert "SELF_BIZ_SUCCESSION_TAX" in warn
+
+
+def test_shortcut_note_is_shown_when_route_disappears(engine):
+    """消えた経路は、消えたと伝える。
+
+    「その作業は要りません」と言えなければ、本人の一手が効いたことが伝わらない。
+    """
+    cond = UserCondition(days_since_death=10, entry_found=True, entry_locked=False)
+    res = run(engine, "SURVIVOR", cond)
+    notes = {s["node_id"]: s["note"] for s in res["shortcuts"]}
+    assert "SURV_DISCOVER_ACCOUNTS" in notes
+    assert "SURV_DISCOVER_DEBT" in notes
+    assert "要りません" in notes["SURV_DISCOVER_ACCOUNTS"]
+
+    # メモがなければ、経路は消えていないので何も言わない
+    res2 = run(engine, "SURVIVOR", UserCondition(days_since_death=10, entry_found=False))
+    assert "SURV_DISCOVER_ACCOUNTS" not in {s["node_id"] for s in res2["shortcuts"]}
 
 
 def test_survivor_death_notice_not_counted_in_three(engine):
@@ -320,9 +371,14 @@ def test_rule5_ordering_is_deterministic(engine):
 
 def test_rule5_irreversible_ranks_above_plain(engine):
     """ルール5。不可逆のあるものは、同じ緊急度の普通のものより先に出る。"""
-    cond = UserCondition(days_since_death=1)
-    today = ids(run(engine, "SURVIVOR", cond)["today_actions"])
-    assert today.index("SURV_WARN_DEPOSIT") < today.index("SURV_FIND_ENTRY")
+    cond = UserCondition(days_since_death=100, entry_found=False)
+    done = {"SURV_DEATH_NOTICE", "SURV_FUNERAL_ARRANGEMENT", "SURV_KNOW_SAFE_ACTIONS",
+            "SURV_FIND_ENTRY", "SURV_WARN_DEPOSIT", "SURV_COLLECT_KOSEKI",
+            "SURV_DETERMINE_HEIRS", "SURV_DISCOVER_ACCOUNTS", "SURV_DISCOVER_DEBT",
+            "SURV_LIST_ASSETS"}
+    today = ids(run(engine, "SURVIVOR", cond, completed=done)["today_actions"])
+    # 期限を過ぎた不可逆（承認・放棄の判断）が、普通の作業より先に出る
+    assert today[0] == "SURV_DECIDE_ACCEPT_OR_RENOUNCE"
 
 
 def test_rule6_warnings_have_fact_and_exception(engine):

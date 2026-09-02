@@ -41,6 +41,7 @@ REQUIRED = [
 
 ALLOWED = set(REQUIRED) | {
     "persona_labels", "why_only_you", "decided_by_you",
+    "is_warning_only", "absent_note",
     "mitigates_nodes", "irreversibility", "caution",
     "deadline", "specialist_bridge",
 }
@@ -226,6 +227,19 @@ for name, nodes in by_file.items():
         if sb is not None and sb.get("type") not in SPECIALIST:
             err(w, f"specialist_bridge.type の値が定義にない: {sb.get('type')}")
 
+        # 赤い帯だけに出すノードは、不可逆の警告を持っていること
+        if node.get("is_warning_only") and not node.get("irreversibility"):
+            err(w, "is_warning_only なのに irreversibility がない（赤い帯に出す中身がない）")
+
+        # 消えたときの一文は、条件つきのノードにしか意味がない
+        if node.get("absent_note") and not node.get("exists_if"):
+            err(w, "absent_note があるのに exists_if がない（このノードは消えることがない）")
+
+        # 消える道には、必ず言葉を置く（S03 ルール14）
+        # 空欄だと、利用者は「自分の場合が単純なのか、道具が隠しているのか」を区別できない
+        if node.get("exists_if") and not node.get("absent_note"):
+            err(w, "exists_if があるのに absent_note がない（消えた道の説明が空欄になる）")
+
         # 本人ノードの why_only_you
         if node.get("actor") == "SELF" and not node.get("why_only_you"):
             warn(w, "why_only_you がない（本人にしかできない理由を書くと、本人の動機になる）")
@@ -273,6 +287,7 @@ immediate = [
     if n.get("base_urgency") == "MUST_IMMEDIATE"
     and not n.get("prerequisites")
     and n.get("decided_by_you") is True
+    and not n.get("is_warning_only")
 ]
 if len(immediate) > 3:
     err("nodes_survivor.json",

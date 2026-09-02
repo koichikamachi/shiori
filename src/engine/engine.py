@@ -8,6 +8,7 @@ data/nodes/*.json（地図）と、ユーザーの状態（現在地）を突き
 """
 import calendar
 import json
+import re
 from datetime import date, timedelta
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Set
@@ -25,6 +26,9 @@ FILE_MAP = {
 URGENCY_ORDER = {"OVERDUE": 0, "MUST_IMMEDIATE": 1, "SOON": 2, "CAN_WAIT": 3}
 IMMEDIATE_DAYS = 14
 SOON_DAYS = 45
+
+# S03 ルール14。exists_if に出てくる条件名を拾う（霧を描くためだけに使う）
+CONDITION_KEY = re.compile(r"condition\.(\w+)")
 
 # S03 ルール7。出来事が起きたときに DONE から戻すノード。
 EVENT_RESETS = {
@@ -50,6 +54,12 @@ class ShioriEngine:
         self.data_dir = data_dir or (Path(__file__).resolve().parents[2] / "data" / "nodes")
         self.nodes_by_scope: Dict[str, Dict[str, Any]] = {k: {} for k in FILE_MAP}
         self._load_nodes()
+        # 条件の日本語名。霧を言葉にするためだけに読む（S03 ルール14）
+        self.condition_labels: Dict[str, str] = {}
+        cpath = self.data_dir.parent / "schema" / "conditions.json"
+        if cpath.exists():
+            conds = json.loads(cpath.read_text(encoding="utf-8")).get("conditions", {})
+            self.condition_labels = {k: v.get("label", k) for k, v in conds.items()}
 
     # ---- 読み込み ---------------------------------------------------------
 
@@ -94,6 +104,30 @@ class ShioriEngine:
         if node.get("base_urgency") == "MUST_IMMEDIATE":
             return "MUST_IMMEDIATE"
         return "CAN_WAIT"
+
+    # ---- 地図の面（S03 ルール14） -----------------------------------------
+
+    def _deadline_label(self, node: Dict[str, Any]) -> Optional[str]:
+        dl = node.get("deadline")
+        if not dl:
+            return None
+        trigger = dl.get("trigger") or "起算"
+        if dl.get("absolute_date"):
+            return f"{dl['absolute_date']} まで"
+        if dl.get("months") is not None:
+            return f"{trigger}から {dl['months']} か月"
+        if dl.get("days") is not None:
+            return f"{trigger}から {dl['days']} 日"
+        return None
+
+    def _fog_keys(self, node: Dict[str, Any], cond_values: Dict[str, Any],
+                  unanswered: Set[str]) -> List[str]:
+        """
+        この道が消えたのは「いいえ」だからか、「まだ答えていない」からか。
+        判定には使わない。霧を描くためだけに使う（S03 ルール14）。
+        """
+        keys = set(CONDITION_KEY.findall(node.get("exists_if") or ""))
+        return sorted(k for k in keys if k in unanswered or cond_values.get(k) is None)
 
     # ---- 本体 -------------------------------------------------------------
 
@@ -169,6 +203,9 @@ class ShioriEngine:
                 nid,
             )
 
+        # 赤い帯にだけ出すノードは、今日の3件に数えない（S03 ルール5）
+        actionable = [n for n in actionable if not n.get("is_warning_only")]
+
         candidates = sorted(actionable, key=sort_key)
         if actor_scope == "SURVIVOR":
             mine = [n for n in candidates if n.get("decided_by_you", True)]
@@ -207,7 +244,15 @@ class ShioriEngine:
                 "warning_exception": existing[nid]["irreversibility"]["warning_exception"],
             }
             for nid in sorted(existing)
-            if existing[nid].get("irreversibility") and resolved[nid] != NodeStatus.DONE
+            if existing[nid].get("irreversibility")
+            and resolved[nid] != NodeStatus.DONE
+            # 遺族はパニックのなかにいる。赤い帯は「いま関係のあるもの」に絞る。
+            # 本人は元気なうちなので、まだ手を打てる不可逆こそ先に知らせる（S02 第一部8）。
+            and (
+                actor_scope != "SURVIVOR"
+                or resolved[nid] in (NodeStatus.READY, NodeStatus.IN_PROGRESS, NodeStatus.WAITING)
+                or urgency[nid] in ("OVERDUE", "MUST_IMMEDIATE", "SOON")
+            )
         ]
         warnings.sort(key=lambda x: (existing[x["node_id"]].get("priority", 999), x["node_id"]))
 
@@ -229,6 +274,98 @@ class ShioriEngine:
                 if statuses.get(nid) == NodeStatus.DONE and nid not in reset_ids
             ]
 
+        # ---- 地図の面（S03 ルール14）------------------------------------
+        # 判定は上で終わっている。ここから下は表示だけである。計算をやり直さない。
+        all_nodes = self.nodes_by_scope[actor_scope]
+        unanswered = set(condition.unanswered)
+
+        # この先に何が開くか（prerequisites の逆引き。データは足していない）
+        unlocks: Dict[str, List[str]] = {nid: [] for nid in all_nodes}
+        for nid, node in existing.items():
+            for p in node.get("prerequisites", []):
+                if p in existing:
+                    unlocks[p].append(existing[nid]["title"])
+
+        absent = []
+        for nid in sorted(all_nodes):
+            if nid in existing:
+                continue
+            node = all_nodes[nid]
+            fog = self._fog_keys(node, cond_values, unanswered)
+            absent.append({
+                "node_id": nid,
+                "title": node["title"],
+                "note": node.get("absent_note") or "",
+                "fog": bool(fog),
+                "fog_keys": fog,
+                "fog_labels": [self.condition_labels.get(k, k) for k in fog],
+            })
+        absent_by_id = {a["node_id"]: a for a in absent}
+
+        # 条件で消えたノードのうち、消えたことを伝える値打ちがあるもの（S02 第三部）。
+        # 霧のものは入れない。「不動産がないので名義変更は要りません」と、
+        # まだ分かっていないのに言い切ってしまうからである（S03 ルール14）。
+        shortcuts = [
+            {"node_id": a["node_id"], "note": a["note"]}
+            for a in absent if a["note"] and not a["fog"]
+        ]
+
+        def map_key(nid: str):
+            n = all_nodes[nid]
+            return (n.get("stream", ""), n.get("priority", 999), nid)
+
+        node_map = []
+        for nid in sorted(all_nodes, key=map_key):
+            node = all_nodes[nid]
+            present = nid in existing
+            a = absent_by_id.get(nid)
+            node_map.append({
+                "node_id": nid,
+                "title": node["title"],
+                "stream": node.get("stream", ""),
+                "present": present,
+                "status": resolved[nid].value if present else None,
+                "urgency": urgency[nid] if present else None,
+                "days_left": days_left[nid] if present else None,
+                "deadline_label": self._deadline_label(node),
+                # 止めているノードは「名前」で出す。idは利用者の言葉ではない。
+                "blocked_by": [existing[p]["title"] for p in unmet_map.get(nid, []) if p in existing],
+                "unlocks": sorted(unlocks.get(nid, [])),
+                "absent_reason": (a["note"] if a else None),
+                "fog": (a["fog"] if a else False),
+                "fog_keys": (a["fog_keys"] if a else []),
+                "verification_status": node.get("legal_metadata", {}).get("verification_status"),
+            })
+
+        # 「◯◯が分かると、この先に◯件つながります」を作るための束ね方
+        fog_groups: Dict[str, Dict[str, Any]] = {}
+        for a in absent:
+            for k, label in zip(a["fog_keys"], a["fog_labels"]):
+                g = fog_groups.setdefault(k, {"key": k, "label": label, "count": 0, "titles": []})
+                g["count"] += 1
+                g["titles"].append(a["title"])
+        fog_groups_list = [fog_groups[k] for k in sorted(fog_groups)]
+
+        by_stream: Dict[str, Dict[str, int]] = {}
+        for nid, node in existing.items():
+            s = by_stream.setdefault(node.get("stream", ""), {"total": 0, "done": 0})
+            s["total"] += 1
+            if resolved[nid] == NodeStatus.DONE:
+                s["done"] += 1
+
+        progress = {
+            "total": len(all_nodes),
+            "present": len(existing),
+            "absent": len(absent),
+            "fog": sum(1 for a in absent if a["fog"]),
+            "done": sum(1 for st in resolved.values() if st == NodeStatus.DONE),
+            "ready": sum(1 for st in resolved.values() if st == NodeStatus.READY),
+            "in_progress": sum(1 for st in resolved.values() if st == NodeStatus.IN_PROGRESS),
+            "waiting": sum(1 for st in resolved.values() if st == NodeStatus.WAITING),
+            "not_ready": sum(1 for st in resolved.values() if st == NodeStatus.NOT_READY),
+            "by_stream": dict(sorted(by_stream.items())),
+        }
+
         mitigation_preview = []
         if actor_scope == "SELF":
             for nid in sorted(existing):
@@ -249,9 +386,15 @@ class ShioriEngine:
             "deadline_alerts": deadline_alerts,
             "waiting": waiting,
             "not_ready_count": sum(1 for st in resolved.values() if st == NodeStatus.NOT_READY),
+            "shortcuts": shortcuts,
             "reset_by_events": reset_ids,
             "surviving_after_event": surviving,
             "mitigation_preview": mitigation_preview,
+            # 地図の面（S03 ルール14）。動詞（today_action）は入れない。
+            "map": node_map,
+            "absent": absent,
+            "fog_groups": fog_groups_list,
+            "progress": progress,
             "all_active_nodes": [existing[nid] for nid in sorted(existing)],
             "statuses": {nid: st.value for nid, st in resolved.items()},
             "urgency": urgency,

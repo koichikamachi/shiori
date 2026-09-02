@@ -1,0 +1,50 @@
+{
+  "id": "SELF_BIZ_SUCCESSION_TAX",
+  "stream": "BUSINESS_SUCCESSION",
+  "actor": "SELF",
+  "persona_labels": [
+    "BUSINESS_OWNER"
+  ],
+  "title": "事業承継税制（法人版）が使えるか、渡す時期まで含めて確かめる",
+  "today_action": "顧問税理士に二つを確かめる。①特例承継計画を出せる期限（令和9年9月30日）に間に合うか。②実際に株を渡す期限（令和9年12月31日）までに渡し終えられるか。",
+  "why_only_you": "株を誰にいつ渡すかを決められるのは本人だけである。計画を出しても、渡す時期が間に合わなければ意味がない。",
+  "exists_if": "condition.is_business_owner == true",
+  "prerequisites": [
+    "SELF_BIZ_STOCK_REGISTER"
+  ],
+  "base_urgency": "CAN_WAIT",
+  "priority": 13,
+  "wait": {
+    "nature": "NONE"
+  },
+  "durability": "PERMANENT",
+  "deadline": {
+    "days": null,
+    "months": null,
+    "absolute_date": "2027-12-31",
+    "trigger": "特例措置の対象となる贈与・相続の期限（法人版）",
+    "note": "計画の提出期限は2027-09-30。渡す期限は2027-12-31。あいだが3か月しかない。急所は計画ではなく、渡すほうの期限である。"
+  },
+  "irreversibility": {
+    "is_irreversible": true,
+    "lost_option": "自社株にかかる贈与税・相続税の納税猶予（特例措置）",
+    "warning_fact": "計画を出せる期限は令和9年9月30日まで延びましたが、実際に株を渡す期限は令和9年12月31日で変わっていません。あいだは3か月しかありません。計画を出しても、その日までに渡し終えていなければ、この特例は使えません。",
+    "warning_exception": "期限は法改正で動きます。いまの期限と、自社が要件を満たすかを、まず税理士に確かめてください。間に合わない場合の別の手立てもあります。"
+  },
+  "specialist_bridge": {
+    "type": "TAX_ACCOUNTANT",
+    "concrete_query": "事業承継税制（法人版・特例措置）について、①特例承継計画の提出（期限 令和9年9月30日）に間に合うか、②令和9年12月31日までに株の贈与を完了できるか、③間に合わない場合の代替（一般措置、株価対策、役員退職金など）を相談したい。",
+    "estimated_cost_range": "顧問報酬内〜別途見積"
+  },
+  "legal_metadata": {
+    "verification_status": "SOURCE_VERIFIED",
+    "verified_at": "2026-08-31",
+    "verified_by": "中小企業庁サイト（法人版事業承継税制・特例措置）",
+    "source_draft": "租税特別措置法第70条の7の5（贈与）、同第70条の7の6（相続）。令和8年度税制改正により特例承継計画の提出期限を令和8年3月31日から令和9年9月30日へ延長。適用期限（令和9年12月31日）は延長されていない。",
+    "source_url": "https://www.chusho.meti.go.jp/zaimu/shoukei/shoukei_enkatsu_zouyo_souzoku.html",
+    "needs_check": [
+      "要件（後継者の数、雇用、代表就任など）は未確認。税理士に確かめる箇所とする。",
+      "令和9年12月31日の適用期限が今後さらに延長されないか、年に一度は確かめる。"
+    ]
+  }
+}

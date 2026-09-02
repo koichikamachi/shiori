@@ -69,6 +69,14 @@
           "enum": ["PERMANENT", "REFRESHABLE", "VOLATILE"],
           "description": "PERMANENT: 一度で済む。REFRESHABLE: 時が経つと古くなる。VOLATILE: 出来事で無効に戻る。"
         },
+        "is_warning_only": {
+          "type": "boolean",
+          "description": "赤い帯にだけ出し、「今日の3件」には数えないノード。S02 第三部2 は『今日やること』『やらなくてよいこと』『触る前に知っておくこと』を別のものとして渡している。触る前の注意を作業として数えると、3件の枠を一つ潰す。"
+        },
+        "absent_note": {
+          "type": "string",
+          "description": "exists_if が偽で、このノードが道筋から消えたときに使う人へ伝える一文。「その作業は要りません」と言えるようにするためのもの。"
+        },
         "decided_by_you": {
           "type": "boolean",
           "description": "遺族が自分で決めて動かねばならないか。false なら葬儀社等が主導する。「今日の3件」に数えるのは true のものだけ。"

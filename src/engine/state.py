@@ -49,6 +49,10 @@ class UserCondition(BaseModel):
     days_since_death: Optional[int] = Field(default=None, description="死亡から何日目か（日付そのものは持たない）")
     events: List[str] = Field(default_factory=list, description="起きた出来事")
 
+    # S03 ルール14。「いいえ」と「まだ答えていない」を分けるためだけの箱。
+    # 判定には使わない。exists_if の意味は変えない。地図に霧を描くのに使う。
+    unanswered: List[str] = Field(default_factory=list, description="まだ答えていない条件の名前")
+
     @property
     def has_self_memo(self) -> bool:
         """導出。本人が残した一覧の中身が手元にある＝入口が見つかり、かつ開けられた。"""
@@ -57,6 +61,8 @@ class UserCondition(BaseModel):
     def to_eval_dict(self) -> Dict[str, Any]:
         d = self.model_dump()
         d["has_self_memo"] = self.has_self_memo
+        # 判定に混ぜない。unanswered は表示のための箱である。
+        d.pop("unanswered", None)
         return d
 
 

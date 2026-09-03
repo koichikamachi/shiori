@@ -165,7 +165,11 @@ def test_the_childless_are_given_the_one_thing_that_works(engine):
     assert "SELF_NO_CHILD_ROUTE" in r["statuses"]
     w = next(w for w in r["irreversible_warnings"] if w["node_id"] == "SELF_NO_CHILD_ROUTE")
     assert "取れません" in w["warning_fact"]
-    assert "遺留分がありません" in w["warning_exception"]
+    exc = w["warning_exception"]
+    assert "遺留分がありません" in exc
+    # 逃げ道（遺言）が先。親の戸籍は誤解の訂正なので後ろ（S03 ルール6）
+    assert "親の戸籍" in exc, "誰が兄弟姉妹かは分かる、を落とさない"
+    assert exc.index("遺留分がありません") < exc.index("親の戸籍")
 
     with_child = run(engine, scope="SELF", has_spouse=True, children_count=2)
     assert "SELF_NO_CHILD_ROUTE" not in with_child["statuses"]
@@ -259,3 +263,22 @@ def test_the_will_route_does_not_wait_for_a_division_that_never_comes(engine):
     r = run(engine, has_real_estate_in_estate=True, has_will=True, days_since_death=1000)
     assert r["days_left"][nid] is not None
     assert r["days_left"][nid] < 100
+
+
+def test_self_side_may_speak_of_the_family_but_only_from_the_map(engine):
+    """
+    本人の画面に遺族の側で起きることを書いてよい（S03 ルール15）。
+    ただし、実務で見た結果を書くときは、その理由を並べて書く。
+    結果だけでは信じるしかなく、仕組みだけでは痛みが伝わらない。
+    """
+    r = run(engine, scope="SELF", has_spouse=True, children_count=2)
+    w = next(w for w in r["irreversible_warnings"]
+             if w["node_id"] == "SELF_RENOUNCE_CHAIN_WARN")
+    fact = w["warning_fact"]
+    assert "終わりがけ" in fact                      # 実務で見た結果
+    assert "戸籍をたどり終えたあと" in fact          # そうなる理由
+    assert fact.index("戸籍をたどり終えたあと") < fact.index("終わりがけ")
+
+    # 気持ちの断定はしない
+    for banned in ("後悔", "困り果て", "きっと"):
+        assert banned not in fact

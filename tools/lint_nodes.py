@@ -196,6 +196,18 @@ for name, nodes in by_file.items():
             if lm.get("verified_at") and not re.match(r"^\d{4}-\d{2}-\d{2}$", lm["verified_at"]):
                 err(w, f"verified_at の書き方が YYYY-MM-DD でない: {lm['verified_at']}")
 
+        # 内部点検の記録。対外的な保証ではないので、status は上げない（S03 ルール8）
+        ihr = lm.get("in_house_reviewed_at")
+        if ihr is not None and not re.match(r"^\d{4}-\d{2}-\d{2}$", ihr):
+            err(w, f"in_house_reviewed_at の書き方が YYYY-MM-DD でない: {ihr}")
+
+        # 事実を断定するノードには、必ず相談先を置く（S03 ルール15）
+        # 断定したまま「あとはご自分で」で終わらせない
+        if node.get("irreversibility") and not node.get("specialist_bridge"):
+            err(w, "赤い帯を出すのに specialist_bridge がない（断定したまま渡す先がない）")
+        if node.get("deadline") and not node.get("specialist_bridge"):
+            warn(w, "期限を持つのに specialist_bridge がない（相談先を置けないか確かめる）")
+
         # 不可逆
         irr = node.get("irreversibility")
         if irr is not None:

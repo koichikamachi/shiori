@@ -418,18 +418,30 @@ def test_rule7_event_resets_only_volatile(engine):
     assert res["statuses"]["SURV_COLLECT_KOSEKI"] == NodeStatus.DONE.value
 
 
-def test_rule8_nothing_claims_expert_verification(engine):
-    """⑫ 専門家の確認を受けたと書いてあるノードは一つもない。未検証の表示が出る。"""
+def test_rule8_verification_claims_carry_their_evidence(engine):
+    """⑫ 確かめたと書くなら、その裏づけが必ず付いている。
+
+    もとは「EXPERT_VERIFIED は一件もない」を固定していた。実際に専門家が
+    目を通しはじめたので、そこは動いてよい。動いてはいけないのは、
+    裏づけのないまま格上げすることのほうである。
+
+      SOURCE_VERIFIED … どこで確かめたか（URL）が辿れること
+      EXPERT_VERIFIED … 誰がいつ見たかが書いてあること
+    """
     res = run(engine, "SURVIVOR", UserCondition(days_since_death=1))
     assert res["verification_notice"].strip()
     for scope in ("SELF", "FAMILY_CHILD", "SURVIVOR"):
         for node in engine.nodes_by_scope[scope].values():
             lm = node["legal_metadata"]
-            assert lm["verification_status"] != "EXPERT_VERIFIED", node["id"]
-            if lm["verification_status"] in ("DRAFT", "SELF_REVIEWED"):
+            st = lm["verification_status"]
+            if st in ("DRAFT", "SELF_REVIEWED"):
                 assert lm["verified_at"] is None, node["id"]
+                assert not lm.get("verified_by"), node["id"]
+            elif st == "SOURCE_VERIFIED":
+                assert lm["verified_at"] and lm.get("source_url"), node["id"]
             else:
-                assert lm["verified_at"] and lm["source_url"], node["id"]
+                assert st == "EXPERT_VERIFIED", node["id"]
+                assert lm["verified_at"] and lm.get("verified_by"), node["id"]
 
 
 def test_waiting_is_distinct_from_not_ready(engine):

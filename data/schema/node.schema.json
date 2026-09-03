@@ -341,6 +341,13 @@
               "items": {
                 "type": "string"
               }
+            },
+            "in_house_reviewed_at": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "開発中の内部点検で読んだ日（YYYY-MM-DD）。これは対外的な保証ではない。専門家の確認を受けたことを意味しない。表示にも使わない。"
             }
           }
         }

@@ -1207,6 +1207,172 @@
           "居住権の確保の手立て"
         ]
       }
+    },
+    {
+      "id": "SELF_HEIR_ESTIMATE",
+      "stream": "ESTATE_SUCCESSION",
+      "actor": "SELF",
+      "persona_labels": [
+        "ALL"
+      ],
+      "title": "いま自分に万一があったら、誰が相続人になるかを書き出す",
+      "today_action": "配偶者と子を書き出す。前の結婚の子、認知した子、養子も相続人である。子が一人もいなければ親へ、親もいなければ兄弟姉妹へ移る。人数だけでよい。名前はこのアプリに入れない。",
+      "why_only_you": "前の結婚の子、認知した子、養子。戸籍を見れば分かることでも、いま思い出せるのは本人だけである。遺族はこれを、戸籍を何通も取り寄せたあとに知る。",
+      "exists_if": null,
+      "prerequisites": [],
+      "base_urgency": "CAN_WAIT",
+      "priority": 4,
+      "wait": {
+        "nature": "NONE"
+      },
+      "durability": "REFRESHABLE",
+      "caution": {
+        "note": "見落としやすいのは、前の結婚の子、認知した子、養子（普通養子は実の親の相続人でもある）、そして子がいない場合に出てくる親と兄弟姉妹である。籍を入れていない相手は相続人にならない。"
+      },
+      "specialist_bridge": {
+        "type": "JUDICIAL_SCRIVENER",
+        "concrete_query": "自分の推定相続人が誰になるかを、戸籍をもとに確かめたい。相続関係説明図の作成を依頼したい。",
+        "estimated_cost_range": "3万円〜10万円程度"
+      },
+      "legal_metadata": {
+        "verification_status": "SELF_REVIEWED",
+        "verified_at": null,
+        "verified_by": null,
+        "source_draft": "民法第887条（子・代襲）、第889条（直系尊属・兄弟姉妹）、第890条（配偶者）",
+        "needs_check": [
+          "代襲相続の範囲（子の代襲は制限なし、兄弟姉妹の代襲は甥姪の一代まで）",
+          "普通養子・特別養子で実親との関係がどう変わるか"
+        ]
+      }
+    },
+    {
+      "id": "SELF_KOSEKI_AHEAD",
+      "stream": "ESTATE_SUCCESSION",
+      "actor": "SELF",
+      "persona_labels": [
+        "ALL"
+      ],
+      "title": "自分の戸籍を、生きているうちに取っておく",
+      "today_action": "本籍地の役所か、最寄りの役所の広域交付で、自分の生まれてから今までの戸籍（除籍・改製原戸籍を含む）を取り、封筒に入れておく。",
+      "why_only_you": "この作業は、あなたなら今日できる。遺族には、あなたが亡くなってからでないとできない。そして遺族の手続は、これが終わるまで八か所で止まる。",
+      "exists_if": "condition.children_count != 0",
+      "absent_note": "子がいないので、この前倒しは効きません。あなたの相続人になるのは親か兄弟姉妹で、兄弟姉妹の戸籍はあなたには取れないためです。",
+      "prerequisites": [
+        "SELF_HEIR_ESTIMATE"
+      ],
+      "base_urgency": "CAN_WAIT",
+      "priority": 6,
+      "wait": {
+        "nature": "NONE"
+      },
+      "durability": "REFRESHABLE",
+      "mitigates_nodes": [
+        {
+          "target_node_id": "SURV_COLLECT_KOSEKI",
+          "effect": "SHORTENED",
+          "explanation": "あなたが自分の戸籍を揃えて残したので、遺族が役所を回って集める作業が大幅に短くなりました。この作業は、遺族の手続を八か所で止めている場所です。"
+        }
+      ],
+      "caution": {
+        "note": "取れるのは、自分・配偶者・直系尊属（親、祖父母）・直系卑属（子、孫）の戸籍である。兄弟姉妹の戸籍は取れない。"
+      },
+      "legal_metadata": {
+        "verification_status": "SELF_REVIEWED",
+        "verified_at": null,
+        "verified_by": null,
+        "source_draft": "戸籍法第10条（本人・配偶者・直系尊属・直系卑属の請求）、第120条の2（広域交付。対象は本人・配偶者・直系尊属・直系卑属）",
+        "needs_check": [
+          "広域交付で取れる範囲と、取れない書類（コンピュータ化されていない戸籍など）",
+          "手数料と、一度に何通まで請求できるか"
+        ]
+      }
+    },
+    {
+      "id": "SELF_NO_CHILD_ROUTE",
+      "stream": "ESTATE_SUCCESSION",
+      "actor": "SELF",
+      "persona_labels": [
+        "ALL"
+      ],
+      "title": "子がいない場合に効く、ただ一つの手立て",
+      "today_action": "遺言を書くと決める。子がいないと、相続人は親、それもいなければ兄弟姉妹（亡くなっていれば甥姪）になる。兄弟姉妹には遺留分がないので、遺言に書いたとおりに渡せる。",
+      "why_only_you": "兄弟姉妹の戸籍は、あなたには取れない。だから遺族が集める作業を、あなたが前もって代わることはできない。代わりにできるのが、遺言でその作業自体を要らなくすることである。",
+      "exists_if": "condition.children_count == 0",
+      "absent_note": "子がいるので、親や兄弟姉妹へ相続が回る経路は通りません。",
+      "prerequisites": [
+        "SELF_HEIR_ESTIMATE"
+      ],
+      "base_urgency": "CAN_WAIT",
+      "priority": 5,
+      "wait": {
+        "nature": "NONE"
+      },
+      "durability": "PERMANENT",
+      "irreversibility": {
+        "is_irreversible": true,
+        "lost_option": "遺産分割の話し合いを、そもそも不要にする道",
+        "warning_fact": "兄弟姉妹の戸籍は、あなたには取れません。市区町村は交付を断れます。だから、あなたが亡くなったあと、遺族は兄弟姉妹（亡くなっていれば甥姪）を戸籍でたどり、その全員から遺産分割の合意を取りつけることになります。人数が多く、面識も薄いのが普通です。",
+        "warning_exception": "ただし、兄弟姉妹には遺留分がありません。遺言を書いておけば、そのとおりに渡せます。話し合い自体が要らなくなります。子がいない方にとって、遺言はこれほど効きます。"
+      },
+      "mitigates_nodes": [
+        {
+          "target_node_id": "SURV_ESTATE_DIVISION",
+          "effect": "SKIPPED",
+          "explanation": "遺言があるので、遺族が兄弟姉妹や甥姪を探し出し、全員から合意を取りつける必要がなくなりました。子がいない相続で最も難渋する場所です。"
+        }
+      ],
+      "specialist_bridge": {
+        "type": "JUDICIAL_SCRIVENER",
+        "concrete_query": "子がいないため、相続人は親または兄弟姉妹になる見込みである。公正証書遺言を作りたい。兄弟姉妹に遺留分がないことを前提に、渡し先の指定と、受け取る人が先に亡くなった場合の予備的な指定も入れたい。",
+        "estimated_cost_range": "公証人手数料 数万円＋専門家報酬 10万円〜"
+      },
+      "legal_metadata": {
+        "verification_status": "SELF_REVIEWED",
+        "verified_at": null,
+        "verified_by": null,
+        "source_draft": "民法第889条（直系尊属・兄弟姉妹）、第1042条（遺留分。兄弟姉妹は遺留分権利者に含まれない）、戸籍法第10条・第10条の2・第120条の2",
+        "needs_check": [
+          "兄弟姉妹の戸籍を、生前の本人が取れないこと（戸籍法10条の2の正当な理由に当たらない）",
+          "親の戸籍から兄弟姉妹の存在をたどれるか。実務上どこまで分かるか",
+          "遺言があっても相続登記や金融機関の手続で必要になる戸籍の範囲"
+        ]
+      }
+    },
+    {
+      "id": "SELF_RENOUNCE_CHAIN_WARN",
+      "stream": "ESTATE_SUCCESSION",
+      "actor": "SELF",
+      "persona_labels": [
+        "ALL"
+      ],
+      "title": "渡したい相手が受け取らなかったとき、財産はどこへ行くか",
+      "today_action": "渡したい相手が相続を放棄する可能性を一度考え、その場合の行き先を遺言で決めておく。",
+      "why_only_you": "誰が受け取らないかもしれないかを見当づけられるのは、家族の事情を知っている本人だけである。",
+      "exists_if": null,
+      "prerequisites": [],
+      "base_urgency": "CAN_WAIT",
+      "priority": 7,
+      "wait": {
+        "nature": "NONE"
+      },
+      "durability": "PERMANENT",
+      "is_warning_only": true,
+      "irreversibility": {
+        "is_irreversible": true,
+        "lost_option": "財産の行き先を、自分の意思で決めておく機会",
+        "warning_fact": "相続を放棄した人は、初めから相続人でなかったことになります。すると財産は、あなたの意思とは関係なく次の順位の人へ移ります。子が全員放棄すれば親へ、親がいなければ兄弟姉妹へ、兄弟姉妹が亡くなっていれば甥姪へ。人数は増え、面識は薄くなります。遺族はこれを、手続の終わりがけに知ることがあります。",
+        "warning_exception": "ただし、遺言で行き先を決めておけば、その指定が生きます。受け取る人が先に亡くなった場合や受け取らなかった場合にそなえて、予備の指定も書いておけます。"
+      },
+      "legal_metadata": {
+        "verification_status": "SELF_REVIEWED",
+        "verified_at": null,
+        "verified_by": null,
+        "source_draft": "民法第939条（放棄の効力）、第887条第2項・第889条（順位と代襲）、第994条（受遺者の死亡による遺贈の失効）",
+        "needs_check": [
+          "放棄によって次順位へ移る場合の、その人の熟慮期間の起算点",
+          "予備的な遺贈（補充遺贈）の書き方と有効性"
+        ]
+      }
     }
   ]
 }

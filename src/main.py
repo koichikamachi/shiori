@@ -63,6 +63,18 @@ SCENARIOS = {
                  "SURV_DETERMINE_HEIRS", "SURV_DISCOVER_ACCOUNTS", "SURV_DISCOVER_DEBT",
                  "SURV_LIST_ASSETS", "SURV_DECIDE_ACCEPT_OR_RENOUNCE", "SURV_ESTATE_DIVISION"},
     },
+    "surv-rank-shift": {
+        # 先生の実話。子が土壇場で放棄し、兄弟姉妹が相続人になった。
+        # 死亡から100日経っているが、この人の3か月は10日前から始まっている。
+        "title": "遺族・先順位が放棄して、自分が相続人になった（死後100日、知って10日）",
+        "scope": "SURVIVOR",
+        "cond": dict(days_since_death=100, days_since_known=10,
+                     events=["HEIR_RENOUNCED"]),
+        # 葬儀も届出も、先順位の人たちが100日前に済ませている。
+        # この人が引き受けるのは、そこから先だけである。
+        "done": {"SURV_DEATH_NOTICE", "SURV_FUNERAL_ARRANGEMENT",
+                 "SURV_KNOW_SAFE_ACTIONS", "SURV_WARN_DEPOSIT", "SURV_FIND_ENTRY"},
+    },
     "surv-not-heir": {
         "title": "遺族・籍を入れていない同居者（相続人ではない）",
         "scope": "SURVIVOR",
@@ -96,6 +108,12 @@ SCENARIOS = {
         "scope": "SELF",
         "cond": dict(has_foreign_assets=True, has_own_home=True, has_spouse=True,
                      estate_over_basic_deduction=True),
+        "done": set(),
+    },
+    "self-no-child": {
+        "title": "本人・子がいない。相続人は親か兄弟姉妹になる",
+        "scope": "SELF",
+        "cond": dict(has_spouse=True, children_count=0, has_own_home=True),
         "done": set(),
     },
     "self-debt": {

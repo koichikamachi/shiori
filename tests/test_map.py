@@ -46,7 +46,7 @@ def test_three_item_limit_does_not_reach_the_map(engine):
     r = run(engine, "SELF", **PENSIONER)
     assert len(r["today_actions"]) <= 3
     assert len([m for m in r["map"] if m["present"]]) > 3
-    assert len(r["map"]) == 34
+    assert len(r["map"]) == len(engine.nodes_by_scope["SELF"])
 
 
 def test_map_carries_no_verb(engine):
@@ -189,9 +189,9 @@ def test_default_face_is_map_for_self_and_brief_for_survivor(capsys):
     assert "--map" in out
 
 
-def test_map_can_be_opened_from_the_first_second(capsys):
+def test_map_can_be_opened_from_the_first_second(engine, capsys):
     """地図は、今日の3件を終えた褒美ではない。何も済んでいなくても開く。"""
     cli.main(["-s", "surv-day1", "--map", "--today", "2026-09-02"])
     out = capsys.readouterr().out
     assert "全体は、こうなっています" in out
-    assert "ぜんぶで 25 件" in out
+    assert f"ぜんぶで {len(engine.nodes_by_scope['SURVIVOR'])} 件" in out

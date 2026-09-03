@@ -324,14 +324,19 @@
       "wait": {
         "nature": "NONE"
       },
-      "durability": "PERMANENT",
+      "durability": "VOLATILE",
       "decided_by_you": true,
       "legal_metadata": {
         "verification_status": "SELF_REVIEWED",
         "verified_at": null,
         "verified_by": null,
         "source_draft": "民法第887条〜第890条（相続人）",
-        "needs_check": []
+        "needs_check": [
+          "放棄による順位の繰り上がりと、代襲の範囲（兄弟姉妹の代襲は甥姪の一代まで）"
+        ]
+      },
+      "caution": {
+        "note": "相続人は、一度決めても入れ替わります。誰かが放棄すると、その人は初めから相続人でなかったことになり、次の順位の人へ移ります。子が全員放棄すれば親へ、親がいなければ兄弟姉妹へ、兄弟姉妹が亡くなっていれば甥姪へ。人数は増え、面識は薄くなります。"
       }
     },
     {
@@ -478,12 +483,13 @@
       "wait": {
         "nature": "NONE"
       },
-      "durability": "PERMANENT",
+      "durability": "VOLATILE",
       "decided_by_you": true,
       "deadline": {
         "days": null,
         "months": 3,
         "trigger": "自己のために相続の開始があったことを知った時",
+        "clock": "KNOWN",
         "note": "月で数える。日数に換算しないこと。"
       },
       "irreversibility": {
@@ -504,8 +510,12 @@
         "source_draft": "民法第915条第1項（熟慮期間およびその伸長）、民法第922条以下（限定承認）",
         "needs_check": [
           "★重要★ 熟慮期間の起算点がずれる場合の判例の射程",
-          "限定承認の要件（相続人全員の同意）と、みなし譲渡課税の扱い"
+          "限定承認の要件（相続人全員の同意）と、みなし譲渡課税の扱い",
+          "知らなかった負債が判明した場合の熟慮期間の起算点（最高裁昭和59年4月27日判決の射程）"
         ]
+      },
+      "caution": {
+        "note": "知らなかった借金や保証があとから出てきたときは、この判断をやり直す余地がある。熟慮期間の起算点を、借金を知った時とする扱いがある。まず弁護士に相談すること。"
       }
     },
     {
@@ -542,6 +552,7 @@
         "months": 3,
         "absolute_date": null,
         "trigger": "自己のために相続の開始があったことを知った時",
+        "clock": "KNOWN",
         "note": "伸長の申立ては、熟慮期間が終わる前に行う必要がある"
       }
     },
@@ -637,6 +648,7 @@
         "days": null,
         "months": 10,
         "trigger": "相続の開始があったことを知った日の翌日から",
+        "clock": "KNOWN",
         "note": "月で数える"
       },
       "caution": {
@@ -679,6 +691,7 @@
         "days": null,
         "months": 4,
         "trigger": "相続の開始があったことを知った日の翌日から",
+        "clock": "KNOWN",
         "note": "相続税より期限が早い。見落としやすい。"
       },
       "legal_metadata": {
@@ -810,6 +823,76 @@
         "source_draft": null,
         "needs_check": [
           "相続人以外の者が行える手続の範囲（死亡届の届出資格を含む）"
+        ]
+      }
+    },
+    {
+      "id": "SURV_RANK_SHIFT_NOTICE",
+      "stream": "ESTATE_SUCCESSION",
+      "actor": "RELATIVES",
+      "title": "先順位の人が放棄すると、あなたが相続人になります",
+      "today_action": "自分より先の順位の人（子、親）が相続を放棄していないかを確かめる。家庭裁判所に、放棄の申述をした人がいるかを照会できる。",
+      "exists_if": null,
+      "prerequisites": [
+        "SURV_KNOW_SAFE_ACTIONS"
+      ],
+      "base_urgency": "CAN_WAIT",
+      "priority": 4,
+      "wait": {
+        "nature": "NONE"
+      },
+      "durability": "PERMANENT",
+      "decided_by_you": true,
+      "is_warning_only": true,
+      "irreversibility": {
+        "is_irreversible": true,
+        "lost_option": "相続を放棄する、または限定して承認する権利",
+        "warning_fact": "先順位の人が全員放棄すると、あなたが相続人になります。家庭裁判所は、そのことをあなたに知らせません。負債も一緒に来ます。気づかないまま期間が過ぎると、そのまま引き継ぐことになります。",
+        "warning_exception": "ただし、あなたの3か月は、亡くなった日からではなく、あなたが相続人になったことを知った時から始まります。死後何か月経っていても、知ったばかりなら、まだ間に合います。"
+      },
+      "specialist_bridge": {
+        "type": "LAWYER",
+        "concrete_query": "先順位の相続人が放棄したため、自分が相続人になったかもしれない。放棄の申述の有無を照会したい。熟慮期間の起算点と、放棄の手続を相談したい。",
+        "estimated_cost_range": "相談料 5千円〜1万円／時"
+      },
+      "legal_metadata": {
+        "verification_status": "SELF_REVIEWED",
+        "verified_at": null,
+        "verified_by": null,
+        "source_draft": "民法第915条（熟慮期間。自己のために相続の開始があったことを知った時から3か月）、第939条（放棄の効力）",
+        "needs_check": [
+          "家庭裁判所への相続放棄申述の有無の照会。誰が、どこへ、何を出して照会できるか",
+          "次順位者の熟慮期間の起算点（先順位者の放棄を知った時とする扱い）"
+        ]
+      }
+    },
+    {
+      "id": "SURV_RENOUNCE_TELL_NEXT",
+      "stream": "ESTATE_SUCCESSION",
+      "actor": "LEGAL_HEIR",
+      "title": "自分が放棄するなら、次に相続人になる人に自分から伝える",
+      "today_action": "放棄すると決めたら、次の順位になる人（親、兄弟姉妹、甥姪）に、放棄したこと、負債があるかもしれないこと、その人の3か月がそこから始まることを伝える。",
+      "exists_if": null,
+      "prerequisites": [
+        "SURV_DECIDE_ACCEPT_OR_RENOUNCE"
+      ],
+      "base_urgency": "MUST_IMMEDIATE",
+      "priority": 21,
+      "wait": {
+        "nature": "NONE"
+      },
+      "durability": "PERMANENT",
+      "decided_by_you": true,
+      "caution": {
+        "note": "裁判所は次順位の人に通知しない。伝えないと、その人は何も知らないまま期間を過ぎることがある。負債があるときは、伝えないことがそのまま損害になる。"
+      },
+      "legal_metadata": {
+        "verification_status": "SELF_REVIEWED",
+        "verified_at": null,
+        "verified_by": null,
+        "source_draft": "民法第939条（放棄の効力）、第915条（熟慮期間）",
+        "needs_check": [
+          "放棄した人に、次順位者へ通知する法律上の義務があるか（実務上の扱い）"
         ]
       }
     }

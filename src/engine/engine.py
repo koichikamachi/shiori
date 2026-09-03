@@ -83,9 +83,16 @@ class ShioriEngine:
             y, m, d = (int(x) for x in dl["absolute_date"].split("-"))
             return (date(y, m, d) - today).days
 
-        if cond.days_since_death is None:
+        # どの時計で数えるか（S03 ルール4）。既定は死亡日から。
+        # 「自己のために相続の開始があったことを知った時」から数える期限は clock=KNOWN。
+        # 順位が繰り上がって相続人になった人は、死亡から何か月経っていても、
+        # その人の3か月はそこから始まる。ここを死亡日で数えると、まだ間に合う人に
+        # 「もう過ぎています」と言うことになる。
+        elapsed = (cond.days_for_known_clock if dl.get("clock") == "KNOWN"
+                   else cond.days_since_death)
+        if elapsed is None:
             return None
-        base = today - timedelta(days=cond.days_since_death)
+        base = today - timedelta(days=elapsed)
 
         if dl.get("days") is not None:
             return ((base + timedelta(days=dl["days"])) - today).days

@@ -4,7 +4,7 @@
     "nodes_family.json",
     "nodes_survivor.json"
   ],
-  "count": 66,
+  "count": 80,
   "checks": [
     {
       "check_id": "SELF_INSURANCE_NOTE#1",
@@ -357,6 +357,96 @@
       "current_source_url": null
     },
     {
+      "check_id": "SELF_HEIR_ESTIMATE#1",
+      "node_id": "SELF_HEIR_ESTIMATE",
+      "file": "nodes_self.json",
+      "actor": "SELF",
+      "question": "代襲相続の範囲（子の代襲は制限なし、兄弟姉妹の代襲は甥姪の一代まで）",
+      "claim": "いま自分に万一があったら、誰が相続人になるかを書き出す　根拠（下書き）: 民法第887条（子・代襲）、第889条（直系尊属・兄弟姉妹）、第890条（配偶者）",
+      "current_status": "SELF_REVIEWED",
+      "current_source_url": null
+    },
+    {
+      "check_id": "SELF_HEIR_ESTIMATE#2",
+      "node_id": "SELF_HEIR_ESTIMATE",
+      "file": "nodes_self.json",
+      "actor": "SELF",
+      "question": "普通養子・特別養子で実親との関係がどう変わるか",
+      "claim": "いま自分に万一があったら、誰が相続人になるかを書き出す　根拠（下書き）: 民法第887条（子・代襲）、第889条（直系尊属・兄弟姉妹）、第890条（配偶者）",
+      "current_status": "SELF_REVIEWED",
+      "current_source_url": null
+    },
+    {
+      "check_id": "SELF_KOSEKI_AHEAD#1",
+      "node_id": "SELF_KOSEKI_AHEAD",
+      "file": "nodes_self.json",
+      "actor": "SELF",
+      "question": "広域交付で取れる範囲と、取れない書類（コンピュータ化されていない戸籍など）",
+      "claim": "自分の戸籍を、生きているうちに取っておく　根拠（下書き）: 戸籍法第10条（本人・配偶者・直系尊属・直系卑属の請求）、第120条の2（広域交付。対象は本人・配偶者・直系尊属・直系卑属）",
+      "current_status": "SELF_REVIEWED",
+      "current_source_url": null
+    },
+    {
+      "check_id": "SELF_KOSEKI_AHEAD#2",
+      "node_id": "SELF_KOSEKI_AHEAD",
+      "file": "nodes_self.json",
+      "actor": "SELF",
+      "question": "手数料と、一度に何通まで請求できるか",
+      "claim": "自分の戸籍を、生きているうちに取っておく　根拠（下書き）: 戸籍法第10条（本人・配偶者・直系尊属・直系卑属の請求）、第120条の2（広域交付。対象は本人・配偶者・直系尊属・直系卑属）",
+      "current_status": "SELF_REVIEWED",
+      "current_source_url": null
+    },
+    {
+      "check_id": "SELF_NO_CHILD_ROUTE#1",
+      "node_id": "SELF_NO_CHILD_ROUTE",
+      "file": "nodes_self.json",
+      "actor": "SELF",
+      "question": "兄弟姉妹の戸籍を、生前の本人が取れないこと（戸籍法10条の2の正当な理由に当たらない）",
+      "claim": "子がいない場合に効く、ただ一つの手立て　兄弟姉妹の戸籍は、あなたには取れません。市区町村は交付を断れます。だから、あなたが亡くなったあと、遺族は兄弟姉妹（亡くなっていれば甥姪）を戸籍でたどり、その全員から遺産分割の合意を取りつけることになります。人数が多く、面識も薄いのが普通です。　根拠（下書き）: 民法第889条（直系尊属・兄弟姉妹）、第1042条（遺留分。兄弟姉妹は遺留分権利者に含まれない）、戸籍法第10条・第10条の2・第120条の2",
+      "current_status": "SELF_REVIEWED",
+      "current_source_url": null
+    },
+    {
+      "check_id": "SELF_NO_CHILD_ROUTE#2",
+      "node_id": "SELF_NO_CHILD_ROUTE",
+      "file": "nodes_self.json",
+      "actor": "SELF",
+      "question": "親の戸籍から兄弟姉妹の存在をたどれるか。実務上どこまで分かるか",
+      "claim": "子がいない場合に効く、ただ一つの手立て　兄弟姉妹の戸籍は、あなたには取れません。市区町村は交付を断れます。だから、あなたが亡くなったあと、遺族は兄弟姉妹（亡くなっていれば甥姪）を戸籍でたどり、その全員から遺産分割の合意を取りつけることになります。人数が多く、面識も薄いのが普通です。　根拠（下書き）: 民法第889条（直系尊属・兄弟姉妹）、第1042条（遺留分。兄弟姉妹は遺留分権利者に含まれない）、戸籍法第10条・第10条の2・第120条の2",
+      "current_status": "SELF_REVIEWED",
+      "current_source_url": null
+    },
+    {
+      "check_id": "SELF_NO_CHILD_ROUTE#3",
+      "node_id": "SELF_NO_CHILD_ROUTE",
+      "file": "nodes_self.json",
+      "actor": "SELF",
+      "question": "遺言があっても相続登記や金融機関の手続で必要になる戸籍の範囲",
+      "claim": "子がいない場合に効く、ただ一つの手立て　兄弟姉妹の戸籍は、あなたには取れません。市区町村は交付を断れます。だから、あなたが亡くなったあと、遺族は兄弟姉妹（亡くなっていれば甥姪）を戸籍でたどり、その全員から遺産分割の合意を取りつけることになります。人数が多く、面識も薄いのが普通です。　根拠（下書き）: 民法第889条（直系尊属・兄弟姉妹）、第1042条（遺留分。兄弟姉妹は遺留分権利者に含まれない）、戸籍法第10条・第10条の2・第120条の2",
+      "current_status": "SELF_REVIEWED",
+      "current_source_url": null
+    },
+    {
+      "check_id": "SELF_RENOUNCE_CHAIN_WARN#1",
+      "node_id": "SELF_RENOUNCE_CHAIN_WARN",
+      "file": "nodes_self.json",
+      "actor": "SELF",
+      "question": "放棄によって次順位へ移る場合の、その人の熟慮期間の起算点",
+      "claim": "渡したい相手が受け取らなかったとき、財産はどこへ行くか　相続を放棄した人は、初めから相続人でなかったことになります。すると財産は、あなたの意思とは関係なく次の順位の人へ移ります。子が全員放棄すれば親へ、親がいなければ兄弟姉妹へ、兄弟姉妹が亡くなっていれば甥姪へ。人数は増え、面識は薄くなります。遺族はこれを、手続の終わりがけに知ることがあります。　根拠（下書き）: 民法第939条（放棄の効力）、第887条第2項・第889条（順位と代襲）、第994条（受遺者の死亡による遺贈の失効）",
+      "current_status": "SELF_REVIEWED",
+      "current_source_url": null
+    },
+    {
+      "check_id": "SELF_RENOUNCE_CHAIN_WARN#2",
+      "node_id": "SELF_RENOUNCE_CHAIN_WARN",
+      "file": "nodes_self.json",
+      "actor": "SELF",
+      "question": "予備的な遺贈（補充遺贈）の書き方と有効性",
+      "claim": "渡したい相手が受け取らなかったとき、財産はどこへ行くか　相続を放棄した人は、初めから相続人でなかったことになります。すると財産は、あなたの意思とは関係なく次の順位の人へ移ります。子が全員放棄すれば親へ、親がいなければ兄弟姉妹へ、兄弟姉妹が亡くなっていれば甥姪へ。人数は増え、面識は薄くなります。遺族はこれを、手続の終わりがけに知ることがあります。　根拠（下書き）: 民法第939条（放棄の効力）、第887条第2項・第889条（順位と代襲）、第994条（受遺者の死亡による遺贈の失効）",
+      "current_status": "SELF_REVIEWED",
+      "current_source_url": null
+    },
+    {
       "check_id": "FAMILY_RESEARCH_WITHOUT_PARENT#1",
       "node_id": "FAMILY_RESEARCH_WITHOUT_PARENT",
       "file": "nodes_family.json",
@@ -507,6 +597,16 @@
       "current_source_url": null
     },
     {
+      "check_id": "SURV_DETERMINE_HEIRS#1",
+      "node_id": "SURV_DETERMINE_HEIRS",
+      "file": "nodes_survivor.json",
+      "actor": "LEGAL_HEIR",
+      "question": "放棄による順位の繰り上がりと、代襲の範囲（兄弟姉妹の代襲は甥姪の一代まで）",
+      "claim": "相続人を確定する　根拠（下書き）: 民法第887条〜第890条（相続人）",
+      "current_status": "SELF_REVIEWED",
+      "current_source_url": null
+    },
+    {
       "check_id": "SURV_DISCOVER_ACCOUNTS#1",
       "node_id": "SURV_DISCOVER_ACCOUNTS",
       "file": "nodes_survivor.json",
@@ -582,6 +682,16 @@
       "file": "nodes_survivor.json",
       "actor": "LEGAL_HEIR",
       "question": "限定承認の要件（相続人全員の同意）と、みなし譲渡課税の扱い",
+      "claim": "相続するか、放棄するか、限定して承認するかを決める　起算から 3 か月　起算点は「自己のために相続の開始があったことを知った時」　月で数える。日数に換算しないこと。　この期間を過ぎると、原則として、借入や保証をそのまま引き継ぐことになります。　根拠（下書き）: 民法第915条第1項（熟慮期間およびその伸長）、民法第922条以下（限定承認）",
+      "current_status": "SELF_REVIEWED",
+      "current_source_url": null
+    },
+    {
+      "check_id": "SURV_DECIDE_ACCEPT_OR_RENOUNCE#3",
+      "node_id": "SURV_DECIDE_ACCEPT_OR_RENOUNCE",
+      "file": "nodes_survivor.json",
+      "actor": "LEGAL_HEIR",
+      "question": "知らなかった負債が判明した場合の熟慮期間の起算点（最高裁昭和59年4月27日判決の射程）",
       "claim": "相続するか、放棄するか、限定して承認するかを決める　起算から 3 か月　起算点は「自己のために相続の開始があったことを知った時」　月で数える。日数に換算しないこと。　この期間を過ぎると、原則として、借入や保証をそのまま引き継ぐことになります。　根拠（下書き）: 民法第915条第1項（熟慮期間およびその伸長）、民法第922条以下（限定承認）",
       "current_status": "SELF_REVIEWED",
       "current_source_url": null
@@ -663,6 +773,36 @@
       "actor": "RELATIVES",
       "question": "相続人以外の者が行える手続の範囲（死亡届の届出資格を含む）",
       "claim": "相続人でない私が、できることとできないこと",
+      "current_status": "SELF_REVIEWED",
+      "current_source_url": null
+    },
+    {
+      "check_id": "SURV_RANK_SHIFT_NOTICE#1",
+      "node_id": "SURV_RANK_SHIFT_NOTICE",
+      "file": "nodes_survivor.json",
+      "actor": "RELATIVES",
+      "question": "家庭裁判所への相続放棄申述の有無の照会。誰が、どこへ、何を出して照会できるか",
+      "claim": "先順位の人が放棄すると、あなたが相続人になります　先順位の人が全員放棄すると、あなたが相続人になります。家庭裁判所は、そのことをあなたに知らせません。負債も一緒に来ます。気づかないまま期間が過ぎると、そのまま引き継ぐことになります。　根拠（下書き）: 民法第915条（熟慮期間。自己のために相続の開始があったことを知った時から3か月）、第939条（放棄の効力）",
+      "current_status": "SELF_REVIEWED",
+      "current_source_url": null
+    },
+    {
+      "check_id": "SURV_RANK_SHIFT_NOTICE#2",
+      "node_id": "SURV_RANK_SHIFT_NOTICE",
+      "file": "nodes_survivor.json",
+      "actor": "RELATIVES",
+      "question": "次順位者の熟慮期間の起算点（先順位者の放棄を知った時とする扱い）",
+      "claim": "先順位の人が放棄すると、あなたが相続人になります　先順位の人が全員放棄すると、あなたが相続人になります。家庭裁判所は、そのことをあなたに知らせません。負債も一緒に来ます。気づかないまま期間が過ぎると、そのまま引き継ぐことになります。　根拠（下書き）: 民法第915条（熟慮期間。自己のために相続の開始があったことを知った時から3か月）、第939条（放棄の効力）",
+      "current_status": "SELF_REVIEWED",
+      "current_source_url": null
+    },
+    {
+      "check_id": "SURV_RENOUNCE_TELL_NEXT#1",
+      "node_id": "SURV_RENOUNCE_TELL_NEXT",
+      "file": "nodes_survivor.json",
+      "actor": "LEGAL_HEIR",
+      "question": "放棄した人に、次順位者へ通知する法律上の義務があるか（実務上の扱い）",
+      "claim": "自分が放棄するなら、次に相続人になる人に自分から伝える　根拠（下書き）: 民法第939条（放棄の効力）、第915条（熟慮期間）",
       "current_status": "SELF_REVIEWED",
       "current_source_url": null
     }

@@ -47,11 +47,20 @@ class UserCondition(BaseModel):
     has_real_estate_in_estate: bool = Field(default=False, description="遺産に不動産がある")
     viewer_is_legal_heir: bool = Field(default=True, description="見ている人が相続人である")
     days_since_death: Optional[int] = Field(default=None, description="死亡から何日目か（日付そのものは持たない）")
+    # 順位が繰り上がって相続人になった人は、死亡日ではなく「知った時」から数える。
+    # 先生の実話：子が土壇場で放棄し、兄弟姉妹が相続人になった。その人たちの3か月は、
+    # そこから始まる。省略すると死亡からの日数を使う（これまでと同じ動き）。
+    days_since_known: Optional[int] = Field(default=None, description="自己のために相続の開始があったことを知った日から何日目か")
     events: List[str] = Field(default_factory=list, description="起きた出来事")
 
     # S03 ルール14。「いいえ」と「まだ答えていない」を分けるためだけの箱。
     # 判定には使わない。exists_if の意味は変えない。地図に霧を描くのに使う。
     unanswered: List[str] = Field(default_factory=list, description="まだ答えていない条件の名前")
+
+    @property
+    def days_for_known_clock(self) -> Optional[int]:
+        """「知った時」から数える期限に使う日数。指定がなければ死亡からの日数。"""
+        return self.days_since_known if self.days_since_known is not None else self.days_since_death
 
     @property
     def has_self_memo(self) -> bool:

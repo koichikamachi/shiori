@@ -1,0 +1,970 @@
+{
+  "generated_from": [
+    "nodes_self.json",
+    "nodes_family.json",
+    "nodes_survivor.json"
+  ],
+  "count": 96,
+  "checks": [
+    {
+      "check_id": "SELF_INSURANCE_NOTE#1",
+      "node_id": "SELF_INSURANCE_NOTE",
+      "file": "nodes_self.json",
+      "actor": "SELF",
+      "question": "時効の年数と、時効経過後の実務上の取扱い",
+      "claim": "生命保険・共済の会社名メモ　根拠（下書き）: 保険法第95条（保険給付請求権の消滅時効）",
+      "current_status": "SELF_REVIEWED",
+      "current_source_url": null
+    },
+    {
+      "check_id": "SELF_DESIGNATE_OPERATOR#1",
+      "node_id": "SELF_DESIGNATE_OPERATOR",
+      "file": "nodes_self.json",
+      "actor": "SELF",
+      "question": "委任契約の要否と、契約がない場合に近親者ができる範囲",
+      "claim": "死後の事務を実際に担う人を決めておく　根拠（下書き）: 死後事務委任契約の実務",
+      "current_status": "SELF_REVIEWED",
+      "current_source_url": null
+    },
+    {
+      "check_id": "SELF_WISHES_EFFECTIVE_OR_NOT#1",
+      "node_id": "SELF_WISHES_EFFECTIVE_OR_NOT",
+      "file": "nodes_self.json",
+      "actor": "SELF",
+      "question": "ペットの引き取りを法的に確実にする方法（負担付遺贈・信託・生前契約）",
+      "claim": "効く希望と、効かない希望の書き分け　根拠（下書き）: 民法第960条以下（遺言の方式・内容）、負担付遺贈の実務",
+      "current_status": "SELF_REVIEWED",
+      "current_source_url": null
+    },
+    {
+      "check_id": "SELF_ENTRY_AND_KEY#1",
+      "node_id": "SELF_ENTRY_AND_KEY",
+      "file": "nodes_self.json",
+      "actor": "SELF",
+      "question": "第三者に預けた封書の開封が、遺言書の検認を要する場合にあたらないかの確認",
+      "claim": "入口を家族に渡し、開ける手立ては別の人に預ける",
+      "current_status": "SELF_REVIEWED",
+      "current_source_url": null
+    },
+    {
+      "check_id": "SELF_HOME_TITLE_CHECK#1",
+      "node_id": "SELF_HOME_TITLE_CHECK",
+      "file": "nodes_self.json",
+      "actor": "SELF",
+      "question": "義務化の施行日、期限の数え方、過去の相続への遡及の有無、過料の運用",
+      "claim": "自宅の名義を確かめる　根拠（下書き）: 不動産登記法第76条の2（相続登記の申請義務）",
+      "current_status": "SELF_REVIEWED",
+      "current_source_url": null
+    },
+    {
+      "check_id": "SELF_TAX_BOUNDARY#1",
+      "node_id": "SELF_TAX_BOUNDARY",
+      "file": "nodes_self.json",
+      "actor": "SELF",
+      "question": "基礎控除の算式と、法定相続人の数え方（放棄した人・養子の扱い）",
+      "claim": "相続税の申告が要るかどうかの境界を見る　根拠（下書き）: 相続税法第15条（遺産に係る基礎控除）",
+      "current_status": "SELF_REVIEWED",
+      "current_source_url": null
+    },
+    {
+      "check_id": "SELF_CASH_FOR_TAX#1",
+      "node_id": "SELF_CASH_FOR_TAX",
+      "file": "nodes_self.json",
+      "actor": "SELF",
+      "question": "非課税枠の算式と、放棄した人の扱い",
+      "claim": "納税と当面の資金を、現金でどう用意するか　根拠（下書き）: 相続税法第12条第1項第5号（死亡保険金の非課税）",
+      "current_status": "SELF_REVIEWED",
+      "current_source_url": null
+    },
+    {
+      "check_id": "SELF_CASH_FOR_TAX#2",
+      "node_id": "SELF_CASH_FOR_TAX",
+      "file": "nodes_self.json",
+      "actor": "SELF",
+      "question": "延納・物納の要件",
+      "claim": "納税と当面の資金を、現金でどう用意するか　根拠（下書き）: 相続税法第12条第1項第5号（死亡保険金の非課税）",
+      "current_status": "SELF_REVIEWED",
+      "current_source_url": null
+    },
+    {
+      "check_id": "SELF_INCAPACITY_PLAN#1",
+      "node_id": "SELF_INCAPACITY_PLAN",
+      "file": "nodes_self.json",
+      "actor": "SELF",
+      "question": "任意後見・財産管理委任・家族信託の使い分けと費用感",
+      "claim": "判断ができなくなったときの、生活費の出し方　根拠（下書き）: 任意後見契約に関する法律、民法上の委任",
+      "current_status": "SELF_REVIEWED",
+      "current_source_url": null
+    },
+    {
+      "check_id": "SELF_LAND_ENVELOPE#1",
+      "node_id": "SELF_LAND_ENVELOPE",
+      "file": "nodes_self.json",
+      "actor": "SELF",
+      "question": "名寄帳で把握できる範囲と、把握できない不動産（未登記建物・共有私道など）",
+      "claim": "不動産の書類を一つの封筒にまとめる",
+      "current_status": "SELF_REVIEWED",
+      "current_source_url": null
+    },
+    {
+      "check_id": "SELF_LAND_ANCESTOR_TITLE#1",
+      "node_id": "SELF_LAND_ANCESTOR_TITLE",
+      "file": "nodes_self.json",
+      "actor": "SELF",
+      "question": "数次相続の登記手続と、義務化との関係",
+      "claim": "先代の名義のまま残っている土地がないか確かめる　根拠（下書き）: 不動産登記法",
+      "current_status": "SELF_REVIEWED",
+      "current_source_url": null
+    },
+    {
+      "check_id": "SELF_LAND_BOUNDARY#1",
+      "node_id": "SELF_LAND_BOUNDARY",
+      "file": "nodes_self.json",
+      "actor": "SELF",
+      "question": "確定測量と筆界特定の使い分け、費用の相場",
+      "claim": "隣との境界が決まっているかを確かめる　根拠（下書き）: 民法第223条（境界標の設置）、不動産登記法第123条以下（筆界特定）",
+      "current_status": "SELF_REVIEWED",
+      "current_source_url": null
+    },
+    {
+      "check_id": "SELF_LAND_SMALL_RESIDENTIAL#1",
+      "node_id": "SELF_LAND_SMALL_RESIDENTIAL",
+      "file": "nodes_self.json",
+      "actor": "SELF",
+      "question": "家なき子の6要件の細目（3親等内の親族や同族法人が持つ家に住んでいないこと、いま住む家を過去に所有していないこと、申告期限まで所有し続けること）",
+      "claim": "自宅の土地の評価を下げられる特例が使えるか、先に確かめる　この特例には、誰が引き継ぐか、そこに住み続けるかといった要件があります。亡くなったあとで要件を作ることはできません。　根拠（下書き）: 租税特別措置法第69条の4（小規模宅地等についての相続税の課税価格の計算の特例）。限度面積・減額割合・取得者ごとの要件・未分割の場合の扱いは国税庁 No.4124 による。",
+      "current_status": "SOURCE_VERIFIED",
+      "current_source_url": "https://www.nta.go.jp/taxes/shiraberu/taxanswer/sozoku/4124.htm"
+    },
+    {
+      "check_id": "SELF_LAND_SMALL_RESIDENTIAL#2",
+      "node_id": "SELF_LAND_SMALL_RESIDENTIAL",
+      "file": "nodes_self.json",
+      "actor": "SELF",
+      "question": "被相続人が老人ホームに入所していた場合に、自宅が居住用と認められる要件",
+      "claim": "自宅の土地の評価を下げられる特例が使えるか、先に確かめる　この特例には、誰が引き継ぐか、そこに住み続けるかといった要件があります。亡くなったあとで要件を作ることはできません。　根拠（下書き）: 租税特別措置法第69条の4（小規模宅地等についての相続税の課税価格の計算の特例）。限度面積・減額割合・取得者ごとの要件・未分割の場合の扱いは国税庁 No.4124 による。",
+      "current_status": "SOURCE_VERIFIED",
+      "current_source_url": "https://www.nta.go.jp/taxes/shiraberu/taxanswer/sozoku/4124.htm"
+    },
+    {
+      "check_id": "SELF_LAND_SMALL_RESIDENTIAL#3",
+      "node_id": "SELF_LAND_SMALL_RESIDENTIAL",
+      "file": "nodes_self.json",
+      "actor": "SELF",
+      "question": "未分割で申告したあと、3年以内の分割見込書で特例を使うときの手続",
+      "claim": "自宅の土地の評価を下げられる特例が使えるか、先に確かめる　この特例には、誰が引き継ぐか、そこに住み続けるかといった要件があります。亡くなったあとで要件を作ることはできません。　根拠（下書き）: 租税特別措置法第69条の4（小規模宅地等についての相続税の課税価格の計算の特例）。限度面積・減額割合・取得者ごとの要件・未分割の場合の扱いは国税庁 No.4124 による。",
+      "current_status": "SOURCE_VERIFIED",
+      "current_source_url": "https://www.nta.go.jp/taxes/shiraberu/taxanswer/sozoku/4124.htm"
+    },
+    {
+      "check_id": "SELF_BIZ_STOCK_REGISTER#1",
+      "node_id": "SELF_BIZ_STOCK_REGISTER",
+      "file": "nodes_self.json",
+      "actor": "SELF",
+      "question": "名義株の整理方法",
+      "claim": "株主名簿の在処と、株の分かれ方　根拠（下書き）: 会社法第121条（株主名簿）",
+      "current_status": "SELF_REVIEWED",
+      "current_source_url": null
+    },
+    {
+      "check_id": "SELF_BIZ_STOCK_REGISTER#2",
+      "node_id": "SELF_BIZ_STOCK_REGISTER",
+      "file": "nodes_self.json",
+      "actor": "SELF",
+      "question": "定款による譲渡制限と相続人に対する売渡請求（会社法第174条）",
+      "claim": "株主名簿の在処と、株の分かれ方　根拠（下書き）: 会社法第121条（株主名簿）",
+      "current_status": "SELF_REVIEWED",
+      "current_source_url": null
+    },
+    {
+      "check_id": "SELF_BIZ_GUARANTEE_NOTE#1",
+      "node_id": "SELF_BIZ_GUARANTEE_NOTE",
+      "file": "nodes_self.json",
+      "actor": "SELF",
+      "question": "保証債務が相続される範囲（根保証の元本確定を含む）",
+      "claim": "個人で背負っている保証の一覧　根拠（下書き）: 経営者保証に関するガイドライン",
+      "current_status": "SELF_REVIEWED",
+      "current_source_url": null
+    },
+    {
+      "check_id": "SELF_BIZ_GUARANTEE_NOTE#2",
+      "node_id": "SELF_BIZ_GUARANTEE_NOTE",
+      "file": "nodes_self.json",
+      "actor": "SELF",
+      "question": "経営者保証の解除の実務",
+      "claim": "個人で背負っている保証の一覧　根拠（下書き）: 経営者保証に関するガイドライン",
+      "current_status": "SELF_REVIEWED",
+      "current_source_url": null
+    },
+    {
+      "check_id": "SELF_BIZ_LOAN_BETWEEN#1",
+      "node_id": "SELF_BIZ_LOAN_BETWEEN",
+      "file": "nodes_self.json",
+      "actor": "SELF",
+      "question": "役員貸付金・借入金の相続税上の評価",
+      "claim": "会社と自分のあいだの貸し借り",
+      "current_status": "SELF_REVIEWED",
+      "current_source_url": null
+    },
+    {
+      "check_id": "SELF_BIZ_SUCCESSION_TAX#1",
+      "node_id": "SELF_BIZ_SUCCESSION_TAX",
+      "file": "nodes_self.json",
+      "actor": "SELF",
+      "question": "要件（後継者の数、雇用、代表就任など）は未確認。税理士に確かめる箇所とする。",
+      "claim": "事業承継税制（法人版）が使えるか、渡す時期まで含めて確かめる　期限は 2027-12-31　起算点は「特例措置の対象となる贈与・相続の期限（法人版）」　計画の提出期限は2027-09-30。渡す期限は2027-12-31。あいだが3か月しかない。急所は計画ではなく、渡すほうの期限である。　計画を出せる期限は令和9年9月30日まで延びましたが、実際に株を渡す期限は令和9年12月31日で変わっていません。あいだは3か月しかありません。計画を出しても、その日までに渡し終えていなければ、この特例は使えません。　根拠（下書き）: 租税特別措置法第70条の7の5（贈与）、同第70条の7の6（相続）。令和8年度税制改正の大綱により、特例承継計画の提出期限を1年6月延長（令和8年3月31日→令和9年9月30日）。適用期限（令和9年12月31日）は延長されていない。",
+      "current_status": "SOURCE_VERIFIED",
+      "current_source_url": "https://www.chusho.meti.go.jp/zaimu/shoukei/shoukei_enkatsu_zouyo_souzoku.html"
+    },
+    {
+      "check_id": "SELF_BIZ_SUCCESSION_TAX#2",
+      "node_id": "SELF_BIZ_SUCCESSION_TAX",
+      "file": "nodes_self.json",
+      "actor": "SELF",
+      "question": "適用期限（令和9年12月31日）が今後さらに延長されないか、年に一度は確かめる。",
+      "claim": "事業承継税制（法人版）が使えるか、渡す時期まで含めて確かめる　期限は 2027-12-31　起算点は「特例措置の対象となる贈与・相続の期限（法人版）」　計画の提出期限は2027-09-30。渡す期限は2027-12-31。あいだが3か月しかない。急所は計画ではなく、渡すほうの期限である。　計画を出せる期限は令和9年9月30日まで延びましたが、実際に株を渡す期限は令和9年12月31日で変わっていません。あいだは3か月しかありません。計画を出しても、その日までに渡し終えていなければ、この特例は使えません。　根拠（下書き）: 租税特別措置法第70条の7の5（贈与）、同第70条の7の6（相続）。令和8年度税制改正の大綱により、特例承継計画の提出期限を1年6月延長（令和8年3月31日→令和9年9月30日）。適用期限（令和9年12月31日）は延長されていない。",
+      "current_status": "SOURCE_VERIFIED",
+      "current_source_url": "https://www.chusho.meti.go.jp/zaimu/shoukei/shoukei_enkatsu_zouyo_souzoku.html"
+    },
+    {
+      "check_id": "SELF_BIZ_INDIVIDUAL_SUCCESSION_TAX#1",
+      "node_id": "SELF_BIZ_INDIVIDUAL_SUCCESSION_TAX",
+      "file": "nodes_self.json",
+      "actor": "SELF",
+      "question": "★ 国税庁タックスアンサー No.4153 は、計画の提出期限を令和8年3月31日のままにしている（令和8年度改正前の記載）。改訂されたら差し替えること。",
+      "claim": "事業承継税制（個人版）が使えるか確かめる　期限は 2028-12-31　起算点は「特例措置の対象となる贈与・相続の期限（個人版）」　計画の提出期限は2028-09-30。渡す期限は2028-12-31。法人版とは期限が違う。混同しないこと。　計画を出せる期限は令和10年9月30日まで延びましたが、実際に事業用資産を渡す期限は令和10年12月31日で変わっていません。その日までに渡し終えていなければ、この特例は使えません。　根拠（下書き）: 租税特別措置法第70条の6の8（贈与）、同第70条の6の10（相続）。令和8年度税制改正の大綱により、個人事業承継計画の提出期限を2年6月延長（令和8年3月31日→令和10年9月30日）。適用期限（令和10年12月31日）は延長されていない。特定事業用宅地等について小規模宅地等の特例を受ける者がある場合、この特例は使えない。",
+      "current_status": "SOURCE_VERIFIED",
+      "current_source_url": "https://www.mof.go.jp/tax_policy/tax_reform/outline/fy2026/08taikou_02.htm"
+    },
+    {
+      "check_id": "SELF_BIZ_INDIVIDUAL_SUCCESSION_TAX#2",
+      "node_id": "SELF_BIZ_INDIVIDUAL_SUCCESSION_TAX",
+      "file": "nodes_self.json",
+      "actor": "SELF",
+      "question": "小規模宅地等の特例との併用不可が特定事業用宅地等に限られるのか、特定居住用宅地等とは併用できるのかを確かめる。",
+      "claim": "事業承継税制（個人版）が使えるか確かめる　期限は 2028-12-31　起算点は「特例措置の対象となる贈与・相続の期限（個人版）」　計画の提出期限は2028-09-30。渡す期限は2028-12-31。法人版とは期限が違う。混同しないこと。　計画を出せる期限は令和10年9月30日まで延びましたが、実際に事業用資産を渡す期限は令和10年12月31日で変わっていません。その日までに渡し終えていなければ、この特例は使えません。　根拠（下書き）: 租税特別措置法第70条の6の8（贈与）、同第70条の6の10（相続）。令和8年度税制改正の大綱により、個人事業承継計画の提出期限を2年6月延長（令和8年3月31日→令和10年9月30日）。適用期限（令和10年12月31日）は延長されていない。特定事業用宅地等について小規模宅地等の特例を受ける者がある場合、この特例は使えない。",
+      "current_status": "SOURCE_VERIFIED",
+      "current_source_url": "https://www.mof.go.jp/tax_policy/tax_reform/outline/fy2026/08taikou_02.htm"
+    },
+    {
+      "check_id": "SELF_BIZ_INDIVIDUAL_SUCCESSION_TAX#3",
+      "node_id": "SELF_BIZ_INDIVIDUAL_SUCCESSION_TAX",
+      "file": "nodes_self.json",
+      "actor": "SELF",
+      "question": "租税特別措置法の条番号（第70条の6の8・第70条の6の10）を条文で確かめる。",
+      "claim": "事業承継税制（個人版）が使えるか確かめる　期限は 2028-12-31　起算点は「特例措置の対象となる贈与・相続の期限（個人版）」　計画の提出期限は2028-09-30。渡す期限は2028-12-31。法人版とは期限が違う。混同しないこと。　計画を出せる期限は令和10年9月30日まで延びましたが、実際に事業用資産を渡す期限は令和10年12月31日で変わっていません。その日までに渡し終えていなければ、この特例は使えません。　根拠（下書き）: 租税特別措置法第70条の6の8（贈与）、同第70条の6の10（相続）。令和8年度税制改正の大綱により、個人事業承継計画の提出期限を2年6月延長（令和8年3月31日→令和10年9月30日）。適用期限（令和10年12月31日）は延長されていない。特定事業用宅地等について小規模宅地等の特例を受ける者がある場合、この特例は使えない。",
+      "current_status": "SOURCE_VERIFIED",
+      "current_source_url": "https://www.mof.go.jp/tax_policy/tax_reform/outline/fy2026/08taikou_02.htm"
+    },
+    {
+      "check_id": "SELF_FOREIGN_PROBATE_CHECK#1",
+      "node_id": "SELF_FOREIGN_PROBATE_CHECK",
+      "file": "nodes_self.json",
+      "actor": "SELF",
+      "question": "★重要★ どの国が不動産について所在地法を適用するか（相続分割主義の国）",
+      "claim": "現地の手続が要る国かどうかを確かめる　国によっては、亡くなった人の財産を動かすのに裁判所の手続が必要で、年単位でかかることがあります。日本の遺言や遺産分割協議書は、そのままでは通らないことがあります。日本の法律は「相続は亡くなった人の本国法による」と定めていますが、これで決まるのは日本側の扱いだけです。不動産については、その土地がある国の法律を適用する国があります。その国では、日本法で相続したという主張が通りません。　根拠（下書き）: 法の適用に関する通則法第36条「相続は、被相続人の本国法による。」同第41条（反致）「当事者の本国法によるべき場合において、その国の法に従えば日本法によるべきときは、日本法による。」ただし、不動産について所在地法を適用する国があり、第36条だけでは現地の扱いは決まらない。",
+      "current_status": "SOURCE_VERIFIED",
+      "current_source_url": "https://laws.e-gov.go.jp/law/418AC0000000078"
+    },
+    {
+      "check_id": "SELF_FOREIGN_PROBATE_CHECK#2",
+      "node_id": "SELF_FOREIGN_PROBATE_CHECK",
+      "file": "nodes_self.json",
+      "actor": "SELF",
+      "question": "国別の検認手続の要否と所要期間",
+      "claim": "現地の手続が要る国かどうかを確かめる　国によっては、亡くなった人の財産を動かすのに裁判所の手続が必要で、年単位でかかることがあります。日本の遺言や遺産分割協議書は、そのままでは通らないことがあります。日本の法律は「相続は亡くなった人の本国法による」と定めていますが、これで決まるのは日本側の扱いだけです。不動産については、その土地がある国の法律を適用する国があります。その国では、日本法で相続したという主張が通りません。　根拠（下書き）: 法の適用に関する通則法第36条「相続は、被相続人の本国法による。」同第41条（反致）「当事者の本国法によるべき場合において、その国の法に従えば日本法によるべきときは、日本法による。」ただし、不動産について所在地法を適用する国があり、第36条だけでは現地の扱いは決まらない。",
+      "current_status": "SOURCE_VERIFIED",
+      "current_source_url": "https://laws.e-gov.go.jp/law/418AC0000000078"
+    },
+    {
+      "check_id": "SELF_FOREIGN_PROBATE_CHECK#3",
+      "node_id": "SELF_FOREIGN_PROBATE_CHECK",
+      "file": "nodes_self.json",
+      "actor": "SELF",
+      "question": "共同名義や信託を用いた場合の、日本の相続税・贈与税の扱い",
+      "claim": "現地の手続が要る国かどうかを確かめる　国によっては、亡くなった人の財産を動かすのに裁判所の手続が必要で、年単位でかかることがあります。日本の遺言や遺産分割協議書は、そのままでは通らないことがあります。日本の法律は「相続は亡くなった人の本国法による」と定めていますが、これで決まるのは日本側の扱いだけです。不動産については、その土地がある国の法律を適用する国があります。その国では、日本法で相続したという主張が通りません。　根拠（下書き）: 法の適用に関する通則法第36条「相続は、被相続人の本国法による。」同第41条（反致）「当事者の本国法によるべき場合において、その国の法に従えば日本法によるべきときは、日本法による。」ただし、不動産について所在地法を適用する国があり、第36条だけでは現地の扱いは決まらない。",
+      "current_status": "SOURCE_VERIFIED",
+      "current_source_url": "https://laws.e-gov.go.jp/law/418AC0000000078"
+    },
+    {
+      "check_id": "SELF_FOREIGN_PROBATE_CHECK#4",
+      "node_id": "SELF_FOREIGN_PROBATE_CHECK",
+      "file": "nodes_self.json",
+      "actor": "SELF",
+      "question": "現地で作った遺言と日本で作った遺言が併存する場合の関係",
+      "claim": "現地の手続が要る国かどうかを確かめる　国によっては、亡くなった人の財産を動かすのに裁判所の手続が必要で、年単位でかかることがあります。日本の遺言や遺産分割協議書は、そのままでは通らないことがあります。日本の法律は「相続は亡くなった人の本国法による」と定めていますが、これで決まるのは日本側の扱いだけです。不動産については、その土地がある国の法律を適用する国があります。その国では、日本法で相続したという主張が通りません。　根拠（下書き）: 法の適用に関する通則法第36条「相続は、被相続人の本国法による。」同第41条（反致）「当事者の本国法によるべき場合において、その国の法に従えば日本法によるべきときは、日本法による。」ただし、不動産について所在地法を適用する国があり、第36条だけでは現地の扱いは決まらない。",
+      "current_status": "SOURCE_VERIFIED",
+      "current_source_url": "https://laws.e-gov.go.jp/law/418AC0000000078"
+    },
+    {
+      "check_id": "SELF_FOREIGN_REPORT_CHECK#1",
+      "node_id": "SELF_FOREIGN_REPORT_CHECK",
+      "file": "nodes_self.json",
+      "actor": "SELF",
+      "question": "国外財産調書の提出基準額、判定日、提出期限",
+      "claim": "国外財産の届出をしているか確かめる　根拠（下書き）: 内国税の適正な課税の確保を図るための国外送金等に係る調書の提出等に関する法律（国外送金等調書法）",
+      "current_status": "SELF_REVIEWED",
+      "current_source_url": null
+    },
+    {
+      "check_id": "SELF_FOREIGN_REPORT_CHECK#2",
+      "node_id": "SELF_FOREIGN_REPORT_CHECK",
+      "file": "nodes_self.json",
+      "actor": "SELF",
+      "question": "未提出・過少記載の場合の加算税の扱い",
+      "claim": "国外財産の届出をしているか確かめる　根拠（下書き）: 内国税の適正な課税の確保を図るための国外送金等に係る調書の提出等に関する法律（国外送金等調書法）",
+      "current_status": "SELF_REVIEWED",
+      "current_source_url": null
+    },
+    {
+      "check_id": "SELF_DEBT_INSURANCE_ROUTE#1",
+      "node_id": "SELF_DEBT_INSURANCE_ROUTE",
+      "file": "nodes_self.json",
+      "actor": "SELF",
+      "question": "受取人が『相続人』と指定されている場合の扱い",
+      "claim": "放棄されても残る道を用意しておく　根拠（下書き）: 死亡保険金は受取人固有の財産とする判例（最判昭和40年2月2日ほか）",
+      "current_status": "SELF_REVIEWED",
+      "current_source_url": null
+    },
+    {
+      "check_id": "SELF_DEBT_INSURANCE_ROUTE#2",
+      "node_id": "SELF_DEBT_INSURANCE_ROUTE",
+      "file": "nodes_self.json",
+      "actor": "SELF",
+      "question": "放棄した者に対する死亡保険金の非課税枠の適用可否",
+      "claim": "放棄されても残る道を用意しておく　根拠（下書き）: 死亡保険金は受取人固有の財産とする判例（最判昭和40年2月2日ほか）",
+      "current_status": "SELF_REVIEWED",
+      "current_source_url": null
+    },
+    {
+      "check_id": "SELF_RESERVED_SHARE_CHECK#1",
+      "node_id": "SELF_RESERVED_SHARE_CHECK",
+      "file": "nodes_self.json",
+      "actor": "SELF",
+      "question": "遺留分の割合と、権利を持つ人の範囲",
+      "claim": "家族が最低限受け取れる取り分を先に知る　根拠（下書き）: 民法第1042条（遺留分）",
+      "current_status": "SELF_REVIEWED",
+      "current_source_url": null
+    },
+    {
+      "check_id": "SELF_RESERVED_SHARE_CHECK#2",
+      "node_id": "SELF_RESERVED_SHARE_CHECK",
+      "file": "nodes_self.json",
+      "actor": "SELF",
+      "question": "請求の期限",
+      "claim": "家族が最低限受け取れる取り分を先に知る　根拠（下書き）: 民法第1042条（遺留分）",
+      "current_status": "SELF_REVIEWED",
+      "current_source_url": null
+    },
+    {
+      "check_id": "SELF_BEQUEST_ORG_CHECK#1",
+      "node_id": "SELF_BEQUEST_ORG_CHECK",
+      "file": "nodes_self.json",
+      "actor": "SELF",
+      "question": "換価してから遺贈する場合の課税（譲渡所得の扱い）",
+      "claim": "遺贈したい団体に、受け取ってもらえるか先に聞く",
+      "current_status": "SELF_REVIEWED",
+      "current_source_url": null
+    },
+    {
+      "check_id": "SELF_PARTNER_PROVISION#1",
+      "node_id": "SELF_PARTNER_PROVISION",
+      "file": "nodes_self.json",
+      "actor": "SELF",
+      "question": "相続人以外の者が財産を取得した場合の相続税額の加算",
+      "claim": "籍を入れていない相手に残すための手立て",
+      "current_status": "SELF_REVIEWED",
+      "current_source_url": null
+    },
+    {
+      "check_id": "SELF_PARTNER_PROVISION#2",
+      "node_id": "SELF_PARTNER_PROVISION",
+      "file": "nodes_self.json",
+      "actor": "SELF",
+      "question": "居住権の確保の手立て",
+      "claim": "籍を入れていない相手に残すための手立て",
+      "current_status": "SELF_REVIEWED",
+      "current_source_url": null
+    },
+    {
+      "check_id": "SELF_HEIR_ESTIMATE#1",
+      "node_id": "SELF_HEIR_ESTIMATE",
+      "file": "nodes_self.json",
+      "actor": "SELF",
+      "question": "代襲相続の範囲（子の代襲は制限なし、兄弟姉妹の代襲は甥姪の一代まで）",
+      "claim": "いま自分に万一があったら、誰が相続人になるかを書き出す　根拠（下書き）: 民法第887条（子・代襲）、第889条（直系尊属・兄弟姉妹）、第890条（配偶者）",
+      "current_status": "SELF_REVIEWED",
+      "current_source_url": null
+    },
+    {
+      "check_id": "SELF_HEIR_ESTIMATE#2",
+      "node_id": "SELF_HEIR_ESTIMATE",
+      "file": "nodes_self.json",
+      "actor": "SELF",
+      "question": "普通養子・特別養子で実親との関係がどう変わるか",
+      "claim": "いま自分に万一があったら、誰が相続人になるかを書き出す　根拠（下書き）: 民法第887条（子・代襲）、第889条（直系尊属・兄弟姉妹）、第890条（配偶者）",
+      "current_status": "SELF_REVIEWED",
+      "current_source_url": null
+    },
+    {
+      "check_id": "SELF_KOSEKI_AHEAD#1",
+      "node_id": "SELF_KOSEKI_AHEAD",
+      "file": "nodes_self.json",
+      "actor": "SELF",
+      "question": "広域交付で取れる範囲と、取れない書類（コンピュータ化されていない戸籍など）",
+      "claim": "自分の戸籍を、生きているうちに取っておく　根拠（下書き）: 戸籍法第10条（本人・配偶者・直系尊属・直系卑属の請求）、第120条の2（広域交付。対象は本人・配偶者・直系尊属・直系卑属）",
+      "current_status": "SELF_REVIEWED",
+      "current_source_url": null
+    },
+    {
+      "check_id": "SELF_KOSEKI_AHEAD#2",
+      "node_id": "SELF_KOSEKI_AHEAD",
+      "file": "nodes_self.json",
+      "actor": "SELF",
+      "question": "手数料と、一度に何通まで請求できるか",
+      "claim": "自分の戸籍を、生きているうちに取っておく　根拠（下書き）: 戸籍法第10条（本人・配偶者・直系尊属・直系卑属の請求）、第120条の2（広域交付。対象は本人・配偶者・直系尊属・直系卑属）",
+      "current_status": "SELF_REVIEWED",
+      "current_source_url": null
+    },
+    {
+      "check_id": "SELF_NO_CHILD_ROUTE#1",
+      "node_id": "SELF_NO_CHILD_ROUTE",
+      "file": "nodes_self.json",
+      "actor": "SELF",
+      "question": "遺言があっても、相続登記や金融機関の手続で必要になる戸籍の範囲",
+      "claim": "子がいない場合に効く、ただ一つの手立て　兄弟姉妹の戸籍は、あなたには取れません。市区町村は交付を断れます。だから、あなたが亡くなったあと、遺族は兄弟姉妹（亡くなっていれば甥姪）を戸籍でたどり、その全員から遺産分割の合意を取りつけることになります。人数が多く、面識も薄いのが普通です。　根拠（下書き）: 戸籍法第10条第1項「戸籍に記載されている者（その戸籍から除かれた者を含む。）又はその配偶者、直系尊属若しくは直系卑属は、…交付の請求をすることができる。」兄弟姉妹は傍系親族なので、ここに含まれない。第10条の2第1項は、それ以外の者の請求を、自己の権利行使のためなど限られた場合に絞っている。第120条の2（広域交付）の対象も本人・配偶者・直系尊属・直系卑属である。民法第889条（直系尊属・兄弟姉妹）、第1042条（遺留分。兄弟姉妹は含まれない）。",
+      "current_status": "SOURCE_VERIFIED",
+      "current_source_url": "https://laws.e-gov.go.jp/law/322AC0000000224"
+    },
+    {
+      "check_id": "SELF_NO_CHILD_ROUTE#2",
+      "node_id": "SELF_NO_CHILD_ROUTE",
+      "file": "nodes_self.json",
+      "actor": "SELF",
+      "question": "第120条の2（広域交付）で取れない書類（コンピュータ化されていない戸籍など）",
+      "claim": "子がいない場合に効く、ただ一つの手立て　兄弟姉妹の戸籍は、あなたには取れません。市区町村は交付を断れます。だから、あなたが亡くなったあと、遺族は兄弟姉妹（亡くなっていれば甥姪）を戸籍でたどり、その全員から遺産分割の合意を取りつけることになります。人数が多く、面識も薄いのが普通です。　根拠（下書き）: 戸籍法第10条第1項「戸籍に記載されている者（その戸籍から除かれた者を含む。）又はその配偶者、直系尊属若しくは直系卑属は、…交付の請求をすることができる。」兄弟姉妹は傍系親族なので、ここに含まれない。第10条の2第1項は、それ以外の者の請求を、自己の権利行使のためなど限られた場合に絞っている。第120条の2（広域交付）の対象も本人・配偶者・直系尊属・直系卑属である。民法第889条（直系尊属・兄弟姉妹）、第1042条（遺留分。兄弟姉妹は含まれない）。",
+      "current_status": "SOURCE_VERIFIED",
+      "current_source_url": "https://laws.e-gov.go.jp/law/322AC0000000224"
+    },
+    {
+      "check_id": "SELF_RENOUNCE_CHAIN_WARN#1",
+      "node_id": "SELF_RENOUNCE_CHAIN_WARN",
+      "file": "nodes_self.json",
+      "actor": "SELF",
+      "question": "予備の指定（補充遺贈）の具体的な書き方と、公証役場の実務での取り扱い",
+      "claim": "渡したい相手が受け取らなかったとき、財産はどこへ行くか　相続を放棄した人は、初めから相続人でなかったことになります。すると財産は、あなたの意思とは関係なく次の順位の人へ移ります。子が全員放棄すれば親へ、親がいなければ兄弟姉妹へ、兄弟姉妹が亡くなっていれば甥姪へ。人数は増え、面識は薄くなります。そして、次に誰へ移るのかがはっきりするのは、遺族が戸籍をたどり終えたあとです。だから、気づくのが手続の終わりがけになることがあります。　根拠（下書き）: 民法第995条「遺贈が、その効力を生じないとき、又は放棄によってその効力を失ったときは、受遺者が受けるべきであったものは、相続人に帰属する。ただし、遺言者がその遺言に別段の意思を表示したときは、その意思に従う。」この但し書きが、予備の指定（補充遺贈）の条文上の根拠である。民法第939条（放棄の効力）、第887条第2項・第889条（順位と代襲）。「気づくのが遅れる」のは観察ではなく、手続の順序から出る。相続人の確定は戸籍の収集を前提とするので、次順位への移動がはっきりするのはその作業のあとになる（S03 ルール15）。",
+      "current_status": "SOURCE_VERIFIED",
+      "current_source_url": "https://laws.e-gov.go.jp/law/129AC0000000089"
+    },
+    {
+      "check_id": "SELF_RENOUNCE_CHAIN_WARN#2",
+      "node_id": "SELF_RENOUNCE_CHAIN_WARN",
+      "file": "nodes_self.json",
+      "actor": "SELF",
+      "question": "放棄によって次順位へ移る場合の、その人の熟慮期間の起算点",
+      "claim": "渡したい相手が受け取らなかったとき、財産はどこへ行くか　相続を放棄した人は、初めから相続人でなかったことになります。すると財産は、あなたの意思とは関係なく次の順位の人へ移ります。子が全員放棄すれば親へ、親がいなければ兄弟姉妹へ、兄弟姉妹が亡くなっていれば甥姪へ。人数は増え、面識は薄くなります。そして、次に誰へ移るのかがはっきりするのは、遺族が戸籍をたどり終えたあとです。だから、気づくのが手続の終わりがけになることがあります。　根拠（下書き）: 民法第995条「遺贈が、その効力を生じないとき、又は放棄によってその効力を失ったときは、受遺者が受けるべきであったものは、相続人に帰属する。ただし、遺言者がその遺言に別段の意思を表示したときは、その意思に従う。」この但し書きが、予備の指定（補充遺贈）の条文上の根拠である。民法第939条（放棄の効力）、第887条第2項・第889条（順位と代襲）。「気づくのが遅れる」のは観察ではなく、手続の順序から出る。相続人の確定は戸籍の収集を前提とするので、次順位への移動がはっきりするのはその作業のあとになる（S03 ルール15）。",
+      "current_status": "SOURCE_VERIFIED",
+      "current_source_url": "https://laws.e-gov.go.jp/law/129AC0000000089"
+    },
+    {
+      "check_id": "SELF_GIFT_AHEAD_CHECK#1",
+      "node_id": "SELF_GIFT_AHEAD_CHECK",
+      "file": "nodes_self.json",
+      "actor": "SELF",
+      "question": "相続時精算課税の年110万円の基礎控除の分が、加算の対象になるかどうか（No.4103 で確かめる）",
+      "claim": "生前に渡す方法を、種類だけ知っておく　亡くなる前の一定の期間に贈与した財産は、相続財産に足し戻されます。令和6年1月1日以後の贈与は、最終的に相続開始前7年以内が対象になります。いまは経過措置の途中です。相続開始が令和8年12月31日までなら3年以内、令和9年1月1日から令和12年12月31日までなら令和6年1月1日から亡くなった日までの間、令和13年1月1日以後なら7年以内。つまり、足し戻される期間は、これから年々のびていきます。　根拠（下書き）: 相続税法第19条（相続開始前の贈与財産の加算）。令和5年度税制改正により、令和6年1月1日以後の暦年課税の贈与は加算対象期間が相続開始前7年以内となった。経過措置により、相続開始が令和8年12月31日までは3年以内、令和9年1月1日から令和12年12月31日までは令和6年1月1日から相続開始の日までの間、令和13年1月1日以後は7年以内。令和9年1月2日以後の相続では、3年超の期間の贈与について総額100万円まで加算されない。",
+      "current_status": "SOURCE_VERIFIED",
+      "current_source_url": "https://www.nta.go.jp/taxes/shiraberu/taxanswer/sozoku/4161.htm"
+    },
+    {
+      "check_id": "SELF_GIFT_AHEAD_CHECK#2",
+      "node_id": "SELF_GIFT_AHEAD_CHECK",
+      "file": "nodes_self.json",
+      "actor": "SELF",
+      "question": "教育資金・結婚子育て資金・住宅取得等資金の各非課税の期限と要件",
+      "claim": "生前に渡す方法を、種類だけ知っておく　亡くなる前の一定の期間に贈与した財産は、相続財産に足し戻されます。令和6年1月1日以後の贈与は、最終的に相続開始前7年以内が対象になります。いまは経過措置の途中です。相続開始が令和8年12月31日までなら3年以内、令和9年1月1日から令和12年12月31日までなら令和6年1月1日から亡くなった日までの間、令和13年1月1日以後なら7年以内。つまり、足し戻される期間は、これから年々のびていきます。　根拠（下書き）: 相続税法第19条（相続開始前の贈与財産の加算）。令和5年度税制改正により、令和6年1月1日以後の暦年課税の贈与は加算対象期間が相続開始前7年以内となった。経過措置により、相続開始が令和8年12月31日までは3年以内、令和9年1月1日から令和12年12月31日までは令和6年1月1日から相続開始の日までの間、令和13年1月1日以後は7年以内。令和9年1月2日以後の相続では、3年超の期間の贈与について総額100万円まで加算されない。",
+      "current_status": "SOURCE_VERIFIED",
+      "current_source_url": "https://www.nta.go.jp/taxes/shiraberu/taxanswer/sozoku/4161.htm"
+    },
+    {
+      "check_id": "SELF_GIFT_AHEAD_CHECK#3",
+      "node_id": "SELF_GIFT_AHEAD_CHECK",
+      "file": "nodes_self.json",
+      "actor": "SELF",
+      "question": "贈与税の申告が必要になる場合と、その期限",
+      "claim": "生前に渡す方法を、種類だけ知っておく　亡くなる前の一定の期間に贈与した財産は、相続財産に足し戻されます。令和6年1月1日以後の贈与は、最終的に相続開始前7年以内が対象になります。いまは経過措置の途中です。相続開始が令和8年12月31日までなら3年以内、令和9年1月1日から令和12年12月31日までなら令和6年1月1日から亡くなった日までの間、令和13年1月1日以後なら7年以内。つまり、足し戻される期間は、これから年々のびていきます。　根拠（下書き）: 相続税法第19条（相続開始前の贈与財産の加算）。令和5年度税制改正により、令和6年1月1日以後の暦年課税の贈与は加算対象期間が相続開始前7年以内となった。経過措置により、相続開始が令和8年12月31日までは3年以内、令和9年1月1日から令和12年12月31日までは令和6年1月1日から相続開始の日までの間、令和13年1月1日以後は7年以内。令和9年1月2日以後の相続では、3年超の期間の贈与について総額100万円まで加算されない。",
+      "current_status": "SOURCE_VERIFIED",
+      "current_source_url": "https://www.nta.go.jp/taxes/shiraberu/taxanswer/sozoku/4161.htm"
+    },
+    {
+      "check_id": "SELF_INSURANCE_NONTAX_FRAME#1",
+      "node_id": "SELF_INSURANCE_NONTAX_FRAME",
+      "file": "nodes_self.json",
+      "actor": "SELF",
+      "question": "法定相続人の数の数え方（放棄した人、養子の数の制限）",
+      "claim": "生命保険の非課税の枠が、まだ余っていないか確かめる　死亡保険金には、500万円に法定相続人の数をかけた額まで相続税がかからない枠があります。この枠は、契約しておかなければ使えません。そして保険に入れるかどうかは、年齢と健康状態で決まります。健康を害してからでは、もう入れません。また、この非課税が使えるのは受取人が相続人である場合だけです。相続人以外の人が受け取った死亡保険金には、非課税の適用はありません。　根拠（下書き）: 相続税法第12条第1項第5号（生命保険金等の非課税）。非課税限度額は「500万円×法定相続人の数」。国税庁 No.4114 は「相続人以外の人が取得した死亡保険金には、非課税の適用はありません」とする。",
+      "current_status": "SOURCE_VERIFIED",
+      "current_source_url": "https://www.nta.go.jp/taxes/shiraberu/taxanswer/sozoku/4114.htm"
+    },
+    {
+      "check_id": "SELF_INSURANCE_NONTAX_FRAME#2",
+      "node_id": "SELF_INSURANCE_NONTAX_FRAME",
+      "file": "nodes_self.json",
+      "actor": "SELF",
+      "question": "受取人が複数いる場合の非課税額の按分",
+      "claim": "生命保険の非課税の枠が、まだ余っていないか確かめる　死亡保険金には、500万円に法定相続人の数をかけた額まで相続税がかからない枠があります。この枠は、契約しておかなければ使えません。そして保険に入れるかどうかは、年齢と健康状態で決まります。健康を害してからでは、もう入れません。また、この非課税が使えるのは受取人が相続人である場合だけです。相続人以外の人が受け取った死亡保険金には、非課税の適用はありません。　根拠（下書き）: 相続税法第12条第1項第5号（生命保険金等の非課税）。非課税限度額は「500万円×法定相続人の数」。国税庁 No.4114 は「相続人以外の人が取得した死亡保険金には、非課税の適用はありません」とする。",
+      "current_status": "SOURCE_VERIFIED",
+      "current_source_url": "https://www.nta.go.jp/taxes/shiraberu/taxanswer/sozoku/4114.htm"
+    },
+    {
+      "check_id": "SELF_INSURANCE_NONTAX_FRAME#3",
+      "node_id": "SELF_INSURANCE_NONTAX_FRAME",
+      "file": "nodes_self.json",
+      "actor": "SELF",
+      "question": "一時払終身保険などの類型について、年齢と健康状態による加入の可否の目安",
+      "claim": "生命保険の非課税の枠が、まだ余っていないか確かめる　死亡保険金には、500万円に法定相続人の数をかけた額まで相続税がかからない枠があります。この枠は、契約しておかなければ使えません。そして保険に入れるかどうかは、年齢と健康状態で決まります。健康を害してからでは、もう入れません。また、この非課税が使えるのは受取人が相続人である場合だけです。相続人以外の人が受け取った死亡保険金には、非課税の適用はありません。　根拠（下書き）: 相続税法第12条第1項第5号（生命保険金等の非課税）。非課税限度額は「500万円×法定相続人の数」。国税庁 No.4114 は「相続人以外の人が取得した死亡保険金には、非課税の適用はありません」とする。",
+      "current_status": "SOURCE_VERIFIED",
+      "current_source_url": "https://www.nta.go.jp/taxes/shiraberu/taxanswer/sozoku/4114.htm"
+    },
+    {
+      "check_id": "SELF_TAX_REDUCTION_CONSULT#1",
+      "node_id": "SELF_TAX_REDUCTION_CONSULT",
+      "file": "nodes_self.json",
+      "actor": "SELF",
+      "question": "相談に持っていく資料の一覧として、税理士側から見て足りないものはないか",
+      "claim": "残し方の手立てを、税理士と一度ならべてみる　根拠（下書き）: 相続税法第12条・第19条、租税特別措置法第69条の4ほか。個別の手立ての選択は税務判断であり、このアプリは行わない（S03 ルール15）。",
+      "current_status": "SELF_REVIEWED",
+      "current_source_url": null
+    },
+    {
+      "check_id": "FAMILY_RESEARCH_WITHOUT_PARENT#1",
+      "node_id": "FAMILY_RESEARCH_WITHOUT_PARENT",
+      "file": "nodes_family.json",
+      "actor": "FAMILY_CHILD",
+      "question": "登記事項証明書を誰でも取得できる範囲",
+      "claim": "親が話してくれなくても、自分で調べられること",
+      "current_status": "SELF_REVIEWED",
+      "current_source_url": null
+    },
+    {
+      "check_id": "FAMILY_RESEARCH_WITHOUT_PARENT#2",
+      "node_id": "FAMILY_RESEARCH_WITHOUT_PARENT",
+      "file": "nodes_family.json",
+      "actor": "FAMILY_CHILD",
+      "question": "本人以外が取得できない書類の線引き",
+      "claim": "親が話してくれなくても、自分で調べられること",
+      "current_status": "SELF_REVIEWED",
+      "current_source_url": null
+    },
+    {
+      "check_id": "FAMILY_PARENT_INCAPACITY_PREP#1",
+      "node_id": "FAMILY_PARENT_INCAPACITY_PREP",
+      "file": "nodes_family.json",
+      "actor": "FAMILY_CHILD",
+      "question": "判断能力低下後に家族が預金を動かせる範囲（金融機関の実務）",
+      "claim": "親が判断できなくなったときの備えを、先に話す",
+      "current_status": "SELF_REVIEWED",
+      "current_source_url": null
+    },
+    {
+      "check_id": "SURV_DEATH_NOTICE#1",
+      "node_id": "SURV_DEATH_NOTICE",
+      "file": "nodes_survivor.json",
+      "actor": "RELATIVES",
+      "question": "期限を過ぎた場合の過料の根拠条文と金額",
+      "claim": "死亡届と火葬許可の申請　起算から 7 日　起算点は「死亡の事実を知った日」　国外で死亡したときは、その事実を知った日から3か月以内。　根拠（下書き）: 戸籍法第86条（届出期間と添付書類）、第87条（届出義務者）",
+      "current_status": "SOURCE_VERIFIED",
+      "current_source_url": "https://www.moj.go.jp/ONLINE/FAMILYREGISTER/5-4.html"
+    },
+    {
+      "check_id": "SURV_KNOW_SAFE_ACTIONS#1",
+      "node_id": "SURV_KNOW_SAFE_ACTIONS",
+      "file": "nodes_survivor.json",
+      "actor": "RELATIVES",
+      "question": "★重要★ 単純承認にあたる行為・あたらない行為の線引き。ここを誤ると遺族に実害が出る。専門家の確認を必須とする。",
+      "claim": "やってよいことと、慎重にすべきことの線　根拠（下書き）: 民法第921条第1号（法定単純承認）の該当行為の範囲",
+      "current_status": "SELF_REVIEWED",
+      "current_source_url": null
+    },
+    {
+      "check_id": "SURV_WARN_DEPOSIT#1",
+      "node_id": "SURV_WARN_DEPOSIT",
+      "file": "nodes_survivor.json",
+      "actor": "RELATIVES",
+      "question": "払戻しの上限（相続分に対する割合と、金融機関ごとの上限額）",
+      "claim": "故人の預金に触る前に知っておくこと　故人の預金を引き出して使うと、法律上すべてを相続したとみなされることがあります。そうなると、あとから多額の借金や保証が判明しても、放棄できません。　根拠（下書き）: 民法第921条第1号（法定単純承認）、民法第909条の2（遺産分割前の預貯金の払戻し）",
+      "current_status": "SELF_REVIEWED",
+      "current_source_url": null
+    },
+    {
+      "check_id": "SURV_WARN_DEPOSIT#2",
+      "node_id": "SURV_WARN_DEPOSIT",
+      "file": "nodes_survivor.json",
+      "actor": "RELATIVES",
+      "question": "葬儀費用への充当が単純承認にあたるかの実務上の扱い",
+      "claim": "故人の預金に触る前に知っておくこと　故人の預金を引き出して使うと、法律上すべてを相続したとみなされることがあります。そうなると、あとから多額の借金や保証が判明しても、放棄できません。　根拠（下書き）: 民法第921条第1号（法定単純承認）、民法第909条の2（遺産分割前の預貯金の払戻し）",
+      "current_status": "SELF_REVIEWED",
+      "current_source_url": null
+    },
+    {
+      "check_id": "SURV_FIND_KEY_HOLDER#1",
+      "node_id": "SURV_FIND_KEY_HOLDER",
+      "file": "nodes_survivor.json",
+      "actor": "RELATIVES",
+      "question": "封書の中身が遺言書であった場合の検認の必要性",
+      "claim": "入口を開ける手立てを預かっている人を探す",
+      "current_status": "SELF_REVIEWED",
+      "current_source_url": null
+    },
+    {
+      "check_id": "SURV_PENSION_AND_BENEFITS#1",
+      "node_id": "SURV_PENSION_AND_BENEFITS",
+      "file": "nodes_survivor.json",
+      "actor": "RELATIVES",
+      "question": "未支給年金・遺族年金・埋葬料・高額療養費のそれぞれの時効",
+      "claim": "年金の停止と、請求しないともらえないお金　根拠（下書き）: 国民年金法・厚生年金保険法、健康保険法（埋葬料）",
+      "current_status": "SELF_REVIEWED",
+      "current_source_url": null
+    },
+    {
+      "check_id": "SURV_PENSION_AND_BENEFITS#2",
+      "node_id": "SURV_PENSION_AND_BENEFITS",
+      "file": "nodes_survivor.json",
+      "actor": "RELATIVES",
+      "question": "未支給年金を受け取れる人の範囲と順位",
+      "claim": "年金の停止と、請求しないともらえないお金　根拠（下書き）: 国民年金法・厚生年金保険法、健康保険法（埋葬料）",
+      "current_status": "SELF_REVIEWED",
+      "current_source_url": null
+    },
+    {
+      "check_id": "SURV_CLAIM_INSURANCE#1",
+      "node_id": "SURV_CLAIM_INSURANCE",
+      "file": "nodes_survivor.json",
+      "actor": "RELATIVES",
+      "question": "受取人が『相続人』と指定されている場合の扱い",
+      "claim": "生命保険金の請求　根拠（下書き）: 死亡保険金は受取人固有の財産とする判例（最判昭和40年2月2日ほか）、保険法第95条（消滅時効）",
+      "current_status": "SELF_REVIEWED",
+      "current_source_url": null
+    },
+    {
+      "check_id": "SURV_CLAIM_INSURANCE#2",
+      "node_id": "SURV_CLAIM_INSURANCE",
+      "file": "nodes_survivor.json",
+      "actor": "RELATIVES",
+      "question": "放棄した者への非課税枠の適用可否",
+      "claim": "生命保険金の請求　根拠（下書き）: 死亡保険金は受取人固有の財産とする判例（最判昭和40年2月2日ほか）、保険法第95条（消滅時効）",
+      "current_status": "SELF_REVIEWED",
+      "current_source_url": null
+    },
+    {
+      "check_id": "SURV_FIND_WILL#1",
+      "node_id": "SURV_FIND_WILL",
+      "file": "nodes_survivor.json",
+      "actor": "LEGAL_HEIR",
+      "question": "自筆証書遺言の検認が要る場合・要らない場合",
+      "claim": "遺言があるかどうかを調べる　根拠（下書き）: 法務局における遺言書の保管等に関する法律、民法第1004条（遺言書の検認）",
+      "current_status": "SELF_REVIEWED",
+      "current_source_url": null
+    },
+    {
+      "check_id": "SURV_FIND_WILL#2",
+      "node_id": "SURV_FIND_WILL",
+      "file": "nodes_survivor.json",
+      "actor": "LEGAL_HEIR",
+      "question": "公証役場の遺言検索を利用できる人の範囲",
+      "claim": "遺言があるかどうかを調べる　根拠（下書き）: 法務局における遺言書の保管等に関する法律、民法第1004条（遺言書の検認）",
+      "current_status": "SELF_REVIEWED",
+      "current_source_url": null
+    },
+    {
+      "check_id": "SURV_COLLECT_KOSEKI#1",
+      "node_id": "SURV_COLLECT_KOSEKI",
+      "file": "nodes_survivor.json",
+      "actor": "LEGAL_HEIR",
+      "question": "★重要★ 広域交付を請求できる人の範囲（直系に限られるか）、対象外となる戸籍、代理人・郵送の可否。ここを誤ると『窓口で断られる』案内になる。",
+      "claim": "生まれてから亡くなるまでの戸籍を集める　根拠（下書き）: 戸籍法第120条の2（戸籍の広域交付）",
+      "current_status": "SELF_REVIEWED",
+      "current_source_url": null
+    },
+    {
+      "check_id": "SURV_DETERMINE_HEIRS#1",
+      "node_id": "SURV_DETERMINE_HEIRS",
+      "file": "nodes_survivor.json",
+      "actor": "LEGAL_HEIR",
+      "question": "放棄による順位の繰り上がりと、代襲の範囲（兄弟姉妹の代襲は甥姪の一代まで）",
+      "claim": "相続人を確定する　根拠（下書き）: 民法第887条〜第890条（相続人）",
+      "current_status": "SELF_REVIEWED",
+      "current_source_url": null
+    },
+    {
+      "check_id": "SURV_DISCOVER_ACCOUNTS#1",
+      "node_id": "SURV_DISCOVER_ACCOUNTS",
+      "file": "nodes_survivor.json",
+      "actor": "LEGAL_HEIR",
+      "question": "残高証明の請求に必要な書類（戸籍の範囲）",
+      "claim": "取引のあった金融機関を探す（標準の経路）",
+      "current_status": "SELF_REVIEWED",
+      "current_source_url": null
+    },
+    {
+      "check_id": "SURV_DISCOVER_DEBT#1",
+      "node_id": "SURV_DISCOVER_DEBT",
+      "file": "nodes_survivor.json",
+      "actor": "LEGAL_HEIR",
+      "question": "相続人が開示を請求できる要件と必要書類",
+      "claim": "借入と保証を調べる　根拠（下書き）: 信用情報機関（JICC・CIC・KSC）の開示制度",
+      "current_status": "SELF_REVIEWED",
+      "current_source_url": null
+    },
+    {
+      "check_id": "SURV_DISCOVER_DEBT#2",
+      "node_id": "SURV_DISCOVER_DEBT",
+      "file": "nodes_survivor.json",
+      "actor": "LEGAL_HEIR",
+      "question": "保証債務が開示対象に含まれるかどうか",
+      "claim": "借入と保証を調べる　根拠（下書き）: 信用情報機関（JICC・CIC・KSC）の開示制度",
+      "current_status": "SELF_REVIEWED",
+      "current_source_url": null
+    },
+    {
+      "check_id": "SURV_LIST_ASSETS#1",
+      "node_id": "SURV_LIST_ASSETS",
+      "file": "nodes_survivor.json",
+      "actor": "LEGAL_HEIR",
+      "question": "名寄帳で把握できない不動産（未登記建物・他市の物件）の探し方",
+      "claim": "財産と負債の一覧を作る",
+      "current_status": "SELF_REVIEWED",
+      "current_source_url": null
+    },
+    {
+      "check_id": "SURV_FOREIGN_PROBATE_START#1",
+      "node_id": "SURV_FOREIGN_PROBATE_START",
+      "file": "nodes_survivor.json",
+      "actor": "LEGAL_HEIR",
+      "question": "国別の手続の要否と所要期間",
+      "claim": "海外の資産について、現地の手続を始める　根拠（下書き）: 法の適用に関する通則法第36条、各国の検認制度",
+      "current_status": "SELF_REVIEWED",
+      "current_source_url": null
+    },
+    {
+      "check_id": "SURV_FOREIGN_PROBATE_START#2",
+      "node_id": "SURV_FOREIGN_PROBATE_START",
+      "file": "nodes_survivor.json",
+      "actor": "LEGAL_HEIR",
+      "question": "アポスティーユ・領事認証の要否",
+      "claim": "海外の資産について、現地の手続を始める　根拠（下書き）: 法の適用に関する通則法第36条、各国の検認制度",
+      "current_status": "SELF_REVIEWED",
+      "current_source_url": null
+    },
+    {
+      "check_id": "SURV_DECIDE_ACCEPT_OR_RENOUNCE#1",
+      "node_id": "SURV_DECIDE_ACCEPT_OR_RENOUNCE",
+      "file": "nodes_survivor.json",
+      "actor": "LEGAL_HEIR",
+      "question": "★重要★ 熟慮期間の起算点がずれる場合の判例の射程",
+      "claim": "相続するか、放棄するか、限定して承認するかを決める　起算から 3 か月　起算点は「自己のために相続の開始があったことを知った時」　月で数える。日数に換算しないこと。　この期間を過ぎると、原則として、借入や保証をそのまま引き継ぐことになります。　根拠（下書き）: 民法第915条第1項（熟慮期間およびその伸長）、民法第922条以下（限定承認）",
+      "current_status": "SELF_REVIEWED",
+      "current_source_url": null
+    },
+    {
+      "check_id": "SURV_DECIDE_ACCEPT_OR_RENOUNCE#2",
+      "node_id": "SURV_DECIDE_ACCEPT_OR_RENOUNCE",
+      "file": "nodes_survivor.json",
+      "actor": "LEGAL_HEIR",
+      "question": "限定承認の要件（相続人全員の同意）と、みなし譲渡課税の扱い",
+      "claim": "相続するか、放棄するか、限定して承認するかを決める　起算から 3 か月　起算点は「自己のために相続の開始があったことを知った時」　月で数える。日数に換算しないこと。　この期間を過ぎると、原則として、借入や保証をそのまま引き継ぐことになります。　根拠（下書き）: 民法第915条第1項（熟慮期間およびその伸長）、民法第922条以下（限定承認）",
+      "current_status": "SELF_REVIEWED",
+      "current_source_url": null
+    },
+    {
+      "check_id": "SURV_DECIDE_ACCEPT_OR_RENOUNCE#3",
+      "node_id": "SURV_DECIDE_ACCEPT_OR_RENOUNCE",
+      "file": "nodes_survivor.json",
+      "actor": "LEGAL_HEIR",
+      "question": "知らなかった負債が判明した場合の熟慮期間の起算点（最高裁昭和59年4月27日判決の射程）",
+      "claim": "相続するか、放棄するか、限定して承認するかを決める　起算から 3 か月　起算点は「自己のために相続の開始があったことを知った時」　月で数える。日数に換算しないこと。　この期間を過ぎると、原則として、借入や保証をそのまま引き継ぐことになります。　根拠（下書き）: 民法第915条第1項（熟慮期間およびその伸長）、民法第922条以下（限定承認）",
+      "current_status": "SELF_REVIEWED",
+      "current_source_url": null
+    },
+    {
+      "check_id": "SURV_EXTEND_DELIBERATION#1",
+      "node_id": "SURV_EXTEND_DELIBERATION",
+      "file": "nodes_survivor.json",
+      "actor": "LEGAL_HEIR",
+      "question": "再度の伸長が認められる場合の要件",
+      "claim": "調べが終わらないときは、期間を延ばす　起算から 3 か月　起算点は「自己のために相続の開始があったことを知った時」　伸長の申立ては、熟慮期間が終わる前に行う必要がある　期間を延ばす申立ては、3か月が過ぎる前にしかできません。1日でも過ぎると、法律上すべてを相続したものとして扱われ、申立てそのものができなくなります。家庭裁判所があとから救うことはできません。　根拠（下書き）: 民法第915条第1項ただし書（期間の伸長）、民法第921条第2号（期間経過による法定単純承認）",
+      "current_status": "SELF_REVIEWED",
+      "current_source_url": null
+    },
+    {
+      "check_id": "SURV_EXTEND_DELIBERATION#2",
+      "node_id": "SURV_EXTEND_DELIBERATION",
+      "file": "nodes_survivor.json",
+      "actor": "LEGAL_HEIR",
+      "question": "申立ての時点で、どこまで調べが進んでいる必要があるか（実務上の扱い）",
+      "claim": "調べが終わらないときは、期間を延ばす　起算から 3 か月　起算点は「自己のために相続の開始があったことを知った時」　伸長の申立ては、熟慮期間が終わる前に行う必要がある　期間を延ばす申立ては、3か月が過ぎる前にしかできません。1日でも過ぎると、法律上すべてを相続したものとして扱われ、申立てそのものができなくなります。家庭裁判所があとから救うことはできません。　根拠（下書き）: 民法第915条第1項ただし書（期間の伸長）、民法第921条第2号（期間経過による法定単純承認）",
+      "current_status": "SELF_REVIEWED",
+      "current_source_url": null
+    },
+    {
+      "check_id": "SURV_ESTATE_DIVISION#1",
+      "node_id": "SURV_ESTATE_DIVISION",
+      "file": "nodes_survivor.json",
+      "actor": "LEGAL_HEIR",
+      "question": "★重要★ いったん成立した遺産分割を合意解除してやり直した場合の課税関係。相続税の申告期限の前後で扱いが分かれるか（国税不服審判所 平17.12.15裁決ほか）",
+      "claim": "財産の分け方を話し合い、合意書を作る　全員が署名押印して成立した合意は、原則としてあとから撤回できません。　根拠（下書き）: 民法第907条（遺産の分割の協議）、第909条（分割の遡及効）。やり直しの課税関係は、相続税法に直接の定めがなく、事案ごとの判断による。",
+      "current_status": "SELF_REVIEWED",
+      "current_source_url": null
+    },
+    {
+      "check_id": "SURV_ESTATE_DIVISION#2",
+      "node_id": "SURV_ESTATE_DIVISION",
+      "file": "nodes_survivor.json",
+      "actor": "LEGAL_HEIR",
+      "question": "分割協議が錯誤などで無効・取消しとなる場合と、単なる合意解除との区別",
+      "claim": "財産の分け方を話し合い、合意書を作る　全員が署名押印して成立した合意は、原則としてあとから撤回できません。　根拠（下書き）: 民法第907条（遺産の分割の協議）、第909条（分割の遡及効）。やり直しの課税関係は、相続税法に直接の定めがなく、事案ごとの判断による。",
+      "current_status": "SELF_REVIEWED",
+      "current_source_url": null
+    },
+    {
+      "check_id": "SURV_ESTATE_DIVISION#3",
+      "node_id": "SURV_ESTATE_DIVISION",
+      "file": "nodes_survivor.json",
+      "actor": "LEGAL_HEIR",
+      "question": "遺言と異なる分割をした場合は贈与税が課されないこと（国税庁タックスアンサー No.4176）との関係",
+      "claim": "財産の分け方を話し合い、合意書を作る　全員が署名押印して成立した合意は、原則としてあとから撤回できません。　根拠（下書き）: 民法第907条（遺産の分割の協議）、第909条（分割の遡及効）。やり直しの課税関係は、相続税法に直接の定めがなく、事案ごとの判断による。",
+      "current_status": "SELF_REVIEWED",
+      "current_source_url": null
+    },
+    {
+      "check_id": "SURV_TAX_FILING_NEED#1",
+      "node_id": "SURV_TAX_FILING_NEED",
+      "file": "nodes_survivor.json",
+      "actor": "LEGAL_HEIR",
+      "question": "特例適用により控除内に収まる場合の申告義務",
+      "claim": "相続税の申告が要るかどうかを判定する　根拠（下書き）: 相続税法第15条（基礎控除）、第27条（申告）",
+      "current_status": "SELF_REVIEWED",
+      "current_source_url": null
+    },
+    {
+      "check_id": "SURV_TAX_FILING#1",
+      "node_id": "SURV_TAX_FILING",
+      "file": "nodes_survivor.json",
+      "actor": "LEGAL_HEIR",
+      "question": "3年以内に分割できなかった場合の延長手続（やむを得ない事由があるときの承認申請）",
+      "claim": "相続税の申告と納付　起算から 10 か月　起算点は「相続の開始があったことを知った日の翌日から」　月で数える　根拠（下書き）: 相続税法第27条（申告書）、第33条（納期限）、第55条（未分割の場合の課税価格の計算）、第38条・第41条（延納・物納）",
+      "current_status": "SELF_REVIEWED",
+      "current_source_url": null
+    },
+    {
+      "check_id": "SURV_INCOME_TAX_FINAL#1",
+      "node_id": "SURV_INCOME_TAX_FINAL",
+      "file": "nodes_survivor.json",
+      "actor": "LEGAL_HEIR",
+      "question": "単独で提出した場合の、他の相続人への通知のやり方",
+      "claim": "故人の所得税の申告　起算から 4 か月　起算点は「相続の開始があったことを知った日の翌日から」　相続税より期限が早い。見落としやすい。　根拠（下書き）: 所得税法第125条第1項（準確定申告。同法第120条の確定申告義務があった場合に要する）、同条第2項（各相続人による提出と通知）、第121条（確定申告を要しない場合）",
+      "current_status": "SELF_REVIEWED",
+      "current_source_url": null
+    },
+    {
+      "check_id": "SURV_INCOME_TAX_FINAL#2",
+      "node_id": "SURV_INCOME_TAX_FINAL",
+      "file": "nodes_survivor.json",
+      "actor": "LEGAL_HEIR",
+      "question": "準確定申告における「確定申告を要しない場合」（20万円以下など）の当てはめ方",
+      "claim": "故人の所得税の申告　起算から 4 か月　起算点は「相続の開始があったことを知った日の翌日から」　相続税より期限が早い。見落としやすい。　根拠（下書き）: 所得税法第125条第1項（準確定申告。同法第120条の確定申告義務があった場合に要する）、同条第2項（各相続人による提出と通知）、第121条（確定申告を要しない場合）",
+      "current_status": "SELF_REVIEWED",
+      "current_source_url": null
+    },
+    {
+      "check_id": "SURV_REAL_ESTATE_REGISTRATION#1",
+      "node_id": "SURV_REAL_ESTATE_REGISTRATION",
+      "file": "nodes_survivor.json",
+      "actor": "LEGAL_HEIR",
+      "question": "過料の運用実態（どの程度、実際に科されているか）",
+      "claim": "不動産の名義変更（遺産分割にもとづく）　起算から 36 か月　起算点は「遺産分割が成立した日」　分割が成立するまで、この3年は始まらない。令和6年4月1日より前に相続を知っていた不動産は、令和9年3月31日までとされる。　根拠（下書き）: 不動産登記法第76条の2（相続登記の申請義務。遺産分割で取得した場合は分割の日から3年以内）、第164条第1項（10万円以下の過料）",
+      "current_status": "SOURCE_VERIFIED",
+      "current_source_url": "https://www.moj.go.jp/MINJI/minji05_00565.html"
+    },
+    {
+      "check_id": "SURV_REAL_ESTATE_REGISTRATION#2",
+      "node_id": "SURV_REAL_ESTATE_REGISTRATION",
+      "file": "nodes_survivor.json",
+      "actor": "LEGAL_HEIR",
+      "question": "令和6年4月1日より前の相続について、令和9年3月31日という期限の条文上の根拠",
+      "claim": "不動産の名義変更（遺産分割にもとづく）　起算から 36 か月　起算点は「遺産分割が成立した日」　分割が成立するまで、この3年は始まらない。令和6年4月1日より前に相続を知っていた不動産は、令和9年3月31日までとされる。　根拠（下書き）: 不動産登記法第76条の2（相続登記の申請義務。遺産分割で取得した場合は分割の日から3年以内）、第164条第1項（10万円以下の過料）",
+      "current_status": "SOURCE_VERIFIED",
+      "current_source_url": "https://www.moj.go.jp/MINJI/minji05_00565.html"
+    },
+    {
+      "check_id": "SURV_DIGITAL_CLEANUP#1",
+      "node_id": "SURV_DIGITAL_CLEANUP",
+      "file": "nodes_survivor.json",
+      "actor": "RELATIVES",
+      "question": "解約が単純承認にあたらないかの確認",
+      "claim": "携帯と定期サービスの解約",
+      "current_status": "SELF_REVIEWED",
+      "current_source_url": null
+    },
+    {
+      "check_id": "SURV_NON_HEIR_SCOPE#1",
+      "node_id": "SURV_NON_HEIR_SCOPE",
+      "file": "nodes_survivor.json",
+      "actor": "RELATIVES",
+      "question": "相続人以外の者が行える手続の範囲（死亡届の届出資格を含む）",
+      "claim": "相続人でない私が、できることとできないこと",
+      "current_status": "SELF_REVIEWED",
+      "current_source_url": null
+    },
+    {
+      "check_id": "SURV_RANK_SHIFT_NOTICE#1",
+      "node_id": "SURV_RANK_SHIFT_NOTICE",
+      "file": "nodes_survivor.json",
+      "actor": "RELATIVES",
+      "question": "次順位者の熟慮期間の起算点（先順位者の放棄を知った時とする扱い）",
+      "claim": "先順位の人が放棄すると、あなたが相続人になります　先順位の人が全員放棄すると、あなたが相続人になります。家庭裁判所は、そのことをあなたに知らせません。負債も一緒に来ます。気づかないまま期間が過ぎると、そのまま引き継ぐことになります。　根拠（下書き）: 民法第915条（熟慮期間。自己のために相続の開始があったことを知った時から3か月）、第939条（放棄の効力）、家事事件手続法第47条（記録の閲覧等）の運用",
+      "current_status": "SELF_REVIEWED",
+      "current_source_url": null
+    },
+    {
+      "check_id": "SURV_RENOUNCE_TELL_NEXT#1",
+      "node_id": "SURV_RENOUNCE_TELL_NEXT",
+      "file": "nodes_survivor.json",
+      "actor": "LEGAL_HEIR",
+      "question": "放棄した人に、次順位者へ通知する法律上の義務があるか（実務上の扱い）",
+      "claim": "自分が放棄するなら、次に相続人になる人に自分から伝える　根拠（下書き）: 民法第939条（放棄の効力）、第915条（熟慮期間）",
+      "current_status": "SELF_REVIEWED",
+      "current_source_url": null
+    },
+    {
+      "check_id": "SURV_HEIR_DECLARATION_REG#1",
+      "node_id": "SURV_HEIR_DECLARATION_REG",
+      "file": "nodes_survivor.json",
+      "actor": "LEGAL_HEIR",
+      "question": "申出に必要な戸籍の範囲と、登録免許税の要否",
+      "claim": "分け方が決まらないうちに、相続人であることだけ申し出ておく　起算から 36 か月　起算点は「自己のために相続の開始があったことを知り、かつ所有権を取得したことを知った日」　分割を待たずに数え始まる。だから分割が長引くほど、こちらが効いてくる。　相続登記の申請には義務があります。分け方が決まらないまま3年が過ぎると、10万円以下の過料の対象になります。話し合いが長引いていることは、言い訳になりません。　根拠（下書き）: 不動産登記法第76条の3（相続人申告登記）。特定の相続人が単独で申し出ることができ、申出をした相続人についてのみ義務を履行したものとみなされる。",
+      "current_status": "SOURCE_VERIFIED",
+      "current_source_url": "https://www.moj.go.jp/MINJI/minji05_00565.html"
+    },
+    {
+      "check_id": "SURV_REGISTRATION_BY_WILL#1",
+      "node_id": "SURV_REGISTRATION_BY_WILL",
+      "file": "nodes_survivor.json",
+      "actor": "LEGAL_HEIR",
+      "question": "遺言執行者がいる場合と、いない場合の申請人の違い",
+      "claim": "不動産の名義変更（遺言にもとづく）　起算から 36 か月　起算点は「自己のために相続の開始があったことを知り、かつ所有権を取得したことを知った日」　遺言があるので、遺産分割の成立を待たずに数え始まる。令和6年4月1日より前に相続を知っていた不動産は、令和9年3月31日までとされる。　根拠（下書き）: 不動産登記法第76条の2第1項（所有権を取得したことを知った日から3年以内）、第164条第1項（10万円以下の過料）",
+      "current_status": "SOURCE_VERIFIED",
+      "current_source_url": "https://www.moj.go.jp/MINJI/minji05_00565.html"
+    },
+    {
+      "check_id": "SURV_REGISTRATION_BY_WILL#2",
+      "node_id": "SURV_REGISTRATION_BY_WILL",
+      "file": "nodes_survivor.json",
+      "actor": "LEGAL_HEIR",
+      "question": "特定財産承継遺言と遺贈で、手続がどう違うか",
+      "claim": "不動産の名義変更（遺言にもとづく）　起算から 36 か月　起算点は「自己のために相続の開始があったことを知り、かつ所有権を取得したことを知った日」　遺言があるので、遺産分割の成立を待たずに数え始まる。令和6年4月1日より前に相続を知っていた不動産は、令和9年3月31日までとされる。　根拠（下書き）: 不動産登記法第76条の2第1項（所有権を取得したことを知った日から3年以内）、第164条第1項（10万円以下の過料）",
+      "current_status": "SOURCE_VERIFIED",
+      "current_source_url": "https://www.moj.go.jp/MINJI/minji05_00565.html"
+    }
+  ]
+}

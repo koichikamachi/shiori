@@ -1,0 +1,350 @@
+"""
+相続人は「確定」しない（放棄と、順位の繰り上がり）
+
+もとは実務の一件である。前の配偶者のもとで育った子が土壇場で相続を放棄し、
+順位が繰り上がって故人の兄弟姉妹が相続人になった。人数が多く、面識も薄く、
+遺産分割の合意を取りつけるのに極めて難渋した。
+
+この形をエンジンが表現できているかを、ここで固定する。
+"""
+from datetime import date
+from pathlib import Path
+
+import pytest
+
+from src.engine.engine import EVENT_RESETS, ShioriEngine
+from src.engine.state import NodeStatus, UserCondition
+
+ROOT = Path(__file__).resolve().parents[1]
+TODAY = date(2026, 9, 3)
+
+# 話し合いまで済ませたところ
+FAR_ALONG = {
+    "SURV_DEATH_NOTICE", "SURV_FUNERAL_ARRANGEMENT", "SURV_KNOW_SAFE_ACTIONS",
+    "SURV_FIND_ENTRY", "SURV_WARN_DEPOSIT", "SURV_COLLECT_KOSEKI",
+    "SURV_DETERMINE_HEIRS", "SURV_DISCOVER_ACCOUNTS", "SURV_DISCOVER_DEBT",
+    "SURV_LIST_ASSETS", "SURV_DECIDE_ACCEPT_OR_RENOUNCE", "SURV_ESTATE_DIVISION",
+}
+
+
+@pytest.fixture(scope="module")
+def engine():
+    return ShioriEngine(data_dir=ROOT / "data" / "nodes")
+
+
+def run(engine, scope="SURVIVOR", done=None, **cond):
+    return engine.evaluate(actor_scope=scope, condition=UserCondition(**cond),
+                           completed_node_ids=done or set(), today=TODAY)
+
+
+# ---- 放棄が起きると、相続人の確定が崩れる ----
+
+def test_renunciation_undoes_the_heir_determination(engine):
+    """
+    放棄した人は初めから相続人でなかったことになる。だから相続人の顔ぶれが変わる。
+    ここが崩れないと、しおりは「相続人はもう確定しています」と言い続ける。
+    """
+    r = run(engine, done=FAR_ALONG, days_since_death=100, events=["HEIR_RENOUNCED"])
+    assert "SURV_DETERMINE_HEIRS" in r["reset_by_events"]
+    assert "SURV_ESTATE_DIVISION" in r["reset_by_events"]
+
+
+def test_reset_list_and_durability_agree(engine):
+    """
+    EVENT_RESETS に名前があっても durability が VOLATILE でなければ戻らない。
+    書いてあるのに効かない、という形をここで防ぐ。
+    """
+    for event, ids in EVENT_RESETS.items():
+        for nid in ids:
+            node = engine.nodes_by_scope["SURVIVOR"].get(nid)
+            assert node is not None, f"{event} が知らないノードを指している: {nid}"
+            assert node["durability"] == "VOLATILE", \
+                f"{nid} は {event} で戻す対象なのに VOLATILE でない"
+
+
+def test_what_survived_is_shown(engine):
+    """崩れたものより、生き残った範囲を見せる（S03 ルール7）。"""
+    r = run(engine, done=FAR_ALONG, days_since_death=100, events=["HEIR_RENOUNCED"])
+    survived = {s["node_id"] for s in r["surviving_after_event"]}
+    assert "SURV_LIST_ASSETS" in survived      # 財産の一覧は無駄になっていない
+    assert "SURV_COLLECT_KOSEKI" in survived   # 集めた戸籍も無駄になっていない
+    assert survived.isdisjoint(set(r["reset_by_events"]))
+
+
+# ---- 期限の時計が、人によって違う ----
+
+def test_three_months_starts_when_you_learned_not_when_they_died(engine):
+    """
+    繰り上がって相続人になった人の3か月は、死亡日ではなく知った時から始まる。
+    ここを死亡日で数えると、まだ間に合う人に「もう過ぎています」と言う。
+    """
+    nid = "SURV_DECIDE_ACCEPT_OR_RENOUNCE"
+    late = run(engine, done={"SURV_DEATH_NOTICE"}, days_since_death=100)
+    shifted = run(engine, done={"SURV_DEATH_NOTICE"}, days_since_death=100, days_since_known=10)
+
+    assert late["days_left"][nid] < 0                    # 死亡から数えると過ぎている
+    assert late["urgency"][nid] == "OVERDUE"
+    assert shifted["days_left"][nid] > 60                # 知った時から数えるとまだある
+    assert shifted["urgency"][nid] == "CAN_WAIT"
+
+
+def test_death_clock_is_unchanged_when_not_specified(engine):
+    """clock を書いていない期限は、これまでどおり死亡日から数える。"""
+    nid = "SURV_DEATH_NOTICE"                            # 死亡の事実を知った日から7日
+    a = run(engine, days_since_death=3)
+    b = run(engine, days_since_death=3, days_since_known=0)
+    assert a["days_left"][nid] == b["days_left"][nid] == 4
+
+
+def test_known_clock_is_declared_in_data_not_in_code(engine):
+    """どの時計で数えるかは、コードではなくノードに書く。"""
+    nodes = engine.nodes_by_scope["SURVIVOR"]
+    assert nodes["SURV_DECIDE_ACCEPT_OR_RENOUNCE"]["deadline"]["clock"] == "KNOWN"
+    assert nodes["SURV_TAX_FILING"]["deadline"]["clock"] == "KNOWN"
+    assert "clock" not in nodes["SURV_DEATH_NOTICE"]["deadline"]
+
+
+# ---- 繰り上がった人に、届くこと ----
+
+def test_rank_shift_warning_reaches_the_next_in_line(engine):
+    r = run(engine, done={"SURV_DEATH_NOTICE", "SURV_KNOW_SAFE_ACTIONS"},
+            days_since_death=100, days_since_known=10)
+    band = [w["node_id"] for w in r["irreversible_warnings"]]
+    assert "SURV_RANK_SHIFT_NOTICE" in band
+    w = next(w for w in r["irreversible_warnings"] if w["node_id"] == "SURV_RANK_SHIFT_NOTICE")
+    assert "知らせません" in w["warning_fact"]           # 裁判所は通知しない
+    assert "知った時から" in w["warning_exception"]      # まだ間に合う
+
+
+def test_rank_shift_warning_does_not_crowd_day_one(engine):
+    """1日目の赤い帯は「預金に触る前に」だけ。順位の話はその次から。"""
+    r = run(engine, days_since_death=1)
+    assert [w["node_id"] for w in r["irreversible_warnings"]] == ["SURV_WARN_DEPOSIT"]
+
+
+def test_telling_the_next_person_appears_after_the_renounce_decision(engine):
+    """裁判所は次順位の人に通知しない。だから自分から伝える道が要る。"""
+    nid = "SURV_RENOUNCE_TELL_NEXT"
+    before = run(engine, done={"SURV_DEATH_NOTICE"}, days_since_death=30)
+    after = run(engine, done=FAR_ALONG, days_since_death=100)
+    assert before["statuses"][nid] == "NOT_READY"
+    assert after["statuses"][nid] == "READY"
+
+
+# ---- 本人の側。子の有無で、打てる手がまったく違う ----
+
+def test_everyone_is_asked_who_their_heirs_would_be(engine):
+    for cond in (dict(has_spouse=True, children_count=2),
+                 dict(children_count=0),
+                 dict(is_business_owner=True)):
+        r = run(engine, scope="SELF", **cond)
+        assert "SELF_HEIR_ESTIMATE" in r["statuses"]
+
+
+def test_koseki_can_be_pulled_forward_only_when_there_are_children(engine):
+    """
+    自分・配偶者・直系尊属・直系卑属の戸籍は取れる。兄弟姉妹の戸籍は取れない。
+    だから子がいない人には、この前倒しが効かない。
+    """
+    with_child = run(engine, scope="SELF", has_spouse=True, children_count=2)
+    no_child = run(engine, scope="SELF", has_spouse=True, children_count=0)
+
+    assert "SELF_KOSEKI_AHEAD" in with_child["statuses"]
+    assert "SELF_KOSEKI_AHEAD" not in no_child["statuses"]
+
+    gone = next(a for a in no_child["absent"] if a["node_id"] == "SELF_KOSEKI_AHEAD")
+    assert "取れない" in gone["note"]        # できないと、はっきり言う
+
+
+def test_the_childless_are_given_the_one_thing_that_works(engine):
+    """
+    できないと言うだけで終わらせない。兄弟姉妹には遺留分がないので、
+    遺言を書けば遺産分割の話し合いそのものが要らなくなる。
+    """
+    r = run(engine, scope="SELF", has_spouse=True, children_count=0)
+    assert "SELF_NO_CHILD_ROUTE" in r["statuses"]
+    w = next(w for w in r["irreversible_warnings"] if w["node_id"] == "SELF_NO_CHILD_ROUTE")
+    assert "取れません" in w["warning_fact"]
+    exc = w["warning_exception"]
+    assert "遺留分がありません" in exc
+    # 逃げ道（遺言）が先。親の戸籍は誤解の訂正なので後ろ（S03 ルール6）
+    assert "親の戸籍" in exc, "誰が兄弟姉妹かは分かる、を落とさない"
+    assert exc.index("遺留分がありません") < exc.index("親の戸籍")
+
+    with_child = run(engine, scope="SELF", has_spouse=True, children_count=2)
+    assert "SELF_NO_CHILD_ROUTE" not in with_child["statuses"]
+
+
+def test_the_childless_will_removes_the_hardest_survivor_step(engine):
+    """遺言を書き終えると、遺族の側で何が消えるかを見せる（S03 ルール3・表示専用）。"""
+    r = run(engine, scope="SELF", done={"SELF_HEIR_ESTIMATE", "SELF_NO_CHILD_ROUTE"},
+            has_spouse=True, children_count=0)
+    eased = {(m["node_id"], m["effect"]) for m in r["mitigation_preview"]}
+    assert ("SELF_NO_CHILD_ROUTE", "SKIPPED") in eased
+
+
+def test_renounce_chain_warning_never_eats_todays_three(engine):
+    """行き先が変わるという警告は、赤い帯に出す。今日の3件には数えない。"""
+    r = run(engine, scope="SELF", has_spouse=True, children_count=2)
+    assert "SELF_RENOUNCE_CHAIN_WARN" not in [n["id"] for n in r["today_actions"]]
+    assert "SELF_RENOUNCE_CHAIN_WARN" in [w["node_id"] for w in r["irreversible_warnings"]]
+
+
+# ---- 三つの時計（S03 ルール4） ----
+
+def test_registration_clock_does_not_start_before_the_division(engine):
+    """
+    相続登記の3年は、遺産分割が成立した日から数える。
+    分割が済むまで、その時計は始まっていない。死亡日で代用すると、
+    まだ義務のない人を急かすことになる。
+    """
+    nid = "SURV_REAL_ESTATE_REGISTRATION"
+    before = run(engine, days_since_death=1000, has_real_estate_in_estate=True)
+    assert before["days_left"][nid] is None          # まだ始まっていない
+    assert before["urgency"][nid] == "CAN_WAIT"
+
+    after = run(engine, days_since_death=1000, days_since_division=1000,
+                has_real_estate_in_estate=True)
+    assert after["days_left"][nid] is not None and after["days_left"][nid] < 100
+
+
+def test_heir_declaration_clock_runs_from_day_one(engine):
+    """
+    分け方が決まらないうちでも、相続人申告登記の3年は動いている。
+    だから分割が長引くほど、こちらが効いてくる。
+    """
+    nid = "SURV_HEIR_DECLARATION_REG"
+    r = run(engine, days_since_death=1000, has_real_estate_in_estate=True)
+    assert r["days_left"][nid] is not None
+    assert r["statuses"][nid] == "READY"              # 一人で出せる。前提を待たない。
+
+
+def test_heir_declaration_is_the_way_out_before_the_division(engine):
+    """
+    ④と同じ形。逃げ道が本体の完了を待っていたら、逃げ道にならない。
+    """
+    reg = engine.nodes_by_scope["SURVIVOR"]["SURV_REAL_ESTATE_REGISTRATION"]
+    dec = engine.nodes_by_scope["SURVIVOR"]["SURV_HEIR_DECLARATION_REG"]
+    assert reg["prerequisites"] == ["SURV_ESTATE_DIVISION"]   # 移転登記は分割のあと
+    assert dec["prerequisites"] == []                         # 申し出は分割の前でもできる
+    assert dec["deadline"]["clock"] == "KNOWN"
+    assert reg["deadline"]["clock"] == "DIVISION"
+
+
+def test_three_clocks_are_all_declared_in_data(engine):
+    """どの時計で数えるかは、コードではなくノードに書く。"""
+    clocks = {n["deadline"].get("clock", "DEATH")
+              for n in engine.nodes_by_scope["SURVIVOR"].values() if n.get("deadline")}
+    assert clocks == {"DEATH", "KNOWN", "DIVISION"}
+
+
+def test_a_will_changes_which_registration_route_exists(engine):
+    """
+    遺言があると、遺産分割の話し合いがない。だから登記の道も別になる。
+    条文も二つに分かれている（分割の日から／取得を知った日から）。
+    """
+    no_will = run(engine, has_real_estate_in_estate=True, days_since_death=30)
+    with_will = run(engine, has_real_estate_in_estate=True, has_will=True, days_since_death=30)
+
+    assert "SURV_REAL_ESTATE_REGISTRATION" in no_will["statuses"]
+    assert "SURV_REGISTRATION_BY_WILL" not in no_will["statuses"]
+
+    assert "SURV_REGISTRATION_BY_WILL" in with_will["statuses"]
+    assert "SURV_REAL_ESTATE_REGISTRATION" not in with_will["statuses"]
+    assert "SURV_HEIR_DECLARATION_REG" not in with_will["statuses"]
+
+
+def test_the_will_route_does_not_wait_for_a_division_that_never_comes(engine):
+    """
+    遺言があるのに DIVISION の時計を使うと、時計が永久に始まらない。
+    義務はあるのに、期限が一度も出てこないことになる。
+    """
+    nid = "SURV_REGISTRATION_BY_WILL"
+    r = run(engine, has_real_estate_in_estate=True, has_will=True, days_since_death=1000)
+    assert r["days_left"][nid] is not None
+    assert r["days_left"][nid] < 100
+
+
+def test_self_side_may_speak_of_the_family_but_only_from_the_map(engine):
+    """
+    本人の画面に遺族の側で起きることを書いてよい（S03 ルール15）。
+    ただし、実務で見た結果を書くときは、その理由を並べて書く。
+    結果だけでは信じるしかなく、仕組みだけでは痛みが伝わらない。
+    """
+    r = run(engine, scope="SELF", has_spouse=True, children_count=2)
+    w = next(w for w in r["irreversible_warnings"]
+             if w["node_id"] == "SELF_RENOUNCE_CHAIN_WARN")
+    fact = w["warning_fact"]
+    assert "終わりがけ" in fact                      # 実務で見た結果
+    assert "戸籍をたどり終えたあと" in fact          # そうなる理由
+    assert fact.index("戸籍をたどり終えたあと") < fact.index("終わりがけ")
+
+    # 気持ちの断定はしない
+    for banned in ("後悔", "困り果て", "きっと"):
+        assert banned not in fact
+
+
+# ---- 余裕資金がある人（S02 第二部6） ----
+
+def test_surplus_route_appears_only_with_surplus(engine):
+    """
+    暮らしに使わない預貯金がなければ、生前に渡す話も保険の枠も出さない。
+    無理に渡すと、その人の暮らしが立たなくなる。
+    """
+    ids = ("SELF_GIFT_AHEAD_CHECK", "SELF_INSURANCE_NONTAX_FRAME",
+           "SELF_TAX_REDUCTION_CONSULT")
+    plain = run(engine, scope="SELF", has_spouse=True, children_count=2)
+    rich = run(engine, scope="SELF", has_spouse=True, children_count=2,
+               has_surplus_savings=True)
+    for nid in ids:
+        assert nid not in plain["statuses"], nid
+        assert nid in rich["statuses"], nid
+
+    gone = next(a for a in plain["absent"] if a["node_id"] == "SELF_GIFT_AHEAD_CHECK")
+    assert "暮らしが立たなくなります" in gone["note"]
+
+
+def test_gift_warning_says_the_window_grows(engine):
+    """
+    足し戻される期間は、これから年々のびていく。
+    「早く始めた分しか効かない」を、経過措置の事実として書く。
+    """
+    r = run(engine, scope="SELF", has_surplus_savings=True, children_count=2)
+    w = next(w for w in r["irreversible_warnings"]
+             if w["node_id"] == "SELF_GIFT_AHEAD_CHECK")
+    assert "のびていきます" in w["warning_fact"]
+    assert "7年以内" in w["warning_fact"]
+    assert "早く始めた分だけは足し戻されません" in w["warning_exception"]
+
+
+def test_insurance_frame_needs_the_heir_count_first(engine):
+    """500万円×法定相続人の数。人数が分からなければ枠も分からない。"""
+    r = run(engine, scope="SELF", has_surplus_savings=True, children_count=2)
+    nid = "SELF_INSURANCE_NONTAX_FRAME"
+    assert r["statuses"][nid] == "NOT_READY"
+    m = next(m for m in r["map"] if m["node_id"] == nid)
+    assert "いま自分に万一があったら、誰が相続人になるかを書き出す" in m["blocked_by"]
+
+    done = run(engine, scope="SELF", done={"SELF_HEIR_ESTIMATE"},
+               has_surplus_savings=True, children_count=2)
+    assert done["statuses"][nid] == "READY"
+
+
+def test_no_product_names_anywhere(engine):
+    """
+    商品名は書かない。類型までにとどめる。
+    制度の説明と、金融商品の勧誘は別のことである。
+    """
+    import json as _json
+    blob = _json.dumps([engine.nodes_by_scope[s] for s in
+                        ("SELF", "FAMILY_CHILD", "SURVIVOR")], ensure_ascii=False)
+    for banned in ("マニュライフ", "ソニー生命", "日本生命", "第一生命", "かんぽ",
+                   "アフラック", "オリックス生命", "楽天", "SBI"):
+        assert banned not in blob, banned
+
+
+def test_the_app_says_it_does_not_judge_which_is_better(engine):
+    """どれが得かは判断しない。金額も計算しない。並べるところまで。"""
+    n = engine.nodes_by_scope["SELF"]["SELF_TAX_REDUCTION_CONSULT"]
+    note = n["caution"]["note"]
+    assert "判断しない" in note and "金額も計算しない" in note

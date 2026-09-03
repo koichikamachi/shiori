@@ -7,3 +7,6 @@ state.json
 
 # Word の一時ファイル
 ~$*
+
+# 消す前の一時置き場
+_to_delete/

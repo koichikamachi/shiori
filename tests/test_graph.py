@@ -332,11 +332,17 @@ def test_rule4_deadline_alert_even_when_blocked(engine):
 
 
 def test_rule4_extend_deliberation_is_reachable_early(engine):
-    """期間の伸長は、調べの途中でも手が届くこと（間に合わないときの逃げ道）。"""
+    """期間の伸長は、調べの途中でも手が届くこと（間に合わないときの逃げ道）。
+
+    もとは「借入と保証を調べる」の完了を前提にしていた。伸長は調べが終わらないときの
+    手立てなので、それでは一番必要な人にだけ出てこない。逆になっていた。
+    """
     cond = UserCondition(days_since_death=70, entry_found=False)
     res = run(engine, "SURVIVOR", cond,
-              completed={"SURV_DEATH_NOTICE", "SURV_FIND_ENTRY", "SURV_DISCOVER_DEBT"})
+              completed={"SURV_DEATH_NOTICE", "SURV_KNOW_SAFE_ACTIONS"})
     assert res["statuses"]["SURV_EXTEND_DELIBERATION"] == NodeStatus.READY.value
+    # 調べが終わったから出た、ではないことを確かめる
+    assert res["statuses"]["SURV_DISCOVER_DEBT"] != NodeStatus.DONE.value
 
 
 def test_rule4_add_months_rounds_at_month_end():

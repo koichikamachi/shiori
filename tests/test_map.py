@@ -195,3 +195,33 @@ def test_map_can_be_opened_from_the_first_second(engine, capsys):
     out = capsys.readouterr().out
     assert "全体は、こうなっています" in out
     assert f"ぜんぶで {len(engine.nodes_by_scope['SURVIVOR'])} 件" in out
+
+
+def test_deadline_alerts_also_use_titles_not_ids(engine):
+    """
+    期限の帯にも、止めているノードを名前で出す。
+    地図だけ直して、こちらにIDが残っていた。
+    """
+    r = engine.evaluate(
+        actor_scope="SURVIVOR",
+        condition=UserCondition(days_since_death=80),
+        completed_node_ids={"SURV_DEATH_NOTICE"}, today=TODAY)
+    alerts = [a for a in r["deadline_alerts"] if a["blocked_by"]]
+    assert alerts, "80日目なら、前提が未了のまま期限が近いものがあるはず"
+    for a in alerts:
+        for b in a["blocked_by"]:
+            assert not b.startswith(("SURV_", "SELF_", "FAM_")), b
+
+
+def test_warning_band_leads_with_the_running_clock(engine):
+    """
+    赤い帯は、時計が動いているものから。
+    12日しかない逃げ道より先に、いつでも読める警告が並ぶと、帯の意味が薄れる。
+    """
+    r = engine.evaluate(
+        actor_scope="SURVIVOR",
+        condition=UserCondition(days_since_death=80),
+        completed_node_ids={"SURV_DEATH_NOTICE", "SURV_KNOW_SAFE_ACTIONS"}, today=TODAY)
+    band = [w["node_id"] for w in r["irreversible_warnings"]]
+    assert "SURV_EXTEND_DELIBERATION" in band
+    assert band[0] == "SURV_EXTEND_DELIBERATION", band

@@ -530,10 +530,10 @@
       "stream": "ESTATE_SUCCESSION",
       "actor": "LEGAL_HEIR",
       "title": "調べが終わらないときは、期間を延ばす",
-      "today_action": "財産と負債の調べが期限に間に合わないなら、期限が来る前に家庭裁判所へ期間の伸長を申し立てる。",
+      "today_action": "財産と負債の調べが期限に間に合わないなら、期限が来る前に、故人の最後の住所地を管轄する家庭裁判所へ「相続の承認又は放棄の期間伸長審判申立書」を出す。",
       "exists_if": null,
       "prerequisites": [
-        "SURV_DISCOVER_DEBT"
+        "SURV_KNOW_SAFE_ACTIONS"
       ],
       "base_urgency": "CAN_WAIT",
       "priority": 40,
@@ -542,17 +542,16 @@
       },
       "durability": "PERMANENT",
       "decided_by_you": true,
-      "caution": {
-        "note": "この手立ては、あまり知られていない。間に合わないと思ったときの逃げ道がある。ただし、期限が来る前に申し立てること。"
-      },
       "legal_metadata": {
         "verification_status": "SELF_REVIEWED",
         "verified_at": null,
         "verified_by": null,
-        "source_draft": "民法第915条第1項ただし書（期間の伸長）",
+        "source_draft": "民法第915条第1項ただし書（期間の伸長）、民法第921条第2号（期間経過による法定単純承認）",
         "needs_check": [
-          "申立ての方法、認められる期間の目安、費用"
-        ]
+          "再度の伸長が認められる場合の要件",
+          "申立ての時点で、どこまで調べが進んでいる必要があるか（実務上の扱い）"
+        ],
+        "in_house_reviewed_at": "2026-09-03"
       },
       "deadline": {
         "days": null,
@@ -566,6 +565,12 @@
         "type": "LAWYER",
         "concrete_query": "調べが終わらないため、相続の承認・放棄の期間を延ばす申立てをしたい。",
         "estimated_cost_range": "5万円〜10万円程度（目安）"
+      },
+      "irreversibility": {
+        "is_irreversible": true,
+        "lost_option": "期間を延ばして、調べてから決める機会",
+        "warning_fact": "期間を延ばす申立ては、3か月が過ぎる前にしかできません。1日でも過ぎると、法律上すべてを相続したものとして扱われ、申立てそのものができなくなります。家庭裁判所があとから救うことはできません。",
+        "warning_exception": "ただし、この申立ては安く、早くできます。相続人一人につき収入印紙800円と、連絡用の郵便切手だけです。通常は1か月から3か月ほど延ばせます。迷ったら、期限が来る前にまず延ばしてください。"
       }
     },
     {
@@ -643,7 +648,7 @@
       "stream": "ESTATE_SUCCESSION",
       "actor": "LEGAL_HEIR",
       "title": "相続税の申告と納付",
-      "today_action": "税理士に依頼するか自分で申告する。納付は現金である。",
+      "today_action": "税理士に依頼するか自分で申告する。納付は原則として一括・現金である（延納や物納もあるが、要件が極めて厳しい）。",
       "exists_if": "condition.estate_over_basic_deduction == true",
       "absent_note": "財産が基礎控除を超えないので、相続税の申告と納付は要りません。",
       "prerequisites": [
@@ -664,21 +669,22 @@
         "note": "月で数える"
       },
       "caution": {
-        "note": "分け方が決まっていなくても、期限は来る。決まっていない場合の申告の仕方がある。"
+        "note": "分け方が決まっていなくても、期限は来る。決まっていない場合は、法定相続分で分けたものとみなして申告・納税する。ただし未分割のままだと、配偶者の税額軽減も小規模宅地等の特例も使えず、税額が跳ね上がる。あとからこれらを使うために、申告書と一緒に「申告期限後3年以内の分割見込書」を必ず出しておくこと。"
       },
       "specialist_bridge": {
         "type": "TAX_ACCOUNTANT",
-        "concrete_query": "相続税の申告をお願いしたい。分割が未了の場合の申告方法と、あとから特例を適用する手続もあわせて相談したい。",
+        "concrete_query": "相続税の申告を依頼したい。期限までに分割がまとまらない場合は、未分割で申告したうえで「申告期限後3年以内の分割見込書」を出したい。納税資金の用意についても相談したい。",
         "estimated_cost_range": "遺産総額の0.5〜1%程度が目安"
       },
       "legal_metadata": {
         "verification_status": "SELF_REVIEWED",
         "verified_at": null,
         "verified_by": null,
-        "source_draft": "相続税法第27条（相続税の申告書）",
+        "source_draft": "相続税法第27条（申告書）、第33条（納期限）、第55条（未分割の場合の課税価格の計算）、第38条・第41条（延納・物納）",
         "needs_check": [
-          "未分割で申告する場合の手続（申告期限後3年以内の分割見込書など）"
-        ]
+          "3年以内に分割できなかった場合の延長手続（やむを得ない事由があるときの承認申請）"
+        ],
+        "in_house_reviewed_at": "2026-09-03"
       }
     },
     {
@@ -686,12 +692,10 @@
       "stream": "ESTATE_SUCCESSION",
       "actor": "LEGAL_HEIR",
       "title": "故人の所得税の申告",
-      "today_action": "故人に事業所得や不動産所得、一定額以上の年金があった場合、亡くなった年の分の所得税を申告する。",
+      "today_action": "故人に、事業や不動産の収入、給与2,000万円超、公的年金400万円超、年内の不動産売却などがあったかを確かめる。あれば、亡くなった年の分の所得税を申告する。",
       "exists_if": "condition.had_income_to_file == true",
       "absent_note": "故人に申告の要る所得がなかったので、所得税の申告は要りません。",
-      "prerequisites": [
-        "SURV_DETERMINE_HEIRS"
-      ],
+      "prerequisites": [],
       "base_urgency": "CAN_WAIT",
       "priority": 17,
       "wait": {
@@ -710,16 +714,19 @@
         "verification_status": "SELF_REVIEWED",
         "verified_at": null,
         "verified_by": null,
-        "source_draft": "所得税法第125条（準確定申告）",
+        "source_draft": "所得税法第125条第1項（準確定申告）、同条第2項（各相続人による提出と通知）",
         "needs_check": [
-          "申告が必要となる場合の要件",
-          "医療費控除等による還付の可能性"
-        ]
+          "単独で提出した場合の、他の相続人への通知のやり方"
+        ],
+        "in_house_reviewed_at": "2026-09-03"
       },
       "specialist_bridge": {
         "type": "TAX_ACCOUNTANT",
         "concrete_query": "故人に申告の要る所得があったか、準確定申告が必要かを確かめ、必要なら依頼したい。",
         "estimated_cost_range": "5万円〜（目安）"
+      },
+      "caution": {
+        "note": "原則は相続人全員の連名で出す。しかし相続人の確定を待っていると4か月に間に合わないことがある。その場合は、各相続人が単独で出すことができる。単独で出した人は、申告した内容を他の相続人に知らせる義務を負う。なお、入院や治療の費用が多かった場合の医療費控除など、還付になることもある。還付の申告に4か月の縛りはなく、5年間できる。"
       }
     },
     {

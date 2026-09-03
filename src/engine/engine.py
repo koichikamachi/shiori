@@ -231,7 +231,8 @@ class ShioriEngine:
                 "days_left": days_left[nid],
                 "urgency": urgency[nid],
                 "status": resolved[nid].value,
-                "blocked_by": unmet_map.get(nid, []),
+                # 止めているノードは「名前」で出す。idは利用者の言葉ではない。
+                "blocked_by": [existing[p]["title"] for p in unmet_map.get(nid, []) if p in existing],
             }
             for nid in sorted(existing)
             if urgency[nid] in ("OVERDUE", "MUST_IMMEDIATE", "SOON")
@@ -261,7 +262,26 @@ class ShioriEngine:
                 or urgency[nid] in ("OVERDUE", "MUST_IMMEDIATE", "SOON")
             )
         ]
-        warnings.sort(key=lambda x: (existing[x["node_id"]].get("priority", 999), x["node_id"]))
+        # 赤い帯も、時計が動いているものから出す。
+        # 12日しかない逃げ道より先に、いつでも読める警告が並ぶと、帯の意味が薄れる。
+        # 赤い帯の並び（S03 ルール6）。上から順に見る。
+        #   1. 緊急度
+        #   2. 実際に時計が動いているものを、いつでも読める警告より先に
+        #   3. 残り日数の少ないもの
+        #   4. いま手をつけられるもの（「もう間に合いません」より「今日これをすれば延ばせます」）
+        #   5. priority、id
+        def warn_key(x):
+            nid = x["node_id"]
+            d = days_left[nid]
+            return (
+                URGENCY_ORDER[urgency[nid]],
+                0 if d is not None else 1,
+                d if d is not None else 0,
+                0 if resolved[nid] in (NodeStatus.READY, NodeStatus.IN_PROGRESS) else 1,
+                existing[nid].get("priority", 999),
+                nid,
+            )
+        warnings.sort(key=warn_key)
 
         waiting = [
             {

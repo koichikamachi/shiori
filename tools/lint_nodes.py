@@ -232,7 +232,7 @@ for name, nodes in by_file.items():
             if ad and not re.match(r"^\d{4}-\d{2}-\d{2}$", ad):
                 err(w, f"absolute_date の書き方が YYYY-MM-DD でない: {ad}")
             # どの時計で数えるか（S03 ルール4・14）。書くなら値は二つだけ。
-            if "clock" in dl and dl["clock"] not in {"DEATH", "KNOWN"}:
+            if "clock" in dl and dl["clock"] not in {"DEATH", "KNOWN", "DIVISION"}:
                 err(w, f"deadline.clock の値が定義にない: {dl['clock']}")
             if dl.get("clock") == "KNOWN" and dl.get("absolute_date"):
                 err(w, "暦の期限に clock は要らない（知った時から数える期限ではない）")

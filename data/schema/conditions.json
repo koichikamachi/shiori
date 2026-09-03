@@ -151,6 +151,20 @@
         "FOREIGN_ASSET_FOUND"
       ],
       "note": "durability が VOLATILE のノードを無効に戻すために使う。"
+    },
+    "days_since_known": {
+      "type": "int_or_null",
+      "kind": "input",
+      "scope": "survivor",
+      "label": "自己のために相続の開始があったことを知った日から何日目か",
+      "note": "順位が繰り上がって相続人になった人は、死亡日ではなくこの日から数える。省略すると days_since_death を使う。deadline.clock が KNOWN の期限に使う。"
+    },
+    "days_since_division": {
+      "type": "int_or_null",
+      "kind": "input",
+      "scope": "survivor",
+      "label": "遺産分割が成立した日から何日目か",
+      "note": "相続登記の申請義務の起算点。分割が成立するまでこの時計は始まらない。deadline.clock が DIVISION の期限に使う。"
     }
   }
 }

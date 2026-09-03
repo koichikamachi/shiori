@@ -88,8 +88,7 @@ class ShioriEngine:
         # 順位が繰り上がって相続人になった人は、死亡から何か月経っていても、
         # その人の3か月はそこから始まる。ここを死亡日で数えると、まだ間に合う人に
         # 「もう過ぎています」と言うことになる。
-        elapsed = (cond.days_for_known_clock if dl.get("clock") == "KNOWN"
-                   else cond.days_since_death)
+        elapsed = cond.days_for_clock(dl.get("clock"))
         if elapsed is None:
             return None
         base = today - timedelta(days=elapsed)

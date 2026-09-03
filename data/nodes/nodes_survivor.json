@@ -23,16 +23,21 @@
         "days": 7,
         "months": null,
         "trigger": "死亡の事実を知った日",
-        "note": "起算日の数え方は要確認"
+        "note": "国外で死亡したときは、その事実を知った日から3か月以内。"
       },
       "legal_metadata": {
-        "verification_status": "SELF_REVIEWED",
-        "verified_at": null,
-        "verified_by": null,
-        "source_draft": "戸籍法第86条",
+        "verification_status": "SOURCE_VERIFIED",
+        "verified_at": "2026-09-03",
+        "verified_by": "法務省サイト（死亡届）",
+        "source_draft": "戸籍法第86条（届出期間と添付書類）、第87条（届出義務者）",
         "needs_check": [
-          "提出期限の起算と、国外で死亡した場合の期限"
-        ]
+          "期限を過ぎた場合の過料の根拠条文と金額"
+        ],
+        "source_url": "https://www.moj.go.jp/ONLINE/FAMILYREGISTER/5-4.html",
+        "in_house_reviewed_at": "2026-09-03"
+      },
+      "caution": {
+        "note": "国外で死亡したときは3か月以内。届出人になれるのは、親族、同居者、家主、地主、家屋管理人、土地管理人、後見人などである。届出先は、死亡地・本籍地・届出人の所在地のいずれかの市区町村。医師の死亡診断書（または死体検案書）を添える。遅れても届け出はできるが、火葬の許可が下りないので、実際上は先に進めない。"
       }
     },
     {
@@ -596,7 +601,7 @@
         "is_irreversible": true,
         "lost_option": "分け方をやり直す機会",
         "warning_fact": "全員が署名押印して成立した合意は、原則としてあとから撤回できません。",
-        "warning_exception": "全員が改めて合意すればやり直せる場合があります。ただし、税や登記の扱いが変わることがあります。"
+        "warning_exception": "ただし、相続人全員が改めて合意すれば、やり直せる場合があります。ただし、やり直した時期によって税の扱いが変わります。相続税の申告期限を過ぎてからのやり直しは、財産の移し替えが贈与にあたるとして、別に贈与税がかかると判断された例があります。やり直す前に、必ず税理士に確かめてください。"
       },
       "specialist_bridge": {
         "type": "JUDICIAL_SCRIVENER",
@@ -607,10 +612,18 @@
         "verification_status": "SELF_REVIEWED",
         "verified_at": null,
         "verified_by": null,
-        "source_draft": "民法第907条（遺産の分割の協議）",
-        "needs_check": []
+        "source_draft": "民法第907条（遺産の分割の協議）、第909条（分割の遡及効）。やり直しの課税関係は、相続税法に直接の定めがなく、事案ごとの判断による。",
+        "needs_check": [
+          "★重要★ いったん成立した遺産分割を合意解除してやり直した場合の課税関係。相続税の申告期限の前後で扱いが分かれるか（国税不服審判所 平17.12.15裁決ほか）",
+          "分割協議が錯誤などで無効・取消しとなる場合と、単なる合意解除との区別",
+          "遺言と異なる分割をした場合は贈与税が課されないこと（国税庁タックスアンサー No.4176）との関係"
+        ],
+        "in_house_reviewed_at": "2026-09-03"
       },
-      "absent_note": "遺言があるので、財産の分け方を話し合いで決める必要はありません。"
+      "absent_note": "遺言があるので、財産の分け方を話し合いで決める必要はありません。",
+      "caution": {
+        "note": "やり直しを考えるときは、司法書士だけでなく税理士にも確かめること。登記はやり直せても、税は戻らないことがある。"
+      }
     },
     {
       "id": "SURV_TAX_FILING_NEED",
@@ -735,7 +748,7 @@
       "stream": "ESTATE_SUCCESSION",
       "actor": "LEGAL_HEIR",
       "title": "不動産の名義変更",
-      "today_action": "分け方が決まったら、法務局へ名義変更を申請する。決まらない場合にも、先に申し出ておく手立てがある。",
+      "today_action": "遺産分割が成立したら、その内容にもとづいて法務局へ名義変更を申請する。",
       "exists_if": "condition.has_real_estate_in_estate == true",
       "absent_note": "遺産に不動産がないので、名義変更は要りません。",
       "prerequisites": [
@@ -751,20 +764,25 @@
       "deadline": {
         "days": null,
         "months": 36,
-        "trigger": "所有権を取得したことを知った日から",
-        "note": "期限と過料の運用は要確認"
+        "absolute_date": null,
+        "trigger": "遺産分割が成立した日",
+        "clock": "DIVISION",
+        "note": "分割が成立するまで、この3年は始まらない。令和6年4月1日より前に相続を知っていた不動産は、令和9年3月31日までとされる。"
       },
       "caution": {
-        "note": "申請には義務があり、怠ると過料の対象になるとされる。分け方が決まらない場合の申し出の手立てもある。"
+        "note": "相続登記の申請には義務がある。怠ると10万円以下の過料の対象になる。分け方が決まらないうちは、相続人申告登記を先に出しておけば、その人については義務を果たしたことになる。ただしそれは所有権の移転登記ではないので、分割が成立したらあらためて申請する。"
       },
       "legal_metadata": {
-        "verification_status": "SELF_REVIEWED",
-        "verified_at": null,
-        "verified_by": null,
-        "source_draft": "不動産登記法第76条の2（相続登記の申請義務）、第76条の3（相続人申告登記）",
+        "verification_status": "SOURCE_VERIFIED",
+        "verified_at": "2026-09-03",
+        "verified_by": "法務省サイト（相続登記の申請義務化に関するQ&A）",
+        "source_draft": "不動産登記法第76条の2（相続登記の申請義務。遺産分割で取得した場合は分割の日から3年以内）、第164条第1項（10万円以下の過料）",
         "needs_check": [
-          "★重要★ 期限の数え方、過去に発生した相続への適用、過料の運用実態"
-        ]
+          "過料の運用実態（どの程度、実際に科されているか）",
+          "令和6年4月1日より前の相続について、令和9年3月31日という期限の条文上の根拠"
+        ],
+        "source_url": "https://www.moj.go.jp/MINJI/minji05_00565.html",
+        "in_house_reviewed_at": "2026-09-03"
       },
       "specialist_bridge": {
         "type": "JUDICIAL_SCRIVENER",
@@ -924,6 +942,56 @@
         "needs_check": [
           "放棄した人に、次順位者へ通知する法律上の義務があるか（実務上の扱い）"
         ]
+      }
+    },
+    {
+      "id": "SURV_HEIR_DECLARATION_REG",
+      "stream": "ESTATE_SUCCESSION",
+      "actor": "LEGAL_HEIR",
+      "title": "分け方が決まらないうちに、相続人であることだけ申し出ておく",
+      "today_action": "遺産分割がまとまらないうちでも、自分ひとりで法務局へ「相続人申告登記」を申し出ておく。戸籍で相続人であることを示せば足りる。",
+      "exists_if": "condition.has_real_estate_in_estate == true",
+      "absent_note": "遺産に不動産がないので、この申し出は要りません。",
+      "prerequisites": [],
+      "base_urgency": "CAN_WAIT",
+      "priority": 24,
+      "wait": {
+        "nature": "NONE"
+      },
+      "durability": "PERMANENT",
+      "decided_by_you": true,
+      "deadline": {
+        "days": null,
+        "months": 36,
+        "absolute_date": null,
+        "trigger": "自己のために相続の開始があったことを知り、かつ所有権を取得したことを知った日",
+        "clock": "KNOWN",
+        "note": "分割を待たずに数え始まる。だから分割が長引くほど、こちらが効いてくる。"
+      },
+      "irreversibility": {
+        "is_irreversible": true,
+        "lost_option": "過料を科されずに、分割の話し合いを続ける道",
+        "warning_fact": "相続登記の申請には義務があります。分け方が決まらないまま3年が過ぎると、10万円以下の過料の対象になります。話し合いが長引いていることは、言い訳になりません。",
+        "warning_exception": "ただし、分け方が決まっていなくても、自分ひとりで「相続人である」と申し出ておけば、その人については義務を果たしたものとして扱われます。他の相続人の同意は要りません。"
+      },
+      "caution": {
+        "note": "これは所有権の移転登記ではない。遺産分割が成立したら、その日から3年以内に、あらためて相続登記を申請する義務が生じる。"
+      },
+      "specialist_bridge": {
+        "type": "JUDICIAL_SCRIVENER",
+        "concrete_query": "遺産分割がまとまらないため、相続人申告登記を出しておきたい。必要な戸籍の範囲と費用を知りたい。",
+        "estimated_cost_range": "1万円〜3万円程度（目安）"
+      },
+      "legal_metadata": {
+        "verification_status": "SOURCE_VERIFIED",
+        "verified_at": "2026-09-03",
+        "verified_by": "法務省サイト（相続登記の申請義務化に関するQ&A）",
+        "source_draft": "不動産登記法第76条の3（相続人申告登記）。特定の相続人が単独で申し出ることができ、申出をした相続人についてのみ義務を履行したものとみなされる。",
+        "source_url": "https://www.moj.go.jp/MINJI/minji05_00565.html",
+        "needs_check": [
+          "申出に必要な戸籍の範囲と、登録免許税の要否"
+        ],
+        "in_house_reviewed_at": "2026-09-03"
       }
     }
   ]

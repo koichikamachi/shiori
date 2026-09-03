@@ -4,7 +4,7 @@
     "nodes_family.json",
     "nodes_survivor.json"
   ],
-  "count": 80,
+  "count": 85,
   "checks": [
     {
       "check_id": "SELF_INSURANCE_NOTE#1",
@@ -481,10 +481,10 @@
       "node_id": "SURV_DEATH_NOTICE",
       "file": "nodes_survivor.json",
       "actor": "RELATIVES",
-      "question": "提出期限の起算と、国外で死亡した場合の期限",
-      "claim": "死亡届と火葬許可の申請　起算から 7 日　起算点は「死亡の事実を知った日」　起算日の数え方は要確認　根拠（下書き）: 戸籍法第86条",
-      "current_status": "SELF_REVIEWED",
-      "current_source_url": null
+      "question": "期限を過ぎた場合の過料の根拠条文と金額",
+      "claim": "死亡届と火葬許可の申請　起算から 7 日　起算点は「死亡の事実を知った日」　国外で死亡したときは、その事実を知った日から3か月以内。　根拠（下書き）: 戸籍法第86条（届出期間と添付書類）、第87条（届出義務者）",
+      "current_status": "SOURCE_VERIFIED",
+      "current_source_url": "https://www.moj.go.jp/ONLINE/FAMILYREGISTER/5-4.html"
     },
     {
       "check_id": "SURV_KNOW_SAFE_ACTIONS#1",
@@ -717,6 +717,36 @@
       "current_source_url": null
     },
     {
+      "check_id": "SURV_ESTATE_DIVISION#1",
+      "node_id": "SURV_ESTATE_DIVISION",
+      "file": "nodes_survivor.json",
+      "actor": "LEGAL_HEIR",
+      "question": "★重要★ いったん成立した遺産分割を合意解除してやり直した場合の課税関係。相続税の申告期限の前後で扱いが分かれるか（国税不服審判所 平17.12.15裁決ほか）",
+      "claim": "財産の分け方を話し合い、合意書を作る　全員が署名押印して成立した合意は、原則としてあとから撤回できません。　根拠（下書き）: 民法第907条（遺産の分割の協議）、第909条（分割の遡及効）。やり直しの課税関係は、相続税法に直接の定めがなく、事案ごとの判断による。",
+      "current_status": "SELF_REVIEWED",
+      "current_source_url": null
+    },
+    {
+      "check_id": "SURV_ESTATE_DIVISION#2",
+      "node_id": "SURV_ESTATE_DIVISION",
+      "file": "nodes_survivor.json",
+      "actor": "LEGAL_HEIR",
+      "question": "分割協議が錯誤などで無効・取消しとなる場合と、単なる合意解除との区別",
+      "claim": "財産の分け方を話し合い、合意書を作る　全員が署名押印して成立した合意は、原則としてあとから撤回できません。　根拠（下書き）: 民法第907条（遺産の分割の協議）、第909条（分割の遡及効）。やり直しの課税関係は、相続税法に直接の定めがなく、事案ごとの判断による。",
+      "current_status": "SELF_REVIEWED",
+      "current_source_url": null
+    },
+    {
+      "check_id": "SURV_ESTATE_DIVISION#3",
+      "node_id": "SURV_ESTATE_DIVISION",
+      "file": "nodes_survivor.json",
+      "actor": "LEGAL_HEIR",
+      "question": "遺言と異なる分割をした場合は贈与税が課されないこと（国税庁タックスアンサー No.4176）との関係",
+      "claim": "財産の分け方を話し合い、合意書を作る　全員が署名押印して成立した合意は、原則としてあとから撤回できません。　根拠（下書き）: 民法第907条（遺産の分割の協議）、第909条（分割の遡及効）。やり直しの課税関係は、相続税法に直接の定めがなく、事案ごとの判断による。",
+      "current_status": "SELF_REVIEWED",
+      "current_source_url": null
+    },
+    {
       "check_id": "SURV_TAX_FILING_NEED#1",
       "node_id": "SURV_TAX_FILING_NEED",
       "file": "nodes_survivor.json",
@@ -761,10 +791,20 @@
       "node_id": "SURV_REAL_ESTATE_REGISTRATION",
       "file": "nodes_survivor.json",
       "actor": "LEGAL_HEIR",
-      "question": "★重要★ 期限の数え方、過去に発生した相続への適用、過料の運用実態",
-      "claim": "不動産の名義変更　起算から 36 か月　起算点は「所有権を取得したことを知った日から」　期限と過料の運用は要確認　根拠（下書き）: 不動産登記法第76条の2（相続登記の申請義務）、第76条の3（相続人申告登記）",
-      "current_status": "SELF_REVIEWED",
-      "current_source_url": null
+      "question": "過料の運用実態（どの程度、実際に科されているか）",
+      "claim": "不動産の名義変更　起算から 36 か月　起算点は「遺産分割が成立した日」　分割が成立するまで、この3年は始まらない。令和6年4月1日より前に相続を知っていた不動産は、令和9年3月31日までとされる。　根拠（下書き）: 不動産登記法第76条の2（相続登記の申請義務。遺産分割で取得した場合は分割の日から3年以内）、第164条第1項（10万円以下の過料）",
+      "current_status": "SOURCE_VERIFIED",
+      "current_source_url": "https://www.moj.go.jp/MINJI/minji05_00565.html"
+    },
+    {
+      "check_id": "SURV_REAL_ESTATE_REGISTRATION#2",
+      "node_id": "SURV_REAL_ESTATE_REGISTRATION",
+      "file": "nodes_survivor.json",
+      "actor": "LEGAL_HEIR",
+      "question": "令和6年4月1日より前の相続について、令和9年3月31日という期限の条文上の根拠",
+      "claim": "不動産の名義変更　起算から 36 か月　起算点は「遺産分割が成立した日」　分割が成立するまで、この3年は始まらない。令和6年4月1日より前に相続を知っていた不動産は、令和9年3月31日までとされる。　根拠（下書き）: 不動産登記法第76条の2（相続登記の申請義務。遺産分割で取得した場合は分割の日から3年以内）、第164条第1項（10万円以下の過料）",
+      "current_status": "SOURCE_VERIFIED",
+      "current_source_url": "https://www.moj.go.jp/MINJI/minji05_00565.html"
     },
     {
       "check_id": "SURV_DIGITAL_CLEANUP#1",
@@ -805,6 +845,16 @@
       "claim": "自分が放棄するなら、次に相続人になる人に自分から伝える　根拠（下書き）: 民法第939条（放棄の効力）、第915条（熟慮期間）",
       "current_status": "SELF_REVIEWED",
       "current_source_url": null
+    },
+    {
+      "check_id": "SURV_HEIR_DECLARATION_REG#1",
+      "node_id": "SURV_HEIR_DECLARATION_REG",
+      "file": "nodes_survivor.json",
+      "actor": "LEGAL_HEIR",
+      "question": "申出に必要な戸籍の範囲と、登録免許税の要否",
+      "claim": "分け方が決まらないうちに、相続人であることだけ申し出ておく　起算から 36 か月　起算点は「自己のために相続の開始があったことを知り、かつ所有権を取得したことを知った日」　分割を待たずに数え始まる。だから分割が長引くほど、こちらが効いてくる。　相続登記の申請には義務があります。分け方が決まらないまま3年が過ぎると、10万円以下の過料の対象になります。話し合いが長引いていることは、言い訳になりません。　根拠（下書き）: 不動産登記法第76条の3（相続人申告登記）。特定の相続人が単独で申し出ることができ、申出をした相続人についてのみ義務を履行したものとみなされる。",
+      "current_status": "SOURCE_VERIFIED",
+      "current_source_url": "https://www.moj.go.jp/MINJI/minji05_00565.html"
     }
   ]
 }

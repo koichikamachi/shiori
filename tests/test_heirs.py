@@ -184,3 +184,51 @@ def test_renounce_chain_warning_never_eats_todays_three(engine):
     r = run(engine, scope="SELF", has_spouse=True, children_count=2)
     assert "SELF_RENOUNCE_CHAIN_WARN" not in [n["id"] for n in r["today_actions"]]
     assert "SELF_RENOUNCE_CHAIN_WARN" in [w["node_id"] for w in r["irreversible_warnings"]]
+
+
+# ---- 三つの時計（S03 ルール4） ----
+
+def test_registration_clock_does_not_start_before_the_division(engine):
+    """
+    相続登記の3年は、遺産分割が成立した日から数える。
+    分割が済むまで、その時計は始まっていない。死亡日で代用すると、
+    まだ義務のない人を急かすことになる。
+    """
+    nid = "SURV_REAL_ESTATE_REGISTRATION"
+    before = run(engine, days_since_death=1000, has_real_estate_in_estate=True)
+    assert before["days_left"][nid] is None          # まだ始まっていない
+    assert before["urgency"][nid] == "CAN_WAIT"
+
+    after = run(engine, days_since_death=1000, days_since_division=1000,
+                has_real_estate_in_estate=True)
+    assert after["days_left"][nid] is not None and after["days_left"][nid] < 100
+
+
+def test_heir_declaration_clock_runs_from_day_one(engine):
+    """
+    分け方が決まらないうちでも、相続人申告登記の3年は動いている。
+    だから分割が長引くほど、こちらが効いてくる。
+    """
+    nid = "SURV_HEIR_DECLARATION_REG"
+    r = run(engine, days_since_death=1000, has_real_estate_in_estate=True)
+    assert r["days_left"][nid] is not None
+    assert r["statuses"][nid] == "READY"              # 一人で出せる。前提を待たない。
+
+
+def test_heir_declaration_is_the_way_out_before_the_division(engine):
+    """
+    ④と同じ形。逃げ道が本体の完了を待っていたら、逃げ道にならない。
+    """
+    reg = engine.nodes_by_scope["SURVIVOR"]["SURV_REAL_ESTATE_REGISTRATION"]
+    dec = engine.nodes_by_scope["SURVIVOR"]["SURV_HEIR_DECLARATION_REG"]
+    assert reg["prerequisites"] == ["SURV_ESTATE_DIVISION"]   # 移転登記は分割のあと
+    assert dec["prerequisites"] == []                         # 申し出は分割の前でもできる
+    assert dec["deadline"]["clock"] == "KNOWN"
+    assert reg["deadline"]["clock"] == "DIVISION"
+
+
+def test_three_clocks_are_all_declared_in_data(engine):
+    """どの時計で数えるかは、コードではなくノードに書く。"""
+    clocks = {n["deadline"].get("clock", "DEATH")
+              for n in engine.nodes_by_scope["SURVIVOR"].values() if n.get("deadline")}
+    assert clocks == {"DEATH", "KNOWN", "DIVISION"}

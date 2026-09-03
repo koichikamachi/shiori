@@ -51,6 +51,8 @@ class UserCondition(BaseModel):
     # 先生の実話：子が土壇場で放棄し、兄弟姉妹が相続人になった。その人たちの3か月は、
     # そこから始まる。省略すると死亡からの日数を使う（これまでと同じ動き）。
     days_since_known: Optional[int] = Field(default=None, description="自己のために相続の開始があったことを知った日から何日目か")
+    # 相続登記の3年は、遺産分割が成立した日から数える。分割が済むまで、この時計は始まらない。
+    days_since_division: Optional[int] = Field(default=None, description="遺産分割が成立した日から何日目か")
     events: List[str] = Field(default_factory=list, description="起きた出来事")
 
     # S03 ルール14。「いいえ」と「まだ答えていない」を分けるためだけの箱。
@@ -61,6 +63,18 @@ class UserCondition(BaseModel):
     def days_for_known_clock(self) -> Optional[int]:
         """「知った時」から数える期限に使う日数。指定がなければ死亡からの日数。"""
         return self.days_since_known if self.days_since_known is not None else self.days_since_death
+
+    def days_for_clock(self, clock: Optional[str]) -> Optional[int]:
+        """
+        期限をどの時計で数えるか（S03 ルール4）。
+        DIVISION は肩代わりしない。分割が済むまで、その時計は始まっていない。
+        始まっていない時計を死亡日で代用すると、まだ義務のない人を急かすことになる。
+        """
+        if clock == "KNOWN":
+            return self.days_for_known_clock
+        if clock == "DIVISION":
+            return self.days_since_division
+        return self.days_since_death
 
     @property
     def has_self_memo(self) -> bool:

@@ -4,7 +4,7 @@
     "nodes_family.json",
     "nodes_survivor.json"
   ],
-  "count": 79,
+  "count": 80,
   "checks": [
     {
       "check_id": "SELF_INSURANCE_NOTE#1",
@@ -742,7 +742,17 @@
       "file": "nodes_survivor.json",
       "actor": "LEGAL_HEIR",
       "question": "単独で提出した場合の、他の相続人への通知のやり方",
-      "claim": "故人の所得税の申告　起算から 4 か月　起算点は「相続の開始があったことを知った日の翌日から」　相続税より期限が早い。見落としやすい。　根拠（下書き）: 所得税法第125条第1項（準確定申告）、同条第2項（各相続人による提出と通知）",
+      "claim": "故人の所得税の申告　起算から 4 か月　起算点は「相続の開始があったことを知った日の翌日から」　相続税より期限が早い。見落としやすい。　根拠（下書き）: 所得税法第125条第1項（準確定申告。同法第120条の確定申告義務があった場合に要する）、同条第2項（各相続人による提出と通知）、第121条（確定申告を要しない場合）",
+      "current_status": "SELF_REVIEWED",
+      "current_source_url": null
+    },
+    {
+      "check_id": "SURV_INCOME_TAX_FINAL#2",
+      "node_id": "SURV_INCOME_TAX_FINAL",
+      "file": "nodes_survivor.json",
+      "actor": "LEGAL_HEIR",
+      "question": "準確定申告における「確定申告を要しない場合」（20万円以下など）の当てはめ方",
+      "claim": "故人の所得税の申告　起算から 4 か月　起算点は「相続の開始があったことを知った日の翌日から」　相続税より期限が早い。見落としやすい。　根拠（下書き）: 所得税法第125条第1項（準確定申告。同法第120条の確定申告義務があった場合に要する）、同条第2項（各相続人による提出と通知）、第121条（確定申告を要しない場合）",
       "current_status": "SELF_REVIEWED",
       "current_source_url": null
     },

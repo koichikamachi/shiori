@@ -43,7 +43,7 @@ class UserCondition(BaseModel):
 
     # 遺族側の事情
     has_insurance: bool = Field(default=False, description="生命保険があると分かっている")
-    had_income_to_file: bool = Field(default=False, description="故人に申告の要る所得があった")
+    had_income_to_file: bool = Field(default=False, description="故人に所得税の確定申告の義務があった")
     has_real_estate_in_estate: bool = Field(default=False, description="遺産に不動産がある")
     viewer_is_legal_heir: bool = Field(default=True, description="見ている人が相続人である")
     days_since_death: Optional[int] = Field(default=None, description="死亡から何日目か（日付そのものは持たない）")

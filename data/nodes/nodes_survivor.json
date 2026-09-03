@@ -747,10 +747,10 @@
       "id": "SURV_REAL_ESTATE_REGISTRATION",
       "stream": "ESTATE_SUCCESSION",
       "actor": "LEGAL_HEIR",
-      "title": "不動産の名義変更",
+      "title": "不動産の名義変更（遺産分割にもとづく）",
       "today_action": "遺産分割が成立したら、その内容にもとづいて法務局へ名義変更を申請する。",
-      "exists_if": "condition.has_real_estate_in_estate == true",
-      "absent_note": "遺産に不動産がないので、名義変更は要りません。",
+      "exists_if": "condition.has_real_estate_in_estate == true && condition.has_will != true",
+      "absent_note": "遺産に不動産がないか、遺言があるので、遺産分割にもとづく名義変更は出てきません。遺言がある場合は、遺言にもとづく名義変更のほうが出ます。",
       "prerequisites": [
         "SURV_ESTATE_DIVISION"
       ],
@@ -950,8 +950,8 @@
       "actor": "LEGAL_HEIR",
       "title": "分け方が決まらないうちに、相続人であることだけ申し出ておく",
       "today_action": "遺産分割がまとまらないうちでも、自分ひとりで法務局へ「相続人申告登記」を申し出ておく。戸籍で相続人であることを示せば足りる。",
-      "exists_if": "condition.has_real_estate_in_estate == true",
-      "absent_note": "遺産に不動産がないので、この申し出は要りません。",
+      "exists_if": "condition.has_real_estate_in_estate == true && condition.has_will != true",
+      "absent_note": "遺産に不動産がないか、遺言があるので、この申し出は要りません。遺言があれば、分割の話し合いを待たずに名義を変えられます。",
       "prerequisites": [],
       "base_urgency": "CAN_WAIT",
       "priority": 24,
@@ -990,6 +990,53 @@
         "source_url": "https://www.moj.go.jp/MINJI/minji05_00565.html",
         "needs_check": [
           "申出に必要な戸籍の範囲と、登録免許税の要否"
+        ],
+        "in_house_reviewed_at": "2026-09-03"
+      }
+    },
+    {
+      "id": "SURV_REGISTRATION_BY_WILL",
+      "stream": "ESTATE_SUCCESSION",
+      "actor": "LEGAL_HEIR",
+      "title": "不動産の名義変更（遺言にもとづく）",
+      "today_action": "遺言の内容にしたがって、法務局へ名義変更を申請する。遺言執行者がいる場合は、その人が手続を進められる。",
+      "exists_if": "condition.has_real_estate_in_estate == true && condition.has_will == true",
+      "absent_note": "遺産に不動産がないか、遺言がないので、この道は通りません。",
+      "prerequisites": [
+        "SURV_FIND_WILL"
+      ],
+      "base_urgency": "CAN_WAIT",
+      "priority": 25,
+      "wait": {
+        "nature": "NONE"
+      },
+      "durability": "PERMANENT",
+      "decided_by_you": true,
+      "deadline": {
+        "days": null,
+        "months": 36,
+        "absolute_date": null,
+        "trigger": "自己のために相続の開始があったことを知り、かつ所有権を取得したことを知った日",
+        "clock": "KNOWN",
+        "note": "遺言があるので、遺産分割の成立を待たずに数え始まる。令和6年4月1日より前に相続を知っていた不動産は、令和9年3月31日までとされる。"
+      },
+      "caution": {
+        "note": "相続登記の申請には義務があり、怠ると10万円以下の過料の対象になる。遺言があるときは、遺産分割の話し合いを待つ必要がない。"
+      },
+      "specialist_bridge": {
+        "type": "JUDICIAL_SCRIVENER",
+        "concrete_query": "遺言にもとづく不動産の名義変更を依頼したい。必要な書類の範囲と費用、遺言執行者の有無による違いを知りたい。",
+        "estimated_cost_range": "1件 5万円〜10万円程度＋登録免許税（目安）"
+      },
+      "legal_metadata": {
+        "verification_status": "SOURCE_VERIFIED",
+        "verified_at": "2026-09-03",
+        "verified_by": "法務省サイト（相続登記の申請義務化に関するQ&A）",
+        "source_draft": "不動産登記法第76条の2第1項（所有権を取得したことを知った日から3年以内）、第164条第1項（10万円以下の過料）",
+        "source_url": "https://www.moj.go.jp/MINJI/minji05_00565.html",
+        "needs_check": [
+          "遺言執行者がいる場合と、いない場合の申請人の違い",
+          "特定財産承継遺言と遺贈で、手続がどう違うか"
         ],
         "in_house_reviewed_at": "2026-09-03"
       }

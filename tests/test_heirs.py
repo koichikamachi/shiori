@@ -232,3 +232,30 @@ def test_three_clocks_are_all_declared_in_data(engine):
     clocks = {n["deadline"].get("clock", "DEATH")
               for n in engine.nodes_by_scope["SURVIVOR"].values() if n.get("deadline")}
     assert clocks == {"DEATH", "KNOWN", "DIVISION"}
+
+
+def test_a_will_changes_which_registration_route_exists(engine):
+    """
+    遺言があると、遺産分割の話し合いがない。だから登記の道も別になる。
+    条文も二つに分かれている（分割の日から／取得を知った日から）。
+    """
+    no_will = run(engine, has_real_estate_in_estate=True, days_since_death=30)
+    with_will = run(engine, has_real_estate_in_estate=True, has_will=True, days_since_death=30)
+
+    assert "SURV_REAL_ESTATE_REGISTRATION" in no_will["statuses"]
+    assert "SURV_REGISTRATION_BY_WILL" not in no_will["statuses"]
+
+    assert "SURV_REGISTRATION_BY_WILL" in with_will["statuses"]
+    assert "SURV_REAL_ESTATE_REGISTRATION" not in with_will["statuses"]
+    assert "SURV_HEIR_DECLARATION_REG" not in with_will["statuses"]
+
+
+def test_the_will_route_does_not_wait_for_a_division_that_never_comes(engine):
+    """
+    遺言があるのに DIVISION の時計を使うと、時計が永久に始まらない。
+    義務はあるのに、期限が一度も出てこないことになる。
+    """
+    nid = "SURV_REGISTRATION_BY_WILL"
+    r = run(engine, has_real_estate_in_estate=True, has_will=True, days_since_death=1000)
+    assert r["days_left"][nid] is not None
+    assert r["days_left"][nid] < 100

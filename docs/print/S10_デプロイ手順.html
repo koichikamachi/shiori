@@ -1,0 +1,146 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><title>S10_デプロイ手順</title><style>
+@page { size: A4; margin: 16mm 14mm; }
+body{font-family:"Hiragino Kaku Gothic ProN","Yu Gothic",system-ui,sans-serif;
+ font-size:10.5pt;line-height:1.75;color:#1c1c1c;max-width:180mm;margin:0 auto;padding:10mm}
+h1{font-size:17pt;border-bottom:2px solid #333;padding-bottom:5px;margin:0 0 12px}
+h2{font-size:13pt;margin:22px 0 8px;padding:5px 8px;background:#f0ede6;
+ border-left:4px solid #666;page-break-after:avoid}
+h3{font-size:11.5pt;margin:14px 0 6px;page-break-after:avoid}
+p{margin:6px 0}
+blockquote{margin:8px 0;padding:8px 12px;background:#f7f5ef;border-left:3px solid #b9b3a7;
+ page-break-inside:avoid}
+blockquote p{margin:4px 0}
+table{border-collapse:collapse;width:100%;margin:8px 0;font-size:9.5pt;
+ page-break-inside:avoid}
+th,td{border:1px solid #bbb;padding:4px 7px;text-align:left;vertical-align:top}
+th{background:#efece5}
+code{background:#f0ede6;padding:1px 4px;border-radius:3px;font-size:9.5pt}
+pre{background:#fff;border:1px solid #999;border-radius:3px;padding:14px;
+ min-height:58px;page-break-inside:avoid}
+pre code{background:none}
+ul,ol{margin:6px 0;padding-left:22px}
+li{margin:3px 0}
+hr{border:0;border-top:1px solid #ccc;margin:18px 0}
+strong{font-weight:700}
+li input[type=checkbox]{margin-right:6px}
+@media print{ body{padding:0} }
+</style></head><body><h1>しおり — Cloud Run に上げる手順</h1>
+<p><strong>S10_デプロイ手順</strong><br />
+2026年9月4日 ／ BKW研究所</p>
+<blockquote>
+<p><strong>この紙を持って会場へ行く。</strong><br />
+打つコマンドは五つしかない。詰まったら、その場で聞ける。<br />
+<strong>いちばん危ない作業を、いちばん助けの多い場所でやる。</strong></p>
+</blockquote>
+<hr />
+<h2>0　これは何を上げるのか</h2>
+<p><code>server.py</code> は、<strong>地図を配るだけの小さなサーバ</strong>である。</p>
+<ul>
+<li>入口（<code>/</code>）に、16通りの場面が並ぶ</li>
+<li>場面を押すと（<code>/map/surv-day10-nomemo</code>）、<strong>その場で判定エンジンを回して</strong>路線図を組んで返す</li>
+<li>「今日」はURLで受ける（<code>?today=2026-09-05</code>）。<strong>サーバは何も覚えない</strong></li>
+<li>ログインが要らない。Cookie を出さない。書き込む先がない</li>
+</ul>
+<p><strong>あらかじめ書き出したHTMLを配るのではなく、その場で組んで返す。</strong> 理由は二つある。データを直したら次に開いた人にはもう直っていること。そして、<strong>決定論のエンジンがクラウドのうえでも同じ答えを出すことを、URLそのものが示すこと。</strong> 同じURLを二度開けば、同じ地図が出る。</p>
+<p><strong>保存しないという方針と、Cloud Run の性質が、たまたま同じ形をしている。</strong> インスタンスが消えても失うものが無い。審査員がURLを開いた瞬間に動く（提出物の条件にある「ログイン必須は避けてください」を、はじめから満たしている）。</p>
+<hr />
+<h2>1　まず手元で動かす（今晩やっておく）</h2>
+<pre><code>cd &quot;C:\Users\MyProjectsOnWin\9-5ハッカソン開発準備&quot;
+pip install -r requirements-web.txt
+python -m uvicorn server:app --port 8080
+</code></pre>
+<p>ブラウザで <strong>http://127.0.0.1:8080</strong> を開く。</p>
+<ul>
+<li>入口に16通りが並ぶ</li>
+<li>どれか押すと地図が出る</li>
+<li>駅を押すと右から説明が出る</li>
+<li>「← ほかの場面を見る」で戻れる</li>
+</ul>
+<p>止めるのは <strong>Ctrl+C</strong>。</p>
+<p><strong>ここが動けば、Cloud Run でも動く。</strong> 同じ Dockerfile で動かすからである。</p>
+<hr />
+<h2>2　会場で打つコマンド（五つ）</h2>
+<h3>① 入っているか確かめる</h3>
+<pre><code>gcloud --version
+</code></pre>
+<p>無ければ入れる（Google Cloud CLI）。</p>
+<h3>② 入る</h3>
+<pre><code>gcloud auth login
+gcloud config set project &lt;プロジェクトID&gt;
+</code></pre>
+<h3>③ 使うものを有効にする</h3>
+<pre><code>gcloud services enable run.googleapis.com cloudbuild.googleapis.com artifactregistry.googleapis.com
+</code></pre>
+<h3>④ 上げる</h3>
+<pre><code>gcloud run deploy shiori --source . --region asia-northeast1 --allow-unauthenticated
+</code></pre>
+<p>途中で聞かれることに答える。<strong>数分かかる。</strong></p>
+<p>終わると <strong>Service URL</strong> が出る。それが提出するURLである。</p>
+<h3>⑤ 確かめる</h3>
+<pre><code>gcloud run services describe shiori --region asia-northeast1 --format=&quot;value(status.url)&quot;
+</code></pre>
+<p>出たURLを、<strong>スマートフォンで開く。</strong> ログインを求められないことを、自分の目で見る。</p>
+<hr />
+<h2>3　詰まったときに見るところ</h2>
+<table>
+<thead>
+<tr>
+<th>症状</th>
+<th>見るところ</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>起動しない</td>
+<td><code>gcloud run services logs read shiori --region asia-northeast1 --limit 50</code></td>
+</tr>
+<tr>
+<td>502 が出る</td>
+<td><code>$PORT</code> で待っているか。<code>Dockerfile</code> の <code>CMD</code> を確かめる</td>
+</tr>
+<tr>
+<td>ビルドが失敗する</td>
+<td><code>gcloud builds list --limit 3</code> → <code>gcloud builds log &lt;ID&gt;</code></td>
+</tr>
+<tr>
+<td>認証を求められる</td>
+<td><code>--allow-unauthenticated</code> を付け忘れている</td>
+</tr>
+<tr>
+<td>リージョンが違うと言われる</td>
+<td><code>--region asia-northeast1</code> を毎回付ける</td>
+</tr>
+</tbody>
+</table>
+<p><strong>会場で聞くときは、症状ではなくログを見せる。</strong> そのほうが速い。</p>
+<hr />
+<h2>4　上げ直すとき</h2>
+<p>同じコマンドをもう一度打つだけである。</p>
+<pre><code>gcloud run deploy shiori --source . --region asia-northeast1 --allow-unauthenticated
+</code></pre>
+<p><strong>データを直したら、上げ直せばそれだけで反映される。</strong> ページはその場で組んでいるので、HTMLを書き出す手間はない。</p>
+<hr />
+<h2>5　お金のこと</h2>
+<ul>
+<li>Cloud Run は<strong>リクエストが来ないあいだは動かない</strong>設定が既定である。誰も開かなければ、ほぼかからない</li>
+<li><strong>予算アラートを先に置く。</strong> これは会場でいちばん先にやること</li>
+<li>上限を決めておくなら</li>
+</ul>
+<pre><code>gcloud run services update shiori --region asia-northeast1 --max-instances=3
+</code></pre>
+<hr />
+<h2>6　まだ上げないもの</h2>
+<ul>
+<li><strong>Gemini API キーは、この段階では要らない。</strong> 地図を配るだけなので、AIを呼ばない</li>
+<li>鍵が要るようになったら、環境変数に直書きせず <strong>Secret Manager</strong> に置く</li>
+<li><code>.env</code> は <code>.gitignore</code> が無視する。<code>tests/test_no_secrets.py</code> が commit 前に見張っている</li>
+</ul>
+<hr />
+<h2>7　この日の合格ライン</h2>
+<ul>
+<li>[ ] <code>gcloud run deploy</code> が終わって、URLが出た</li>
+<li>[ ] そのURLを<strong>スマホで開いて、地図が出た</strong></li>
+<li>[ ] ログインを求められなかった</li>
+<li>[ ] URLを控えた</li>
+</ul>
+<p><strong>四つ揃えば、10月の最大の不確かさが一つ消える。</strong> あとは中身を良くするだけになる。</p></body></html>

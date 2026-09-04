@@ -1,0 +1,269 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><title>S11_今晩の手順</title><style>
+@page { size: A4; margin: 16mm 14mm; }
+body{font-family:"Hiragino Kaku Gothic ProN","Yu Gothic",system-ui,sans-serif;
+ font-size:10.5pt;line-height:1.75;color:#1c1c1c;max-width:180mm;margin:0 auto;padding:10mm}
+h1{font-size:17pt;border-bottom:2px solid #333;padding-bottom:5px;margin:0 0 12px}
+h2{font-size:13pt;margin:22px 0 8px;padding:5px 8px;background:#f0ede6;
+ border-left:4px solid #666;page-break-after:avoid}
+h3{font-size:11.5pt;margin:14px 0 6px;page-break-after:avoid}
+p{margin:6px 0}
+blockquote{margin:8px 0;padding:8px 12px;background:#f7f5ef;border-left:3px solid #b9b3a7;
+ page-break-inside:avoid}
+blockquote p{margin:4px 0}
+table{border-collapse:collapse;width:100%;margin:8px 0;font-size:9.5pt;
+ page-break-inside:avoid}
+th,td{border:1px solid #bbb;padding:4px 7px;text-align:left;vertical-align:top}
+th{background:#efece5}
+code{background:#f0ede6;padding:1px 4px;border-radius:3px;font-size:9.5pt}
+pre{background:#fff;border:1px solid #999;border-radius:3px;padding:14px;
+ min-height:58px;page-break-inside:avoid}
+pre code{background:none}
+ul,ol{margin:6px 0;padding-left:22px}
+li{margin:3px 0}
+hr{border:0;border-top:1px solid #ccc;margin:18px 0}
+strong{font-weight:700}
+li input[type=checkbox]{margin-right:6px}
+@media print{ body{padding:0} }
+</style></head><body><h1>今晩、Cloud Run に上げてみる</h1>
+<p><strong>S11_今晩の手順</strong><br />
+2026年9月4日（金）夜 ／ BKW研究所</p>
+<blockquote>
+<p><strong>30分で止める。</strong><br />
+通れば、明日は一行打つだけになる。<br />
+通らなくても、<strong>どこで止まったかの画面を持って会場に行ける。</strong> それも成果である。</p>
+<p><strong>時計を見ながらやること。</strong> 30分を過ぎたら、うまくいっていなくても手を止める。<br />
+明日は詳しい人が隣にいる。ひとりで粘る意味はない。</p>
+</blockquote>
+<hr />
+<h2>0　今晩の合格ライン（三段）</h2>
+<table>
+<thead>
+<tr>
+<th>段</th>
+<th>ここまで行けば</th>
+<th>明日やること</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>一段</strong></td>
+<td><code>gcloud --version</code> が出た</td>
+<td>③から</td>
+</tr>
+<tr>
+<td><strong>二段</strong></td>
+<td><code>gcloud services enable</code> が通った</td>
+<td>デプロイだけ</td>
+</tr>
+<tr>
+<td><strong>三段</strong></td>
+<td><strong>URLが出て、スマホで地図が見えた</strong></td>
+<td><strong>なし。①②の質問に集中できる</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>一段でも進めば、会場のWi-Fiで200MBを落とす20分が消える。</strong></p>
+<hr />
+<h2>1　<code>gcloud</code> を入れる（10分）</h2>
+<h3>やること</h3>
+<p>ブラウザで <strong><code>https://cloud.google.com/sdk/docs/install</code></strong> を開き、Windows 用のインストーラを落として実行する。</p>
+<h3>画面に出ること</h3>
+<ul>
+<li>インストーラの画面が出る。<strong>既定のままで進めてよい</strong></li>
+<li>最後に「Run <code>gcloud init</code>」のようなチェックが出ることがある。<strong>チェックは外してよい</strong>（あとで手で打つ）</li>
+</ul>
+<h3>終わったら</h3>
+<p><strong>PowerShell をいったん閉じて、開き直す。</strong> これをしないと次の行が「そんなコマンドはありません」と言われる。</p>
+<pre><code>gcloud --version
+</code></pre>
+<p><strong>出るはずのもの</strong></p>
+<pre><code>Google Cloud SDK 5xx.x.x
+bq 2.x.xx
+core 2026.xx.xx
+gcloud-crc32c 1.x.x
+gsutil 5.xx
+</code></pre>
+<p><strong>バージョンが並んで出れば、一段目は合格。</strong></p>
+<hr />
+<h2>2　Googleアカウントで入る（2分）</h2>
+<pre><code>gcloud auth login
+</code></pre>
+<p><strong>画面に出ること</strong></p>
+<ul>
+<li>ブラウザが自動で開き、Googleのログイン画面が出る</li>
+<li>アカウントを選び、「Google Cloud SDK が…を求めています」に <strong>許可</strong></li>
+<li>ブラウザに「You are now authenticated」と出る</li>
+<li>PowerShell に戻ると <code>You are now logged in as [koichikamachi@gmail.com].</code> のような行が出る</li>
+</ul>
+<p><strong>確かめる</strong></p>
+<pre><code>gcloud auth list
+</code></pre>
+<p>自分のアドレスの左に <code>*</code> が付いていればよい。</p>
+<hr />
+<h2>3　プロジェクトを作り、請求先を紐づける（10分）</h2>
+<p><strong>ここはブラウザの操作である。</strong></p>
+<h3>① クーポンのメールを開いておく</h3>
+<p>Zenn から届いたメール（9月3日、件名「…参加特典クーポンが発行されました」）にコードがある。</p>
+<ul>
+<li><strong>$300 の Google Cloud クレジット</strong></li>
+<li><strong>登録期限 2026年10月20日</strong>（応募締切の10月15日より後なので、期間は足りている）</li>
+</ul>
+<p><strong>コードは商品券と同じである。</strong> 持っている人が使える。<strong>Zenn の記事、GitHub、Discord には貼らない。この紙にも書き写さない。</strong> 今晩のうちに登録してしまえば、先生のアカウントに紐づいて他人には使えなくなる。<strong>それが一番の対策である。</strong></p>
+<p><strong>プロジェクトを作る前に、メールのリンク（ハッカソンページ）で利用条件を一度見ておく。</strong> クレジットは特定の請求先アカウントに載るので、先に別のものを作ると載せ替えの手間が出る。</p>
+<h3>② プロジェクトを作る</h3>
+<ul>
+<li><code>https://console.cloud.google.com</code> を開く</li>
+<li>画面のいちばん上、Googleのロゴの右に<strong>プロジェクト名を選ぶ枠</strong>がある。押す</li>
+<li>右上の <strong>「新しいプロジェクト」</strong> を押す</li>
+<li>名前を付ける（<code>shiori</code> など）。<strong>プロジェクトID</strong>が自動で決まる。<strong>このIDを控える</strong>（<code>shiori-472301</code> のような形）</li>
+<li>「作成」。数十秒かかる</li>
+</ul>
+<h3>③ 請求先アカウントを紐づける</h3>
+<ul>
+<li>左のメニュー（三本線）から <strong>「お支払い」</strong></li>
+<li>「請求先アカウントをリンク」。無ければ作る（カードの登録が求められる）</li>
+<li><strong>クーポンコードを登録する。</strong> メールの案内のリンクから入るのが確実</li>
+<li>登録できると、請求先アカウントの残高に <strong>$300 のクレジット</strong>が載る</li>
+</ul>
+<h3>④ 予算アラートを置く（これを飛ばさない）</h3>
+<ul>
+<li>「お支払い」→ <strong>「予算とアラート」</strong> → 「予算を作成」</li>
+<li>金額を決める（<strong>まずは 3,000円</strong>でよい。少なすぎるくらいでよい。$300 のクレジットがあっても、置く）</li>
+<li>50%・90%・100% で<strong>メールが来る</strong>設定にする</li>
+</ul>
+<p><strong>クレジットがあっても置く。</strong> クレジットが尽きた瞬間からカードに移るので、見張る意味は変わらない。</p>
+<hr />
+<h2>4　どこに置くかを決める（1分）</h2>
+<pre><code>gcloud config set project &lt;控えたプロジェクトID&gt;
+</code></pre>
+<p><strong>出るもの</strong></p>
+<pre><code>Updated property [core/project].
+</code></pre>
+<p><strong>確かめる</strong></p>
+<pre><code>gcloud config get-value project
+</code></pre>
+<p>IDが返ってくればよい。</p>
+<hr />
+<h2>5　三つのサービスを開ける（2分）</h2>
+<pre><code>gcloud services enable run.googleapis.com cloudbuild.googleapis.com artifactregistry.googleapis.com
+</code></pre>
+<p><strong>1〜2分、何も出ないまま待つ。</strong> 終わると <code>Operation "operations/..." finished successfully.</code> のような行が出る。</p>
+<p><strong>ここまで来たら、二段目は合格。</strong></p>
+<p>エラーが出るとしたら</p>
+<table>
+<thead>
+<tr>
+<th>出るもの</th>
+<th>意味</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Billing must be enabled</code></td>
+<td>3の③がまだ。請求先を紐づける</td>
+</tr>
+<tr>
+<td><code>PERMISSION_DENIED</code></td>
+<td>プロジェクトの指定が違う。4に戻る</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>6　場所を確かめる（30秒）</h2>
+<pre><code>cd &quot;C:\Users\MyProjectsOnWin\9-5ハッカソン開発準備&quot;
+dir
+</code></pre>
+<p><strong><code>Dockerfile</code> <code>server.py</code> <code>requirements-web.txt</code> <code>src</code> <code>data</code> が並んでいること。</strong></p>
+<p>コマンドの <code>--source .</code> の「<code>.</code>」は「いまいるフォルダ」という意味なので、<strong>ここを間違えると、別のものを送ってしまう。</strong></p>
+<hr />
+<h2>7　上げる（5分）</h2>
+<pre><code>gcloud run deploy shiori --source . --region asia-northeast1 --allow-unauthenticated
+</code></pre>
+<h3>途中で聞かれること</h3>
+<ul>
+<li><strong><code>Allow unauthenticated invocations to [shiori] (y/N)?</code></strong> → <strong><code>y</code></strong> と打つ<br />
+  （これで、ログイン無しで誰でも開けるURLになる。審査の条件である）</li>
+<li>Artifact Registry のリポジトリを作るか聞かれたら → <strong><code>y</code></strong></li>
+</ul>
+<h3>画面に流れること</h3>
+<pre><code>Building using Dockerfile and deploying container to Cloud Run service [shiori]
+  in project [xxxxx] region [asia-northeast1]
+
+⠏ Building and deploying new service...
+  ⠏ Uploading sources...
+  ⠏ Building Container...
+  ⠏ Creating Revision...
+  ⠏ Routing traffic...
+  ⠏ Setting IAM Policy...
+</code></pre>
+<p><strong><code>Building Container...</code> がいちばん長い。3〜5分かかる。</strong> 止まったように見えても待つ。</p>
+<h3>終わると</h3>
+<pre><code>✓ Building and deploying new service... Done.
+Service URL: https://shiori-a1b2c3d4-an.a.run.app
+</code></pre>
+<p><strong>この最後の一行をコピーする。</strong></p>
+<hr />
+<h2>8　確かめる（2分）</h2>
+<ul>
+<li><strong>パソコンのブラウザ</strong>でそのURLを開く。今晩見た入口が出る</li>
+<li><strong>スマートフォン</strong>でも開く。<strong>ログインを求められないことを、自分の目で見る</strong></li>
+<li>場面をどれか押して、地図が出ることを見る</li>
+<li><strong>最初の一回だけ2〜5秒待たされる。</strong> 二回目からはすぐ出る（寝ていたのを起こすので）</li>
+</ul>
+<p><strong>ここまで来たら、三段目まで合格。明日は質問に集中できる。</strong></p>
+<hr />
+<h2>9　止まったときにすること（粘らない）</h2>
+<p><strong>30分を過ぎたら、うまくいっていなくても手を止める。</strong></p>
+<p>そのうえで、<strong>次の三つを控えて、会場に持って行く。</strong></p>
+<ul>
+<li><strong>最後に打ったコマンド</strong></li>
+<li><strong>画面に出た赤い字を、そのまま</strong>（PowerShellの画面をコピーする。右クリックで選んで Enter でコピーできる）</li>
+<li><strong>どの段まで行ったか</strong>（一段／二段／三段）</li>
+</ul>
+<p><strong>症状ではなく、この三つを見せる。</strong> そのほうが速い。</p>
+<p>よくある止まり方と、その意味だけ置いておく。</p>
+<table>
+<thead>
+<tr>
+<th>出ること</th>
+<th>どこで止まったか</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>'gcloud' は認識されていません</code></td>
+<td>PowerShell を開き直していない（1に戻る）</td>
+</tr>
+<tr>
+<td><code>Billing must be enabled</code></td>
+<td>請求先が紐づいていない（3の③）</td>
+</tr>
+<tr>
+<td><code>API [run.googleapis.com] not enabled</code></td>
+<td>5をやっていない</td>
+</tr>
+<tr>
+<td><code>Dockerfile not found</code></td>
+<td>場所が違う（6に戻る）</td>
+</tr>
+<tr>
+<td><code>Container failed to start. Failed to start and then listen on the port defined by the PORT environment variable</code></td>
+<td><strong>箱は組み立てられたが、起動でつまずいた。</strong> 明日いちばん聞きやすい種類の詰まり</td>
+</tr>
+<tr>
+<td><code>Build failed</code></td>
+<td><code>pip install</code> が失敗した。<strong>ログのURLが一緒に出るので、それも控える</strong></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>10　うまくいったあと</h2>
+<p><strong>ログを見てみるとよい。</strong> 自分が開いたことが、一行として残っている。</p>
+<pre><code>gcloud run services logs read shiori --region asia-northeast1 --limit 20
+</code></pre>
+<p><code>GET /map/surv-day1 200</code> のような行が並ぶ。</p>
+<p><strong>それが「可観測性」の実物である。</strong> 明日の質問1で、これを見せられる。</p>
+<hr />
+<h2>最後に</h2>
+<p><strong>通っても通らなくても、今晩はここで終わり。</strong> 明日の朝、この紙の「どこまで行ったか」を見て、続きから始める。</p>
+<p>URLが出たら、このチャットに貼ってください。<strong>私も開いてみます。</strong></p></body></html>

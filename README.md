@@ -4,6 +4,9 @@
 
 第5回 Agentic AI Hackathon with Google Cloud 応募作品（**開発中**）／BKW研究所
 
+**動いているもの** → https://shiori-120582716769.asia-northeast1.run.app
+（Cloud Run。ログイン不要。Cookie を出さない。何も保存しない。日付は `?today=2026-09-05` のようにURLで渡せる）
+
 ---
 
 ## 一言でいうと
@@ -62,7 +65,9 @@ python -m src.main --questions                   # 1日目に聞くこと
 python -m src.main -s surv-day1 --map            # 地図の面（全体を見る）
 
 python tools/render_map_svg.py -s all            # 地図を絵にする（HTML）
+python -m uvicorn server:app --port 8080        # 地図を配るサーバ（Cloud Run と同じ形）
 python tools/deadline_table.py                   # 期限の表（専門家に渡す一枚）
+python tools/make_printable.py                   # 持って行く紙を作る
 python tools/lint_nodes.py                       # 地図の点検
 python -m pytest tests/ -q                       # テスト
 ```
@@ -86,7 +91,7 @@ Python 3.10 以上。外部サービスへの接続は不要である。
 | | 中身 |
 |---|---|
 | `tools/lint_nodes.py` | 存在しないノードの参照、循環、未定義の条件、検証状態の食い違い、消えた道の説明もれ |
-| テスト254本 | 「本人のメモがあると遺族の道が短くなるか」「期限が近ければ前提が未了でも警告するか」など、設計の急所を固定 |
+| テスト281本 | 「本人のメモがあると遺族の道が短くなるか」「期限が近ければ前提が未了でも警告するか」など、設計の急所を固定 |
 | わざと壊して確かめる | テストを書いたら意図的にコードを壊し、捕まるかを見る。実際に一度、素通りした穴が見つかった |
 | `verification_status` の四段 | 下書き／自分で調べた／一次資料で確認／**外部の専門家が確認**。確かめていないものに確認日を入れるとLintで落ちる |
 
@@ -102,7 +107,7 @@ Python 3.10 以上。外部サービスへの接続は不要である。
 
 正直に書く。**この時点では、まだ応募要件を満たしていない。**
 
-- Cloud Run へのデプロイ（必須要件①）
+- ~~Cloud Run へのデプロイ（必須要件①）~~ → **2026-09-04 に完了。上のURLで動いている**
 - Gemini API / ADK の接続（必須要件②）— 鍵の要らない部分（出力の型・7つの関門・テスト）は完成
 - 画面（いまはターミナルで動く）
 - 制度追従エージェントの本体
@@ -147,7 +152,7 @@ tools/              lint_nodes・extract_checks・list_for_review・render_map_s
 ## いまの数字
 
 ノード **75**（本人41・家族5・遺族29）／条件 **26**／流れ **6**
-テスト **254** 本すべて通過／Lint エラー **0**／まだ確かめていない項目 **109**
+テスト **281** 本すべて通過／Lint エラー **0**／まだ確かめていない項目 **109**
 
 ---
 

@@ -1,0 +1,4 @@
+# Cloud Run に上げるときに要るもの
+pydantic>=2
+fastapi>=0.115
+uvicorn[standard]>=0.30

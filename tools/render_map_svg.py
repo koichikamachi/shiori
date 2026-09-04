@@ -531,19 +531,33 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')P.classList.add('clo
 """
 
 
-def write(key, today):
+NOTICE = ("これは、手続の順序と期限を示す地図です。個別の法律相談や税務相談ではありません。"
+          "あなたの場合にどうなるかは、記載の相談先で確かめてください。"
+          "制度は変わります。多くの項目は、まだ専門家の確認を受けていません。")
+
+
+def page(key, today, home=None):
+    """
+    一枚のHTMLにして返す。ファイルに書かずに使えるようにしてある
+    （Cloud Run のうえで、その場で組んで返すため）。
+    """
     body, sc = render(key, today)
-    notice = ("これは、手続の順序と期限を示す地図です。個別の法律相談や税務相談ではありません。"
-              "あなたの場合にどうなるかは、記載の相談先で確かめてください。"
-              "制度は変わります。多くの項目は、まだ専門家の確認を受けていません。")
-    page = (f'<!doctype html><html lang="ja"><head><meta charset="utf-8">'
+    back = (f'<div class="wrap" style="padding:14px 24px 0">'
+            f'<a class="back" href="{home}">← ほかの場面を見る</a></div>') if home else ""
+    return (f'<!doctype html><html lang="ja"><head><meta charset="utf-8">'
             f'<meta name="viewport" content="width=device-width,initial-scale=1">'
             f'<title>しおり／地図 — {html.escape(sc["title"])}</title>'
-            f'<style>{CSS}</style></head><body>{body}'
-            f'<div class="wrap" style="padding-top:0"><footer>{notice}</footer></div>'
+            f'<style>{CSS}'
+            f'.back{{font-size:12.5px;color:#6b6455;text-decoration:none}}'
+            f'.back:hover{{text-decoration:underline}}'
+            f'</style></head><body>{back}{body}'
+            f'<div class="wrap" style="padding-top:0"><footer>{NOTICE}</footer></div>'
             f'<script>{JS}</script></body></html>')
+
+
+def write(key, today):
     out = ROOT / "docs" / "submission" / f"map_{key}.html"
-    out.write_text(page, encoding="utf-8")
+    out.write_text(page(key, today), encoding="utf-8")
     return out
 
 

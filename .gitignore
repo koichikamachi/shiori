@@ -8,5 +8,14 @@ state.json
 # Word の一時ファイル
 ~$*
 
-# 消す前の一時置き場
-_to_delete/
+# 鍵は、絶対にここへ入れない（tests/test_no_secrets.py が見張っている）
+.env
+.env.*
+*.env
+secrets/
+*.key
+*.pem
+service-account*.json
+credentials*.json
+client_secret*.json
+gha-creds-*.json

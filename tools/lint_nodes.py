@@ -54,7 +54,8 @@ ENUMS = {
     "durability": {"PERMANENT", "REFRESHABLE", "VOLATILE"},
 }
 
-PERSONA = {"ALL", "PENSIONER", "LANDOWNER", "BUSINESS_OWNER", "FOREIGN_ASSETS", "DEBT_CONCERN"}
+PERSONA = {"ALL", "PENSIONER", "LANDOWNER", "BUSINESS_OWNER", "FOREIGN_ASSETS", "DEBT_CONCERN",
+           "SURPLUS_SAVINGS"}
 EFFECT = {"SKIPPED", "SHORTENED", "RISK_REDUCED"}
 WAIT_NATURE = {"NONE", "EXTERNAL_WAIT"}
 VERIF = {"DRAFT", "SELF_REVIEWED", "SOURCE_VERIFIED", "EXPERT_VERIFIED"}
@@ -92,8 +93,22 @@ for name in FILES:
 
 cond_path = SCHEMA_DIR / "conditions.json"
 known_conditions = set()
+ASKED_DAY_ONE = set()
 if cond_path.exists():
-    known_conditions = set(json.loads(cond_path.read_text(encoding="utf-8"))["conditions"].keys())
+    cond_doc = json.loads(cond_path.read_text(encoding="utf-8"))
+    known_conditions = set(cond_doc["conditions"].keys())
+    ASKED_DAY_ONE = set(cond_doc.get("ask_order", {}).get("DAY_ONE", []))
+    for k in ASKED_DAY_ONE:
+        if k not in known_conditions:
+            err("conditions.json", f"1日目に聞く条件が一覧にない: {k}")
+        elif not cond_doc["conditions"][k].get("question"):
+            err("conditions.json", f"1日目に聞く条件に、問いの文がない: {k}")
+    for k, v in cond_doc["conditions"].items():
+        if v.get("ask") == "DAY_ONE" and k not in ASKED_DAY_ONE:
+            err("conditions.json", f"ask=DAY_ONE なのに ask_order に並んでいない: {k}")
+        for f_ in ("question", "question_note"):
+            if v.get(f_) and "**" in v[f_]:
+                err("conditions.json", f"{k}.{f_} に ** が入っている")
 else:
     err("conditions.json", "ファイルがない")
 
@@ -236,8 +251,53 @@ for name, nodes in by_file.items():
                 err(w, f"deadline.clock の値が定義にない: {dl['clock']}")
             if dl.get("clock") == "KNOWN" and dl.get("absolute_date"):
                 err(w, "暦の期限に clock は要らない（知った時から数える期限ではない）")
+            # 期限の性質（S03 ルール4）。過ぎても続くのか、門が閉じるのか。
+            gate = dl.get("gate")
+            if "gate" in dl and gate not in {"STAYS_OPEN", "CLOSES"}:
+                err(w, f"deadline.gate の値が定義にない: {gate}")
+            if gate == "CLOSES":
+                if not dl.get("closed_note"):
+                    err(w, "gate=CLOSES なのに closed_note がない"
+                           "（過ぎたときに何と言うかを書く）")
+                if not node.get("specialist_bridge"):
+                    err(w, "gate=CLOSES なのに相談先がない"
+                           "（閉じた門を見せて行き先を示さないのは、突き放すことである）")
+            if gate != "CLOSES" and dl.get("closed_note"):
+                err(w, "closed_note があるのに gate=CLOSES でない（使われない文になる）")
+            # 「知った時」から数える期限は、その日を1日目に聞いていること。
+            # 聞かずに死亡日で代用したまま赤で出すのは、断定である（ルール4・15）。
+            if dl.get("clock") == "KNOWN" and "days_since_known" not in ASKED_DAY_ONE:
+                err(w, "clock=KNOWN の期限なのに、起算日を1日目に聞く問いがない"
+                       "（conditions.json の ask_order.DAY_ONE）")
+            if gate is None:
+                warn(w, "deadline に gate がない。過ぎても続く期限か、"
+                        "過ぎたら申立てそのものができなくなる期限かを決める")
             if ad and lm.get("verification_status") not in VERIF_NEEDS_DATE:
                 err(w, "暦の期限を持つのに一次資料で確かめていない（制度改正で動く値である）")
+
+            # 期限は別格である（S03 ルール4）。
+            # 期限がなければこのアプリは意味を持たず、間違っていれば実害が出る。
+            # 75件のうち期限を持つのは10件。いちばん大事で、いちばん小さい。
+            # ここだけは、一次資料に当たっていないものを通さない。
+            if lm.get("verification_status") not in VERIF_NEEDS_DATE:
+                err(w, "期限を持つのに一次資料で確かめていない"
+                       "（期限はこのアプリの中心であり、誤れば実害が出る）")
+            if not lm.get("source_url"):
+                err(w, "期限を持つのに出典のURLがない"
+                       "（画面に根拠を出せず、あとで確かめ直せない）")
+
+        # 画面に出る言葉に、書式の記号を混ぜない。
+        # ** は Markdown の強調であって、画面ではそのまま文字として出る。
+        for where_, text_ in (
+            ("today_action", node.get("today_action")),
+            ("caution.note", (node.get("caution") or {}).get("note")),
+            ("absent_note", node.get("absent_note")),
+            ("deadline.closed_note", (node.get("deadline") or {}).get("closed_note")),
+            ("warning_fact", (node.get("irreversibility") or {}).get("warning_fact")),
+            ("warning_exception", (node.get("irreversibility") or {}).get("warning_exception")),
+        ):
+            if text_ and "**" in text_:
+                err(w, f"{where_} に ** が入っている（画面ではそのまま文字として出る）")
 
         # 専門家
         sb = node.get("specialist_bridge")

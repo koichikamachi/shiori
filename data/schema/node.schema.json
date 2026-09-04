@@ -77,7 +77,8 @@
               "LANDOWNER",
               "BUSINESS_OWNER",
               "FOREIGN_ASSETS",
-              "DEBT_CONCERN"
+              "DEBT_CONCERN",
+              "SURPLUS_SAVINGS"
             ]
           },
           "description": "表示用のラベルのみ。出現の判定には使わない。判定は exists_if 一本で行う。"
@@ -262,6 +263,18 @@
                 "DIVISION"
               ],
               "description": "どの時計で数えるか。DEATH=死亡日から（既定）。KNOWN=自己のために相続の開始があったことを知った時から。DIVISION=遺産分割が成立した日から。起算点が違えば、同じ死でも人によって残り日数が違う。"
+            },
+            "gate": {
+              "type": "string",
+              "enum": [
+                "STAYS_OPEN",
+                "CLOSES"
+              ],
+              "description": "期限を過ぎたときの扱い。STAYS_OPEN=過ぎても、まだやらなければならない（既定。死亡届・相続登記・相続税の申告）。CLOSES=過ぎたら、その手続そのものができなくなる（熟慮期間の伸長）。CLOSES のものを過ぎたあとに急かすと、できないことを勧めることになる。"
+            },
+            "closed_note": {
+              "type": "string",
+              "description": "gate=CLOSES で、期限を過ぎているときに画面へ出す言葉。制度の事実（過ぎる前でなければできない）は断定してよいが、その人がもう無理だとは断定しない（ルール15）。"
             }
           },
           "description": "days / months / absolute_date のいずれか一つだけを設定する。月単位のものを日数に換算してはならない。"

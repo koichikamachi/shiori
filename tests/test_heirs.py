@@ -282,3 +282,69 @@ def test_self_side_may_speak_of_the_family_but_only_from_the_map(engine):
     # 気持ちの断定はしない
     for banned in ("後悔", "困り果て", "きっと"):
         assert banned not in fact
+
+
+# ---- 余裕資金がある人（S02 第二部6） ----
+
+def test_surplus_route_appears_only_with_surplus(engine):
+    """
+    暮らしに使わない預貯金がなければ、生前に渡す話も保険の枠も出さない。
+    無理に渡すと、その人の暮らしが立たなくなる。
+    """
+    ids = ("SELF_GIFT_AHEAD_CHECK", "SELF_INSURANCE_NONTAX_FRAME",
+           "SELF_TAX_REDUCTION_CONSULT")
+    plain = run(engine, scope="SELF", has_spouse=True, children_count=2)
+    rich = run(engine, scope="SELF", has_spouse=True, children_count=2,
+               has_surplus_savings=True)
+    for nid in ids:
+        assert nid not in plain["statuses"], nid
+        assert nid in rich["statuses"], nid
+
+    gone = next(a for a in plain["absent"] if a["node_id"] == "SELF_GIFT_AHEAD_CHECK")
+    assert "暮らしが立たなくなります" in gone["note"]
+
+
+def test_gift_warning_says_the_window_grows(engine):
+    """
+    足し戻される期間は、これから年々のびていく。
+    「早く始めた分しか効かない」を、経過措置の事実として書く。
+    """
+    r = run(engine, scope="SELF", has_surplus_savings=True, children_count=2)
+    w = next(w for w in r["irreversible_warnings"]
+             if w["node_id"] == "SELF_GIFT_AHEAD_CHECK")
+    assert "のびていきます" in w["warning_fact"]
+    assert "7年以内" in w["warning_fact"]
+    assert "早く始めた分だけは足し戻されません" in w["warning_exception"]
+
+
+def test_insurance_frame_needs_the_heir_count_first(engine):
+    """500万円×法定相続人の数。人数が分からなければ枠も分からない。"""
+    r = run(engine, scope="SELF", has_surplus_savings=True, children_count=2)
+    nid = "SELF_INSURANCE_NONTAX_FRAME"
+    assert r["statuses"][nid] == "NOT_READY"
+    m = next(m for m in r["map"] if m["node_id"] == nid)
+    assert "いま自分に万一があったら、誰が相続人になるかを書き出す" in m["blocked_by"]
+
+    done = run(engine, scope="SELF", done={"SELF_HEIR_ESTIMATE"},
+               has_surplus_savings=True, children_count=2)
+    assert done["statuses"][nid] == "READY"
+
+
+def test_no_product_names_anywhere(engine):
+    """
+    商品名は書かない。類型までにとどめる。
+    制度の説明と、金融商品の勧誘は別のことである。
+    """
+    import json as _json
+    blob = _json.dumps([engine.nodes_by_scope[s] for s in
+                        ("SELF", "FAMILY_CHILD", "SURVIVOR")], ensure_ascii=False)
+    for banned in ("マニュライフ", "ソニー生命", "日本生命", "第一生命", "かんぽ",
+                   "アフラック", "オリックス生命", "楽天", "SBI"):
+        assert banned not in blob, banned
+
+
+def test_the_app_says_it_does_not_judge_which_is_better(engine):
+    """どれが得かは判断しない。金額も計算しない。並べるところまで。"""
+    n = engine.nodes_by_scope["SELF"]["SELF_TAX_REDUCTION_CONSULT"]
+    note = n["caution"]["note"]
+    assert "判断しない" in note and "金額も計算しない" in note

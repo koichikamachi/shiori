@@ -10,6 +10,7 @@
 目で確かめるためのもの。表示の順序は docs/S03 の決めごとに従う。
 """
 import argparse
+import json
 import sys
 from datetime import date
 from pathlib import Path
@@ -114,6 +115,17 @@ SCENARIOS = {
         "title": "本人・子がいない。相続人は親か兄弟姉妹になる",
         "scope": "SELF",
         "cond": dict(has_spouse=True, children_count=0, has_own_home=True),
+        "done": set(),
+    },
+    "self-surplus": {
+        # 元気な70歳。年金で暮らしは足りているが、預金を子に多く残したい。
+        # 守りではなく攻め。動機がほかの五人と違う。
+        "title": "本人・年金で暮らしは足りている。預金を子に多く残したい",
+        "scope": "SELF",
+        "cond": dict(has_own_home=True, has_spouse=True, children_count=2,
+                     has_surplus_savings=True,
+                     estate_over_basic_deduction=None,
+                     unanswered=["estate_over_basic_deduction"]),
         "done": set(),
     },
     "self-debt": {
@@ -398,6 +410,37 @@ def show(result, scenario_key, scenario):
     print()
 
 
+def show_questions():
+    """
+    1日目に聞くこと（S03 ルール4）。
+
+    遺族の1日目に質問を増やすのは、それだけで負担である。だから増やしてよい
+    問いは、答えが**地図ぜんぶの日数を変えるもの**に限る。いまはこの二つだけ。
+    答えないまま進んでもよい。そのときは、画面に「およそ」が付く。
+    """
+    schema = json.loads((ROOT / "data" / "schema" / "conditions.json")
+                        .read_text(encoding="utf-8"))
+    order = schema.get("ask_order", {}).get("DAY_ONE", [])
+    conds = schema["conditions"]
+
+    head("1日目に聞くこと")
+    print()
+    for i, key in enumerate(order, 1):
+        c = conds[key]
+        print(f"  {i}　{c['question']}")
+        if c.get("question_note"):
+            for part in c["question_note"].split("／"):
+                if part.strip():
+                    print(wrap(part.strip(), indent="       ", width=W - 11))
+        print()
+    print(wrap("答えなくても先へ進めます。そのときは、亡くなった日から数えた"
+               "おおよその日数を出します。画面には「およそ」と付きます。",
+               indent="  "))
+    print()
+    line()
+    print()
+
+
 def main(argv=None):
     p = argparse.ArgumentParser(description="しおり — ターミナルで動かす")
     p.add_argument("-s", "--scenario", help="状況の名前")
@@ -406,7 +449,12 @@ def main(argv=None):
     p.add_argument("--all", action="store_true", help="すべての状況を続けて出す")
     p.add_argument("--map", action="store_true", help="地図の面を出す（全体を見る）")
     p.add_argument("--brief", action="store_true", help="今日の面を出す（今日の3件）")
+    p.add_argument("--questions", action="store_true", help="1日目に聞くことを出す")
     args = p.parse_args(argv)
+
+    if args.questions:
+        show_questions()
+        return 0
 
     if args.list or (not args.scenario and not args.all):
         print("\n用意してある状況：\n")

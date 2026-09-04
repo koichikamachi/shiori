@@ -99,6 +99,33 @@ class ShioriEngine:
             return (add_months(base, dl["months"]) - today).days
         return None
 
+    @staticmethod
+    def _clock_assumed(node: Dict[str, Any], cond: UserCondition) -> bool:
+        """
+        この期限を、聞いていない日で数えていないか（S03 ルール4）。
+
+        clock=KNOWN の期限は「自己のために相続の開始があったことを知った時」から
+        数える。その日を聞いていないとき、エンジンは死亡日で代用する。代用した
+        期限は、確かめた期限と同じ顔で出してはいけない。
+        """
+        dl = node.get("deadline") or {}
+        return dl.get("clock") == "KNOWN" and cond.known_clock_is_assumed
+
+    @staticmethod
+    def _gate_closes(node: Dict[str, Any]) -> bool:
+        """
+        期限を過ぎたとき、その手続そのものができなくなるノードか（S03 ルール4）。
+
+        期限には二種類ある。**過ぎても、まだやらなければならないもの**（死亡届、
+        相続登記、相続税の申告）と、**過ぎたら、申立てそのものができなくなるもの**
+        （熟慮期間の伸長）である。前者を急かすのは正しい。後者を急かすのは、
+        できないことを勧めることになる。
+        """
+        return (node.get("deadline") or {}).get("gate") == "CLOSES"
+
+    def _gate_closed(self, node: Dict[str, Any], days_left: Optional[int]) -> bool:
+        return self._gate_closes(node) and days_left is not None and days_left < 0
+
     def _urgency(self, node: Dict[str, Any], days_left: Optional[int]) -> str:
         if days_left is not None:
             if days_left < 0:
@@ -212,6 +239,12 @@ class ShioriEngine:
         # 赤い帯にだけ出すノードは、今日の3件に数えない（S03 ルール5）
         actionable = [n for n in actionable if not n.get("is_warning_only")]
 
+        # 門が閉じたノードも、今日の3件に数えない（S03 ルール4）。
+        # 「期間が過ぎるとこの申立てはできません」と自分で書いておきながら、
+        # 過ぎたその日に、それを今日の一番目に置いてはいけない。
+        actionable = [n for n in actionable
+                      if not self._gate_closed(n, days_left[n["id"]])]
+
         candidates = sorted(actionable, key=sort_key)
         if actor_scope == "SURVIVOR":
             mine = [n for n in candidates if n.get("decided_by_you", True)]
@@ -228,6 +261,7 @@ class ShioriEngine:
                 "node_id": nid,
                 "title": existing[nid]["title"],
                 "days_left": days_left[nid],
+                "clock_assumed": self._clock_assumed(existing[nid], condition),
                 "urgency": urgency[nid],
                 "status": resolved[nid].value,
                 # 止めているノードは「名前」で出す。idは利用者の言葉ではない。
@@ -237,6 +271,7 @@ class ShioriEngine:
             if urgency[nid] in ("OVERDUE", "MUST_IMMEDIATE", "SOON")
             and days_left[nid] is not None
             and resolved[nid] != NodeStatus.DONE
+            and not self._gate_closed(existing[nid], days_left[nid])
             and nid not in shown
         ]
         deadline_alerts.sort(key=lambda a: (URGENCY_ORDER[a["urgency"]], a["days_left"], a["node_id"]))
@@ -352,8 +387,25 @@ class ShioriEngine:
                 "present": present,
                 "status": resolved[nid].value if present else None,
                 "urgency": urgency[nid] if present else None,
-                "days_left": days_left[nid] if present else None,
+                # 済んだ駅に残り日数を出さない（S03 ルール4）。
+                # いつ出したかを持っていないのだから、「3日超過」と言う根拠がない。
+                # 済んだ人に、済んだことを責める札を貼ることになる。
+                "days_left": (days_left[nid]
+                              if present and resolved[nid] != NodeStatus.DONE else None),
                 "deadline_label": self._deadline_label(node),
+                # 期限を出すなら、根拠も一緒に出す（S03 ルール4）。
+                # 「あと82日」とだけ言われても、確かめようがない。
+                "deadline_source": ((node.get("legal_metadata") or {}).get("verified_by")
+                                    if node.get("deadline") else None),
+                "deadline_source_url": ((node.get("legal_metadata") or {}).get("source_url")
+                                        if node.get("deadline") else None),
+                "deadline_checked_at": ((node.get("legal_metadata") or {}).get("verified_at")
+                                        if node.get("deadline") else None),
+                "clock_assumed": present and self._clock_assumed(node, condition),
+                "gate_closed": (present
+                                and resolved[nid] != NodeStatus.DONE
+                                and self._gate_closed(node, days_left[nid])),
+                "closed_note": (node.get("deadline") or {}).get("closed_note"),
                 # 止めているノードは「名前」で出す。idは利用者の言葉ではない。
                 "blocked_by": [existing[p]["title"] for p in unmet_map.get(nid, []) if p in existing],
                 "unlocks": sorted(unlocks.get(nid, [])),

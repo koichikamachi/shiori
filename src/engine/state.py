@@ -33,6 +33,8 @@ class UserCondition(BaseModel):
     has_unmarried_partner: bool = Field(default=False, description="籍を入れていない相手がいる")
     has_will: bool = Field(default=False, description="遺言がある")
     has_pets: bool = Field(default=False, description="ペットがいる")
+    # 金額は聞かない。あるかないかだけ。無ければ贈与も保険の枠も検討する意味がない。
+    has_surplus_savings: bool = Field(default=False, description="暮らしに使わない預貯金がある")
 
     # 税の境界（None は「まだ分からない」）
     estate_over_basic_deduction: Optional[bool] = Field(default=None, description="財産が基礎控除を超えそう")
@@ -63,6 +65,20 @@ class UserCondition(BaseModel):
     def days_for_known_clock(self) -> Optional[int]:
         """「知った時」から数える期限に使う日数。指定がなければ死亡からの日数。"""
         return self.days_since_known if self.days_since_known is not None else self.days_since_death
+
+    @property
+    def known_clock_is_assumed(self) -> bool:
+        """
+        「自己のために相続の開始があったことを知った日」を、聞かないまま
+        死亡日で代用しているか。
+
+        代用してよい。ふつうの相続人にとって、この二つはほぼ同じ日だからである。
+        だが**代用したことを黙ってはいけない。** 熟慮期間は相続人ごとに別々に
+        進む。後順位で繰り上がった人、疎遠だった子、長く音信のなかった親族に
+        とって、死亡日は自分の起算日ではない。聞いていない日を根拠に
+        「あと82日」と赤で言えば、それはこの人の事案についての断定になる。
+        """
+        return self.days_since_known is None and self.days_since_death is not None
 
     def days_for_clock(self, clock: Optional[str]) -> Optional[int]:
         """

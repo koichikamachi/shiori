@@ -23,7 +23,7 @@
 
 **最後は必ず「専門家にご相談ください」で終わる。** 何を相談すればよいか分からないから困っているのに、である。
 
-そして、三つの立場が丸ごと抜け落ちている。**親に切り出せない子。負債があるかもしれない人。海外に資産がある人。**
+そして、いくつもの立場が丸ごと抜け落ちている。**親に切り出せない子。負債があるかもしれない人。海外に資産がある人。そして、暮らしは足りているが、預金を子に多く残したいと思っている人。**
 
 ---
 
@@ -54,12 +54,15 @@
 ```bash
 pip install -r requirements.txt
 
-python -m src.main --list                        # 用意した15の状況
+python -m src.main --list                        # 用意した16の状況
 python -m src.main -s surv-day1                  # 遺族・死の直後
 python -m src.main -s self-no-child              # 本人・子がいない
 python -m src.main -s surv-rank-shift --brief    # 順位が繰り上がって相続人になった
+python -m src.main --questions                   # 1日目に聞くこと
 python -m src.main -s surv-day1 --map            # 地図の面（全体を見る）
 
+python tools/render_map_svg.py -s all            # 地図を絵にする（HTML）
+python tools/deadline_table.py                   # 期限の表（専門家に渡す一枚）
 python tools/lint_nodes.py                       # 地図の点検
 python -m pytest tests/ -q                       # テスト
 ```
@@ -69,6 +72,8 @@ Python 3.10 以上。外部サービスへの接続は不要である。
 ### 見どころ
 
 **`surv-day10-memo` と `surv-day10-nomemo` を見比べる。** 本人が銀行名を一行書いてあるかどうかで、遺族の経路が丸ごと消える。
+
+**`self-surplus`。** 元気な70歳。使わない預金を子に多く残したい。生前に渡す方法は**足し戻される期間がこれから年々のびていく**ので、早く始めた分しか効かない。保険の非課税枠は**健康なうちしか使えない**。商品名は一つも書かない。
 
 **`surv-rank-shift`。** 死後100日、しかし相続人になったと知ったのは10日前。放棄の3か月は**そこから**始まる。死亡日で数えると「8日過ぎています」、知った時から数えると「82日あります」。同じ死である。
 
@@ -81,7 +86,7 @@ Python 3.10 以上。外部サービスへの接続は不要である。
 | | 中身 |
 |---|---|
 | `tools/lint_nodes.py` | 存在しないノードの参照、循環、未定義の条件、検証状態の食い違い、消えた道の説明もれ |
-| テスト95本 | 「本人のメモがあると遺族の道が短くなるか」「期限が近ければ前提が未了でも警告するか」など、設計の急所を固定 |
+| テスト254本 | 「本人のメモがあると遺族の道が短くなるか」「期限が近ければ前提が未了でも警告するか」など、設計の急所を固定 |
 | わざと壊して確かめる | テストを書いたら意図的にコードを壊し、捕まるかを見る。実際に一度、素通りした穴が見つかった |
 | `verification_status` の四段 | 下書き／自分で調べた／一次資料で確認／**外部の専門家が確認**。確かめていないものに確認日を入れるとLintで落ちる |
 
@@ -112,16 +117,16 @@ Python 3.10 以上。外部サービスへの接続は不要である。
 docs/     S01〜S08  設計文書。原本はここ。過去版は git が持っている
   submission/       提出用の文と画像
 data/
-  nodes/            地図そのもの（本人38・家族5・遺族29）
-  schema/           ノードの形と、使ってよい条件25種
-  checks/           まだ確かめていない89項目（エージェントへの入力）
+  nodes/            地図そのもの（本人41・家族5・遺族29）
+  schema/           ノードの形と、使ってよい条件26種
+  checks/           まだ確かめていない96項目（エージェントへの入力）
   proposals/        エージェントが出す修正案の置き場
 src/
   engine/           expr（式の読み取り）state（状態5値）engine（判定）
   agent/            schema（出力の型）guards（嘘を落とす関門）
-  main.py           ターミナルで15の状況を再現する
+  main.py           ターミナルで16の状況を再現する
 tests/              test_graph・test_map・test_heirs・test_agent_guards
-tools/              lint_nodes・extract_checks・render_node_image
+tools/              lint_nodes・extract_checks・list_for_review・render_map_svg
 ```
 
 ### 設計文書
@@ -141,8 +146,8 @@ tools/              lint_nodes・extract_checks・render_node_image
 
 ## いまの数字
 
-ノード **72**（本人38・家族5・遺族29）／条件 **25**／流れ **6**
-テスト **95** 本すべて通過／Lint エラー **0**／まだ確かめていない項目 **89**
+ノード **75**（本人41・家族5・遺族29）／条件 **26**／流れ **6**
+テスト **254** 本すべて通過／Lint エラー **0**／まだ確かめていない項目 **109**
 
 ---
 

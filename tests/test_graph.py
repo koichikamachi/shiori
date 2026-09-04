@@ -375,16 +375,60 @@ def test_rule5_ordering_is_deterministic(engine):
     assert len(set(a)) == len(a)
 
 
+DONE_UP_TO_THE_DECISION = {
+    "SURV_DEATH_NOTICE", "SURV_FUNERAL_ARRANGEMENT", "SURV_KNOW_SAFE_ACTIONS",
+    "SURV_FIND_ENTRY", "SURV_WARN_DEPOSIT", "SURV_COLLECT_KOSEKI",
+    "SURV_DETERMINE_HEIRS", "SURV_DISCOVER_ACCOUNTS", "SURV_DISCOVER_DEBT",
+    "SURV_LIST_ASSETS",
+}
+
+
 def test_rule5_irreversible_ranks_above_plain(engine):
     """ルール5。不可逆のあるものは、同じ緊急度の普通のものより先に出る。"""
-    cond = UserCondition(days_since_death=100, entry_found=False)
-    done = {"SURV_DEATH_NOTICE", "SURV_FUNERAL_ARRANGEMENT", "SURV_KNOW_SAFE_ACTIONS",
-            "SURV_FIND_ENTRY", "SURV_WARN_DEPOSIT", "SURV_COLLECT_KOSEKI",
-            "SURV_DETERMINE_HEIRS", "SURV_DISCOVER_ACCOUNTS", "SURV_DISCOVER_DEBT",
-            "SURV_LIST_ASSETS"}
-    today = ids(run(engine, "SURVIVOR", cond, completed=done)["today_actions"])
-    # 期限を過ぎた不可逆（承認・放棄の判断）が、普通の作業より先に出る
+    # 期限が迫っているが、まだ過ぎていない日をとる（80日目。残り12日）
+    cond = UserCondition(days_since_death=80, entry_found=False)
+    today = ids(run(engine, "SURVIVOR", cond,
+                    completed=DONE_UP_TO_THE_DECISION)["today_actions"])
     assert today[0] == "SURV_DECIDE_ACCEPT_OR_RENOUNCE"
+
+
+def test_rule4_a_shut_gate_leaves_todays_list(engine):
+    """
+    ルール4。門が閉じた期限は、今日の3件からも期限の帯からも外す。
+
+    もとはここで「期限を過ぎた不可逆が一番目に出る」ことを固定していた。
+    それは誤りだった。熟慮期間は、過ぎたら申述そのものができなくなる期限である。
+    過ぎた日にそれを今日の一番目に置くのは、できないことを勧めることになる。
+    """
+    cond = UserCondition(days_since_death=100, entry_found=False)   # 3か月を過ぎている
+    res = run(engine, "SURVIVOR", cond, completed=DONE_UP_TO_THE_DECISION)
+    assert "SURV_DECIDE_ACCEPT_OR_RENOUNCE" not in ids(res["today_actions"])
+    assert "SURV_DECIDE_ACCEPT_OR_RENOUNCE" not in [
+        a["node_id"] for a in res["deadline_alerts"]]
+    m = next(x for x in res["map"] if x["node_id"] == "SURV_DECIDE_ACCEPT_OR_RENOUNCE")
+    assert m["gate_closed"] is True
+    # 閉じたと断定はしない。相談先を必ず添える（ルール15）
+    assert "弁護士" in m["closed_note"]
+    # ただし救済を約束もしない。反対仮説を並べて置く（先生の指摘）
+    assert "知らなければいつでも放棄できる、という制度ではありません" in m["closed_note"]
+    # 請求書が来ている人が、今日できることを書く
+    for step in ("支払う約束をしない", "遺産に手を付けない"):
+        assert step in m["closed_note"], step
+
+
+def test_rule4_a_gate_that_stays_open_still_pushes(engine):
+    """
+    逆に、過ぎても続く期限は、過ぎたあとも急かしてよい。
+    相続登記も相続税の申告も、遅れたからといって、しなくてよくはならない。
+    """
+    cond = UserCondition(days_since_death=400, entry_found=False,
+                         estate_over_basic_deduction=True)
+    res = run(engine, "SURVIVOR", cond, completed=DONE_UP_TO_THE_DECISION)
+    late = [a for a in res["deadline_alerts"] if a["days_left"] < 0]
+    assert late, "過ぎても続く期限が、ひとつも出てこない"
+    for a in late:
+        m = next(x for x in res["map"] if x["node_id"] == a["node_id"])
+        assert not m["gate_closed"]
 
 
 def test_rule6_warnings_have_fact_and_exception(engine):

@@ -28,3 +28,6 @@ $RECYCLE.BIN/
 
 # macOS
 .DS_Store
+
+# 刷るためのPDFは、いつでも作り直せるので追跡しない
+docs/print/*.pdf

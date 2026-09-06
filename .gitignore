@@ -19,3 +19,12 @@ service-account*.json
 credentials*.json
 client_secret*.json
 gha-creds-*.json
+
+# Windows が勝手に作るもの
+desktop.ini
+Thumbs.db
+ehthumbs.db
+$RECYCLE.BIN/
+
+# macOS
+.DS_Store

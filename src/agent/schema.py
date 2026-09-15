@@ -4,6 +4,7 @@
 エージェントは JSON を書き換えない。この形の「案」を出すところで止まる。
 だから human_review_required は常に true であり、false にする道を作らない。
 """
+import re
 from datetime import date
 from typing import Literal, Optional
 
@@ -59,6 +60,13 @@ class CheckResult(BaseModel):
     human_review_required: bool = True
 
     model_config = {"extra": "forbid"}
+
+    @field_validator("node_id")
+    @classmethod
+    def _must_be_alphanumeric_or_underscore(cls, v: str) -> str:
+        if not re.match(r"^[A-Z0-9_]+$", v):
+            raise ValueError("node_id は英数字・アンダースコア限定（^[A-Z0-9_]+$）である必要があります")
+        return v
 
     @field_validator("human_review_required")
     @classmethod

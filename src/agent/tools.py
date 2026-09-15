@@ -5,6 +5,7 @@
 WEB検索、HTMLページ取得、テキスト抽出、および提案（Proposal）のJSONエクスポート。
 """
 import os
+import re
 import json
 import urllib.request
 import urllib.parse
@@ -23,6 +24,11 @@ class HTMLTextExtractor(HTMLParser):
     HTML から不要なタグ（script, style, head, noscript, svg, iframe など）を除去し、
     クリーンなプレーンテキストを抽出するためのパーサー。
     """
+    VOID_ELEMENTS = {
+        "area", "base", "br", "col", "embed", "hr", "img", "input",
+        "link", "meta", "param", "source", "track", "wbr"
+    }
+
     def __init__(self):
         super().__init__()
         self.exclude_tags = {"script", "style", "head", "noscript", "svg", "iframe", "meta", "link"}
@@ -30,15 +36,18 @@ class HTMLTextExtractor(HTMLParser):
         self.text_parts = []
 
     def handle_starttag(self, tag, attrs):
-        self.tag_stack.append(tag.lower())
+        tag_lower = tag.lower()
+        if tag_lower not in self.VOID_ELEMENTS:
+            self.tag_stack.append(tag_lower)
 
     def handle_endtag(self, tag):
         tag_lower = tag.lower()
-        # スタックを安全に巻き戻す（閉じタグ抜けに対応）
-        while self.tag_stack:
-            t = self.tag_stack.pop()
-            if t == tag_lower:
-                break
+        # スタックにタグが存在する場合のみ、安全にそこまで巻き戻す
+        if tag_lower in self.tag_stack:
+            while self.tag_stack:
+                t = self.tag_stack.pop()
+                if t == tag_lower:
+                    break
 
     def handle_data(self, data):
         # 現在のスタックに除外対象のタグが一切含まれていない場合のみテキストを記録
@@ -114,10 +123,31 @@ def fetch_page_text(url: str, timeout: int = 10) -> str:
             headers={"User-Agent": "ShioriAgent/1.0 (Mozilla-compatible)"}
         )
         with urllib.request.urlopen(req, timeout=timeout) as response:
-            # レスポンスヘッダからエンコード方式を取得。無い場合は utf-8
-            encoding = response.headers.get_content_charset() or "utf-8"
             html_bytes = response.read()
-            html_content = html_bytes.decode(encoding, errors="replace")
+            
+            # レスポンスヘッダからエンコード方式を取得
+            encoding = response.headers.get_content_charset()
+            if not encoding:
+                # ヘッダに指定がない場合、HTMLの冒頭（最初の2048バイト）からmetaタグのcharsetを探索する
+                try:
+                    meta_scan = html_bytes[:2048].decode("ascii", errors="ignore")
+                    match = re.search(r'<meta\s+charset=["\']?([a-zA-Z0-9_-]+)', meta_scan, re.IGNORECASE)
+                    if not match:
+                        match = re.search(r'content=["\'][^"\']*charset=([a-zA-Z0-9_-]+)', meta_scan, re.IGNORECASE)
+                    if match:
+                        encoding = match.group(1).lower()
+                except Exception:
+                    pass
+            
+            # まだ決定していない場合は cp932 へのフォールバックを行う
+            if not encoding:
+                encoding = "cp932"
+                
+            try:
+                html_content = html_bytes.decode(encoding, errors="replace")
+            except LookupError:
+                # 不正なエンコーディング名がメタ等に指定されていた場合も cp932 にフォールバック
+                html_content = html_bytes.decode("cp932", errors="replace")
             
             # テキスト抽出
             extractor = HTMLTextExtractor()
@@ -146,6 +176,13 @@ def export_proposal(result: CheckResult, data_dir: Optional[Path] = None) -> Pat
     seq = 1
     while True:
         file_path = proposal_dir / f"{node_id}__{seq}.json"
+        
+        # 解決（絶対パス化）して proposals ディレクトリ配下であることを徹底検証（パストラバーサル遮断）
+        resolved_proposal_dir = proposal_dir.resolve()
+        resolved_file_path = file_path.resolve()
+        if not str(resolved_file_path).startswith(str(resolved_proposal_dir)):
+            raise ValueError("Path traversal attempt detected")
+            
         if not file_path.exists():
             break
         seq += 1

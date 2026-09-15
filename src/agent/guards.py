@@ -7,6 +7,7 @@
 import copy
 import unicodedata
 from datetime import date
+from urllib.parse import urlsplit
 
 from src.agent.schema import FORBIDDEN_STATUS, CheckResult
 
@@ -27,17 +28,18 @@ PATCHABLE_PREFIXES = (
 )
 
 
-def host_of(url: str) -> str:
-    s = url.split("://", 1)[-1]
-    return s.split("/", 1)[0].split("@")[-1].split(":")[0].lower()
-
-
 def is_official(url: str) -> bool:
     """go.jp / lg.jp のみ。ここを緩めると、根拠の意味が消える。"""
     if not url.lower().startswith("https://"):
         return False
-    host = host_of(url)
-    return host.endswith(OFFICIAL_SUFFIXES)
+    try:
+        hostname = urlsplit(url).hostname
+        if not hostname:
+            return False
+        host = hostname.lower()
+        return host.endswith(OFFICIAL_SUFFIXES)
+    except Exception:
+        return False
 
 
 def _norm(text: str) -> str:

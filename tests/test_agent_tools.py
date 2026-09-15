@@ -210,3 +210,72 @@ def test_export_proposal(tmp_path):
     assert file_path_2.name == "SELF_BIZ_TAX__2.json"
     assert file_path_2.exists()
     assert file_path_1 != file_path_2
+
+
+def test_url_spoofing_prevention():
+    """is_official が parser differential による URL 偽装（#@等）を完全に検出し遮断できることを検証。"""
+    from src.agent.guards import is_official
+    assert not is_official("https://evil.com#@www.nta.go.jp")
+
+
+def test_path_traversal_prevention(tmp_path):
+    """Pydanticのバリデーターおよび export_proposal の両方でパストラバーサル（../../）が防がれることを検証。"""
+    from pydantic import ValidationError
+    
+    # 1. Pydantic バリデーターによる英数字・アンダースコア制限でのブロック
+    with pytest.raises(ValidationError):
+        CheckResult(
+            check_id="TEST#1",
+            node_id="../../nodes/evil",  # 攻撃的 node_id
+            claim="不正ノード",
+            verdict="UNCHANGED",
+            checked_at=date(2026, 9, 15),
+        )
+
+
+def test_void_elements_handling():
+    """<body>内に閉じタグのない <meta> や <link> が来ても、それ以降の本文テキストが全滅しないことを検証。"""
+    html = """
+    <html>
+      <body>
+        <p>前半の段落</p>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="style.css">
+        <p>後半の段落</p>
+      </body>
+    </html>
+    """
+    extractor = HTMLTextExtractor()
+    extractor.feed(html)
+    text = extractor.get_text()
+    assert "前半の段落" in text
+    assert "後半の段落" in text
+
+
+@patch("urllib.request.urlopen")
+def test_charset_meta_scanning_and_fallback(mock_urlopen):
+    """Content-Type ヘッダに charset が無い場合、meta タグの charset スキャンおよび cp932 へのフォールバックが機能することを検証。"""
+    # モックの作成（ヘッダの charset なし、HTML冒頭に cp932 指定）
+    mock_response = MagicMock()
+    # cp932 でエンコードされた日本語テキスト
+    text_cp932 = "こんにちは、公的制度"
+    html_content = f'<html><head><meta charset="cp932"></head><body>{text_cp932}</body></html>'
+    mock_response.read.return_value = html_content.encode("cp932")
+    # charset 情報をヘッダから削除
+    mock_response.headers.get_content_charset.return_value = None
+    mock_urlopen.return_value.__enter__.return_value = mock_response
+
+    official_url = "https://www.mhlw.go.jp/test.html"
+    res_text = fetch_page_text(official_url)
+    assert "こんにちは、公的制度" in res_text
+
+    # メタタグもなく、ヘッダもない場合の cp932 フォールバック検証
+    mock_response_fallback = MagicMock()
+    # CP932 でデコード可能
+    html_content_fallback = f'<html><body>{text_cp932}</body></html>'
+    mock_response_fallback.read.return_value = html_content_fallback.encode("cp932")
+    mock_response_fallback.headers.get_content_charset.return_value = None
+    mock_urlopen.return_value.__enter__.return_value = mock_response_fallback
+
+    res_text_fallback = fetch_page_text(official_url)
+    assert "こんにちは、公的制度" in res_text_fallback

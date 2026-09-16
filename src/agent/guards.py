@@ -170,3 +170,14 @@ def apply_patch(node: dict, patch) -> dict:
     else:
         cur[last] = patch.proposed
     return out
+
+
+def validate_node_id(node_id: str) -> bool:
+    """node_id のバリデーション（パストラバーサルや不正フォーマットの防止）を行う"""
+    if not isinstance(node_id, str):
+        return False
+    # 安全な英数字、アンダースコア、ハイフン、シャープのみ許可し、
+    # パストラバーサルの危険な文字列（.. や / や \\）を完全に排除する。
+    import re
+    return bool(re.match(r"^[A-Za-z0-9_\-#]+$", node_id))
+

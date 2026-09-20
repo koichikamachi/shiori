@@ -114,3 +114,69 @@ def test_the_docker_setup_is_there_and_names_the_port():
     di = (ROOT / ".dockerignore").read_text(encoding="utf-8")
     for skip in ("tests/", "docs/", ".env"):
         assert skip in di, skip
+
+
+# ---- 監査ドロワー（差し込みUI） --------------------------------------------
+# ドロワーは画面の外（right:-450px）に置いてあり、駅をクリックしたときだけ出る。
+# だから、差し込んだスクリプトが死んでいても画面は壊れて見えない。
+# 「ボタンが出ない」という形でしか気づけないので、ここで固定する。
+
+def _drawer_script(html: str) -> str:
+    """配信された HTML から、差し込んだドロワーのスクリプトだけを取り出す。"""
+    import re
+    m = re.search(r"<!-- Shiori Agent Inspector Drawer -->.*?<script>(.*?)</script>",
+                  html, re.S)
+    assert m, "ドロワーのスクリプトが配信されていない"
+    return m.group(1)
+
+
+def test_the_audit_drawer_is_served_with_its_button():
+    """ヘッダー・根拠URLの枠・監査ボタンが、地図のページに必ず付いていること。"""
+    html = client.get("/map/surv-day1").text
+    for needle in ('id="inspector-drawer"',
+                   "制度追従 外部監査エージェント",
+                   'id="drawer-node-title"',
+                   'id="drawer-body"',
+                   'id="btn-run-check"',
+                   "Gemini で一次資料（.go.jp）を監査する",
+                   'id="agent-result-area"'):
+        assert needle in html, f"ドロワーの {needle} が欠けている"
+
+
+def test_the_drawer_script_does_not_collide_with_the_map_script():
+    """
+    地図側のスクリプトとドロワーのスクリプトは別の <script> だが、
+    トップレベルの const / let / function は同じグローバル字句環境を共有する。
+    名前が一つでもぶつかると、**ドロワーのブロックが丸ごと構文エラーで死ぬ**。
+    （実際に `const esc`（render_map_svg.py）と `function esc` がぶつかり、
+    　駅をクリックしてもドロワーが出なくなった。）
+
+    だからドロワー側は全部を無名関数に閉じ込め、
+    HTML の onclick から呼ぶ二つだけを window に出す。
+    """
+    import re
+
+    html = client.get("/map/surv-day1").text
+    script = _drawer_script(html)
+
+    # 1. 閉じ込められていること
+    body = "\n".join(l for l in script.strip().splitlines()
+                     if l.strip() and not l.strip().startswith("//"))
+    assert body.startswith("(function ()"), "ドロワーのスクリプトが閉じ込められていない"
+    assert body.rstrip().endswith("})();"), "無名関数が閉じられていない"
+
+    # 2. 外に出しているのは、onclick から呼ぶ二つだけ
+    exported = set(re.findall(r"window\.([A-Za-z_$][\w$]*)\s*=", script))
+    assert exported == {"closeInspector", "runAgentCheck"}, \
+        f"window に余計なものを出している: {sorted(exported)}"
+
+    # 3. その二つが、地図側の宣言とぶつかっていないこと
+    map_src = (ROOT / "tools" / "render_map_svg.py").read_text(encoding="utf-8")
+    map_names = set(re.findall(r"\b(?:const|let|var|function|class)\s+([A-Za-z_$][\w$]*)",
+                               map_src))
+    assert exported.isdisjoint(map_names), \
+        f"地図側と名前がぶつかっている: {sorted(exported & map_names)}"
+
+    # 4. onclick から呼んでいる名前が、ちゃんと出ていること
+    called = set(re.findall(r'onclick="([A-Za-z_$][\w$]*)\(', html))
+    assert called <= exported, f"onclick から呼ぶのに window に無い: {sorted(called - exported)}"

@@ -358,6 +358,12 @@ def show_map(scenario: str, today: str | None = Query(default=None)) -> str:
 </div>
 
 <script>
+// 地図側のスクリプト（tools/render_map_svg.py）とは別の <script> だが、
+// トップレベルの const / let / function は同じグローバル字句環境を共有する。
+// 名前が一つでもぶつかると、このブロックは丸ごと構文エラーで死に、
+// ドロワーは画面の外（right:-450px）に居たまま出てこない。
+// だから全部を閉じ込め、HTML の onclick から呼ぶ二つだけを外に出す。
+(function () {
 let currentNodeId = null;
 const CHECKS_MAP = CHECKS_MAP_PLACEHOLDER;
 
@@ -619,7 +625,7 @@ async function runAgentCheck() {
   }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+function wireStations() {
   const nodes = document.querySelectorAll('g.node, [data-node-id], .station, .st, .chip');
   nodes.forEach(el => {
     el.style.cursor = 'pointer';
@@ -644,7 +650,21 @@ document.addEventListener('DOMContentLoaded', () => {
       openInspector(id, title, status, sourceUrl, needsCheck);
     });
   });
-});
+}
+
+// このスクリプトは </body> の直前に差し込まれるので、ふつうはまだ解析中である。
+// それでも、読み終わったあとに差し込まれた場合に黙って何もしないことがないよう、
+// 両方の場合を見る。
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', wireStations);
+} else {
+  wireStations();
+}
+
+// HTML の onclick から呼ばれるのはこの二つだけ。ほかは外に出さない。
+window.closeInspector = closeInspector;
+window.runAgentCheck = runAgentCheck;
+})();
 </script>
 </body>
 """.replace("CHECKS_MAP_PLACEHOLDER", checks_json_str)

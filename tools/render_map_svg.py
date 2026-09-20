@@ -203,6 +203,9 @@ def render(key, today):
             "dlsrc": m.get("deadline_source") or "",
             "dlurl": m.get("deadline_source_url") or "",
             "dlat": m.get("deadline_checked_at") or "",
+            # 期限の根拠（dlurl）は期限を持つノードにしか付かない。
+            # 監査ドロワーは期限の有無にかかわらず、そのノードの一次資料を指したい。
+            "srcurl": (n.get("legal_metadata") or {}).get("source_url") or "",
             "blocked": m["blocked_by"], "unlocks": m["unlocks"],
             "fact": irr.get("warning_fact", ""), "exc": irr.get("warning_exception", ""),
             "lost": irr.get("lost_option", ""),

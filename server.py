@@ -700,7 +700,8 @@ function wireStations() {
       if (typeof D !== 'undefined' && D[id]) {
         title = D[id].title || title;
         status = D[id].verif || '';
-        sourceUrl = D[id].dlurl || '';
+        // srcurl はノードの一次資料。dlurl は期限の根拠で、期限のないノードには付かない。
+        sourceUrl = D[id].srcurl || D[id].dlurl || '';
       }
       if (typeof CHECKS_MAP !== 'undefined' && CHECKS_MAP[id]) {
         needsCheck = CHECKS_MAP[id].map(c => c.question);

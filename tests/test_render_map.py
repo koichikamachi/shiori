@@ -131,7 +131,9 @@ def test_a_shut_gate_does_not_declare_the_case_over():
     """
     h = body("surv-new-will")
     assert "期間が過ぎている可能性" in h
-    assert "あきらめる前に弁護士に相談してください" in h
+    # 閉じた門の先にも道を示す一文。言い回しは
+    # 「〜してください」から「〜すべき事柄です」に改めた（紋切り型をやめたため）。
+    assert "あきらめる前に弁護士に相談すべき事柄です" in h
     assert "できません。あなたはもう" not in h
 
 

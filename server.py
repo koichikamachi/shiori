@@ -61,9 +61,9 @@ app = FastAPI(
 # 立場ごとにまとめて出す。順序は固定（毎回おなじ形をしていること）
 GROUPS = [
     ("SURVIVOR", "遺された人の地図",
-     "亡くなったあと、遺族が見る面。今日決めることは三件を超えない。"),
+     "亡くなったあと、遺族が見る面。今日、何をしたらよいのだろうか"),
     ("SELF", "本人の地図（生きているうち）",
-     "自分でできる備えの面。既定でこちらは地図から始まる。"),
+     "残される人たちへの備えです。こちらはご自分の状況に応じてスタートします。"),
     ("FAMILY_CHILD", "親を気にかける家族の地図",
      "親に切り出せない人の面。母数がいちばん大きい立場である。"),
 ]
@@ -82,7 +82,7 @@ body{margin:0;background:#fbfaf7;color:var(--ink);
 /* 標題 */
 h1{font-size:30px;font-weight:700;letter-spacing:.05em;line-height:1.3;margin:0 0 10px}
 /* 副題 */
-.sub{color:var(--sub);font-size:14px;line-height:1.6;margin:0 0 26px}
+.sub{color:#374151;font-size:14px;line-height:1.6;margin:0 0 26px}
 
 /* 試作品の説明 */
 .about{background:#fff;border:1px solid var(--rule);border-radius:12px;
@@ -96,8 +96,8 @@ h1{font-size:30px;font-weight:700;letter-spacing:.05em;line-height:1.3;margin:0 
 .does h3{margin:0 0 6px;font-size:13px;color:var(--ink);font-weight:700;letter-spacing:.02em}
 .does ul{margin:0;padding-left:18px}
 .does li{margin:2px 0}
-.stat{display:flex;flex-wrap:wrap;gap:2px 0;font-size:12px;line-height:1.7;
- color:var(--dim);margin:14px 0 0;padding-top:12px;border-top:1px dashed #e2dcce}
+.stat{display:flex;flex-wrap:wrap;gap:2px 0;font-size:13.5px;line-height:1.7;
+ color:#374151;margin:14px 0 0;padding-top:12px;border-top:1px dashed #d1d5db}
 .stat span{white-space:nowrap}
 /* 区切りの「｜」は項目に付けて運ぶ。別の要素にすると、折り返しで行末に取り残される。 */
 .stat span+span::before{content:"｜";color:#c9c1af;margin:0 8px}
@@ -105,7 +105,7 @@ h1{font-size:30px;font-weight:700;letter-spacing:.05em;line-height:1.3;margin:0 
 /* 見出し。前のかたまりから切り離すため、上の余白を広く取り、左に印を置く。 */
 h2{font-size:21px;font-weight:700;line-height:1.4;letter-spacing:.02em;
  margin:32px 0 6px;padding:2px 0 2px 12px;border-left:4px solid #222;border-bottom:0}
-.note{color:#334155;font-size:15px;line-height:1.7;margin:0 0 14px;padding-left:16px}
+.note{color:#1f2937;font-size:15.5px;font-weight:500;line-height:1.7;margin:0 0 14px;padding-left:16px}
 
 /* 場面を選ぶカードは、この画面のいちばん大事な操作である。
    日本語の題名が主役。識別子は目に入らない大きさに落とす。 */
@@ -120,8 +120,8 @@ a.card .t{font-size:16px;font-weight:700;line-height:1.5}
 a.card .k{display:none}
 
 /* 免責と注記。独立した案内枠として、敷きの上に置く。 */
-footer{margin-top:40px;background:#f9f8f6;border:1px solid #e8e6df;border-radius:6px;
- padding:16px 18px;color:#262626;font-size:14px;line-height:1.8}
+footer{margin-top:40px;background:#f9f8f6;border:1px solid #d1d5db;border-radius:6px;
+ padding:16px 18px;color:#1f2937;font-size:15px;font-weight:500;line-height:1.8}
 footer p{margin:0}
 footer p+p{margin-top:8px}
 @media(max-width:560px){.does{grid-template-columns:1fr}h1{font-size:28px}}

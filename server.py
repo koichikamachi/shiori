@@ -192,7 +192,7 @@ def index(today: str | None = Query(default=None)) -> str:
       '<b>実証プロトタイプ（PoC）</b>です。</p>')
     a('<p>自分が亡くなったあと、残された家族は何を、どの順番で、いつまでに'
       'しなければならないのか。<br>'
-      'その迷いをゼロにするために、公的資料（一次証憑）を自律監査するAIエージェントと共に、'
+      'その迷いをゼロにするために、公的資料（一次証憑）を自律的に照合するAIエージェントと共に、'
       '手続の順序と不可逆な期限を一枚の地図に体系化しました。<br>'
       '同じ課題を抱いている方へ、お届けします。</p>')
     a('<div class="does">')
@@ -358,7 +358,7 @@ def agent_check(req: AgentCheckRequest):
             "result": {
                 "action": "DRY_RUN",
                 "reason": "GEMINI_API_KEY が設定されていないため、安全な静的検証モード（DRY_RUN）で表示しています。",
-                "summary": "静的監査結果: 最新の公的ドメイン（.go.jp）用一次資料照合の準備が整っています。",
+                "summary": "静的確認結果: 最新の公的ドメイン（.go.jp）用一次資料照合の準備が整っています。",
                 "details": {
                     "node_id": req.node_id,
                     "title": node_item.get("title"),
@@ -379,7 +379,7 @@ def agent_check(req: AgentCheckRequest):
             "ok": True,
             "result": {
                 "action": result.verdict,
-                "reason": f"一次資料（.go.jp）に基づく自動監査結果。判定: {result.verdict}（確信度: {result.confidence}）",
+                "reason": f"一次資料（.go.jp）に基づく自動照合結果。判定: {result.verdict}（確信度: {result.confidence}）",
                 "summary": _tidy(result.risk_if_wrong) or "制度との整合性を検証・確認しました。",
                 "details": _tidy_details(result.model_dump())
             }
@@ -407,7 +407,7 @@ def show_map(scenario: str, today: str | None = Query(default=None)) -> str:
 
   <div style="padding:16px 20px; border-bottom:1px solid #e2dcce; display:flex; justify-content:space-between; align-items:center; background:#faf8f5;">
     <div>
-      <div style="font-size:12.5px; font-weight:700; color:#2d3748; letter-spacing:0.05em;">制度追従 外部監査エージェント</div>
+      <div style="font-size:12.5px; font-weight:700; color:#2d3748; letter-spacing:0.05em;">制度追従 照合エージェント</div>
       <div id="drawer-node-title" style="font-size:17px; font-weight:700; margin-top:3px; line-height:1.45;">駅を選んでください</div>
     </div>
     <button onclick="closeInspector()" aria-label="閉じる" style="background:#f4f1ea; border:1.5px solid #c9c1af; border-radius:50%; width:32px; height:32px; font-size:18px; cursor:pointer; color:#2d3748; flex-shrink:0;">&times;</button>
@@ -422,7 +422,7 @@ def show_map(scenario: str, today: str | None = Query(default=None)) -> str:
       width:100%; padding:13px; background:#1558c0; color:#fff; border:none;
       border-radius:8px; font-weight:700; font-size:15px; cursor:pointer;
       box-shadow:0 2px 6px rgba(21,88,192,.28); letter-spacing:.01em;">
-      Gemini で一次資料（.go.jp）を監査する
+      Gemini で一次資料（.go.jp）を確認する
     </button>
   </div>
 </div>
@@ -555,7 +555,7 @@ function renderProcess(d, action) {
       ? `<span style="color:#123a75; font-weight:700;">${esc(name)}</span>`
       : `<span style="color:#9aa4ad; text-decoration:line-through;">${esc(name)}</span>`);
   }).join('');
-  const head = done === steps.length ? '自律監査プロセス完了' : `自律監査プロセス（${done} / ${steps.length} 段）`;
+  const head = done === steps.length ? '一次資料の照合プロセス完了' : `一次資料の照合プロセス（${done} / ${steps.length} 段）`;
   return `
     <div style="margin-top:13px; background:#f3f6fb; border:1px solid #c9d7ec; border-radius:7px;
                 padding:8px 11px; font-size:11.5px; line-height:1.85;">
@@ -750,7 +750,7 @@ async function runAgentCheck() {
       body: JSON.stringify({node_id: currentNodeId})
     });
     const data = await res.json();
-    if (!data.ok) throw new Error(data.error || '監査に失敗しました');
+    if (!data.ok) throw new Error(data.error || '確認に失敗しました');
 
     const result = data.result || data.proposal;
     const d = result.details || {};
@@ -779,7 +779,7 @@ async function runAgentCheck() {
     resArea.innerHTML = `<div style="color:#a01c16; font-size:14px; font-weight:700;">うまく確かめられませんでした: ${esc(err.message)}</div>`;
   } finally {
     btn.disabled = false;
-    btn.innerText = 'Gemini で一次資料（.go.jp）を監査する';
+    btn.innerText = 'Gemini で一次資料（.go.jp）を確認する';
   }
 }
 

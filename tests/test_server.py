@@ -134,11 +134,11 @@ def test_the_audit_drawer_is_served_with_its_button():
     """ヘッダー・根拠URLの枠・監査ボタンが、地図のページに必ず付いていること。"""
     html = client.get("/map/surv-day1").text
     for needle in ('id="inspector-drawer"',
-                   "制度追従 外部監査エージェント",
+                   "制度追従 照合エージェント",
                    'id="drawer-node-title"',
                    'id="drawer-body"',
                    'id="btn-run-check"',
-                   "Gemini で一次資料（.go.jp）を監査する",
+                   "Gemini で一次資料（.go.jp）を確認する",
                    'id="agent-result-area"'):
         assert needle in html, f"ドロワーの {needle} が欠けている"
 
@@ -184,8 +184,8 @@ def test_the_drawer_script_does_not_collide_with_the_map_script():
 
 def test_the_drawer_carries_the_audit_labels_and_the_process_bar():
     """
-    判定ラベルと「自律監査プロセス」の段は、画面に出る言葉そのものである。
-    ここが勝手に変わると、公的監査の見え方が崩れる。文言を固定する。
+    判定ラベルと「一次資料の照合プロセス」の段は、画面に出る言葉そのものである。
+    ここが勝手に変わると、照合の見え方が崩れる。文言を固定する。
     """
     script = _drawer_script(client.get("/map/surv-day1").text)
 
@@ -204,11 +204,11 @@ def test_the_drawer_carries_the_audit_labels_and_the_process_bar():
     for ja in ("'高'", "'中'", "'低'"):
         assert ja in script, ja
 
-    # 自律監査プロセスの五段
+    # 照合プロセスの五段
     for step in ("一次資料取得", "差分検知", "リスク評価", "パッチ起草",
                  "内部統制（七つの関門）検証通過"):
         assert step in script, step
-    assert "自律監査プロセス完了" in script
+    assert "一次資料の照合プロセス完了" in script
 
 
 def test_the_process_bar_is_derived_from_the_result_not_hardcoded():

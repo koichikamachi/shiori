@@ -198,3 +198,68 @@ def export_proposal(result: CheckResult, data_dir: Optional[Path] = None) -> Pat
         return file_path
     except Exception as e:
         raise RuntimeError(f"提案ファイルの書き出しに失敗しました ({file_path}): {e}")
+
+
+def detect_local_jurisdictions(search_results: list[dict]) -> dict:
+    """
+    検索結果の URL から自治体を判定し、複数の異なる自治体が混在している場合を検出。
+    
+    例）
+    - https://www.city.osaka.lg.jp/... → 大阪市
+    - https://www.pref.tokyo.lg.jp/... → 東京都
+    - https://www.city.kyoto.lg.jp/... → 京都市
+    
+    戻り値：
+    {
+        "has_multiple": bool,  # True if 2+ 異なる自治体が検出
+        "jurisdictions": list[str],  # 検出された自治体の一覧
+        "confidence": str,  # "HIGH" / "MEDIUM" / "LOW"
+        "detail": str  # 判定理由（日本語）
+    }
+    """
+    jurisdictions = set()
+    
+    for result in search_results:
+        url = result.get("url", "")
+        if not url:
+            continue
+            
+        # URL から自治体を抽出
+        # パターン1: city.XXX.lg.jp → XXX 市
+        if ".city." in url:
+            match = re.search(r"\.city\.([a-z_]+)\.lg\.jp", url)
+            if match:
+                jurisdiction = match.group(1).replace("_", "市")
+                jurisdictions.add(f"{jurisdiction}市")
+        
+        # パターン2: pref.XXX.lg.jp → XXX 都道府県
+        elif ".pref." in url:
+            match = re.search(r"\.pref\.([a-z_]+)\.lg\.jp", url)
+            if match:
+                pref_name = match.group(1).replace("_", "")
+                # 都道府県名（例：tokyo → 東京都）の簡易マッピング
+                pref_map = {
+                    "tokyo": "東京都", "osaka": "大阪府", "kyoto": "京都府",
+                    "hyogo": "兵庫県", "aichi": "愛知県", "saitama": "埼玉県",
+                    "kanagawa": "神奈川県", "chiba": "千葉県",
+                }
+                jurisdiction = pref_map.get(pref_name, f"{pref_name}県")
+                jurisdictions.add(jurisdiction)
+    
+    has_multiple = len(jurisdictions) > 1
+    confidence = "HIGH" if len(jurisdictions) >= 2 else "MEDIUM" if len(jurisdictions) == 1 else "LOW"
+    
+    detail = ""
+    if has_multiple:
+        detail = f"複数の自治体ローカルルールが検出されました: {', '.join(sorted(jurisdictions))}"
+    elif len(jurisdictions) == 1:
+        detail = f"単一の自治体ルール（{list(jurisdictions)[0]}）を検出"
+    else:
+        detail = "自治体情報を自動判定できませんでした"
+    
+    return {
+        "has_multiple": has_multiple,
+        "jurisdictions": sorted(list(jurisdictions)),
+        "confidence": confidence,
+        "detail": detail
+    }

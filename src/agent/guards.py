@@ -147,6 +147,10 @@ def sanitize(result: CheckResult, pages: dict[str, str], node: dict,
         elif not r.evidence:
             rejected.append("根拠が無いのに直す案が付いている")
             r.proposed_patch = None
+        else:
+            # 現在値は機械が入れ直す。エージェントの自己申告は信じない。
+            # ここがずれていると、人が見る差分（current → proposed）そのものが嘘になる。
+            r.proposed_patch.current = resolve_pointer(node, r.proposed_patch.json_pointer)
 
     if r.checked_at != today:
         rejected.append(f"確認日が今日でない: {r.checked_at}")

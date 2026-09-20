@@ -17,6 +17,7 @@ sys.path.insert(0, str(ROOT))
 from fastapi.testclient import TestClient
 from server import app
 from src.agent.schema import CheckResult
+from src.config import config
 
 client = TestClient(app)
 
@@ -53,6 +54,9 @@ def test_api_agent_check_node_not_found():
 def test_api_agent_check_dry_run_when_no_api_key(monkeypatch):
     """APIキーが無い環境下で、安全に静的解析結果を含むDRY_RUNレスポンスが返ることを検証。"""
     monkeypatch.delenv("GEMINI_API_KEY", raising=False)
+    # server.py は環境変数が無ければ config（起動時に .env を読んで保持）を見る。
+    # 開発機で「鍵が無い状態」を再現するには、そちらも外す必要がある。
+    monkeypatch.setattr(config, "GEMINI_API_KEY", None)
 
     # テスト対象に実在するノードを使用
     response = client.post("/api/agent/check", json={"node_id": "SELF_BANK_LIST"})

@@ -34,6 +34,9 @@ Cloud Run の性質と、このアプリの方針が、たまたま同じ形を�
 `/map/surv-day10-nomemo?today=2026-09-05` のように、
 場面と日付だけをURLで受ける。サーバは何も覚えない。
 """
+from dotenv import load_dotenv
+load_dotenv()
+
 import os
 import json
 from datetime import date, datetime
@@ -394,6 +397,181 @@ function closeInspector() {
   document.getElementById('inspector-drawer').style.right = '-450px';
 }
 
+// ---- 監査結果の描画 --------------------------------------------------------
+// ここは「エージェントが何を根拠に、何を直そうと言っているか」を人が見る場所である。
+// 固定の PASS を並べても、人は何も確かめられない。実際の判定だけを出す。
+
+function esc(s) {
+  return String(s === null || s === undefined ? '' : s)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+// 判定ごとの見え方。CHANGED は「直すところがある」なので、最も目を引かせる。
+const VERDICT_STYLE = {
+  CHANGED:    {bg:'#fef7e0', bd:'#f9c515', fg:'#7a5c00', label:'制度が変わっている（要修正）'},
+  UNCHANGED:  {bg:'#e6f4ea', bd:'#a8d5b5', fg:'#137333', label:'主張は現行の一次資料と一致'},
+  AMBIGUOUS:  {bg:'#f1f3f4', bd:'#d5d8da', fg:'#5f6368', label:'該当箇所の明確な記述が無い'},
+  NOT_FOUND:  {bg:'#f1f3f4', bd:'#d5d8da', fg:'#5f6368', label:'一次資料に到達できなかった'},
+  UNCERTAIN:  {bg:'#fce8e6', bd:'#f0b4ae', fg:'#c5221f', label:'情報が不確か・矛盾'},
+  UNVERIFIED: {bg:'#e8f0fe', bd:'#aecbfa', fg:'#174ea6', label:'自治体ごとに異なる（要問合せ）'},
+  DRY_RUN:    {bg:'#f1f3f4', bd:'#d5d8da', fg:'#5f6368', label:'静的検証モード（APIキー未設定）'}
+};
+
+function renderVerdict(action, confidence) {
+  const st = VERDICT_STYLE[action] || VERDICT_STYLE.AMBIGUOUS;
+  const conf = confidence
+    ? `<span style="font-size:11px; color:${st.fg}; opacity:.85; margin-left:6px;">確信度 ${esc(confidence)}</span>`
+    : '';
+  return `
+    <div style="background:${st.bg}; border:1px solid ${st.bd}; border-radius:8px; padding:11px 13px;">
+      <div style="font-size:11px; color:${st.fg}; opacity:.8; letter-spacing:.04em;">監査判定</div>
+      <div style="font-weight:700; color:${st.fg}; font-size:15px; margin-top:1px;">
+        ${esc(action || 'PROPOSAL')}${conf}
+      </div>
+      <div style="font-size:12px; color:${st.fg}; margin-top:3px;">${esc(st.label)}</div>
+    </div>`;
+}
+
+// 修正案（ケースA の主役）。current → proposed をそのまま並べて見せる。
+function renderPatch(patch) {
+  if (!patch) return '';
+  return `
+    <div style="margin-top:14px; border:1px solid #f9c515; border-radius:8px; overflow:hidden;">
+      <div style="background:#fef7e0; padding:8px 12px; font-size:11px; font-weight:700; color:#7a5c00;">
+        修正パッチの提案（ProposedPatch）
+      </div>
+      <div style="padding:12px;">
+        <div style="font-size:11px; color:#8a8272;">書き換え先</div>
+        <div style="font-family:ui-monospace,monospace; font-size:12px; background:#f6f5f2;
+                    border-radius:4px; padding:4px 7px; margin:3px 0 10px; word-break:break-all;">
+          ${esc(patch.json_pointer)}
+        </div>
+
+        <div style="border-left:3px solid #d93025; background:#fdf1f0; padding:7px 10px;
+                    border-radius:0 4px 4px 0; margin-bottom:6px;">
+          <div style="font-size:10.5px; color:#c5221f; font-weight:700;">いま（current）</div>
+          <div style="font-size:12.5px; color:#3c3c3c; margin-top:2px;">${esc(fmtVal(patch.current))}</div>
+        </div>
+        <div style="text-align:center; color:#a89f8b; font-size:13px; line-height:1;">↓</div>
+        <div style="border-left:3px solid #137333; background:#eef7f0; padding:7px 10px;
+                    border-radius:0 4px 4px 0; margin-top:6px;">
+          <div style="font-size:10.5px; color:#137333; font-weight:700;">こう直す案（proposed）</div>
+          <div style="font-size:12.5px; color:#3c3c3c; margin-top:2px;">${esc(fmtVal(patch.proposed))}</div>
+        </div>
+
+        ${patch.rationale ? `
+        <div style="margin-top:10px;">
+          <div style="font-size:11px; color:#8a8272;">根拠（rationale）</div>
+          <div style="font-size:12px; color:#444; margin-top:2px;">${esc(patch.rationale)}</div>
+        </div>` : ''}
+      </div>
+      <div style="background:#faf8f5; border-top:1px solid #eee; padding:8px 12px;
+                  font-size:11px; color:#6f6f6f;">
+        これは<strong>案</strong>である。JSON を書き換えるのは人であり、
+        エージェントがここから先へ進む道はない。
+      </div>
+    </div>`;
+}
+
+function fmtVal(v) {
+  if (v === null || v === undefined) return '（未設定 / null）';
+  if (typeof v === 'object') return JSON.stringify(v, null, 1);
+  return v;
+}
+
+// 根拠。引用が取得ページに一字一句あったかどうかは、機械が付けた印だけを信じる。
+function renderEvidence(evidence) {
+  if (!evidence || !evidence.length) {
+    return `<div style="margin-top:14px; font-size:12px; color:#8a8272;">
+              残った根拠はありません（関門で落ちたか、そもそも取得できていません）。
+            </div>`;
+  }
+  const items = evidence.map(e => `
+    <div style="border:1px solid #e7e3d9; border-radius:6px; padding:9px 11px; margin-top:7px; background:#fff;">
+      <div style="display:flex; justify-content:space-between; align-items:center; gap:6px;">
+        <span style="font-size:11px; color:#6f6f6f;">${esc(e.publisher || '公的機関')}</span>
+        ${e.quote_verified
+          ? '<span style="font-size:10.5px; background:#e6f4ea; color:#137333; padding:2px 6px; border-radius:10px; white-space:nowrap;">✓ 逐語一致を機械で検証済み</span>'
+          : '<span style="font-size:10.5px; background:#fce8e6; color:#c5221f; padding:2px 6px; border-radius:10px; white-space:nowrap;">未検証</span>'}
+      </div>
+      <blockquote style="margin:6px 0 0; padding-left:9px; border-left:3px solid #d2e3fc;
+                         font-size:12.5px; color:#2b2b2b;">「${esc(e.quote)}」</blockquote>
+      <a href="${esc(e.url)}" target="_blank" rel="noopener"
+         style="display:inline-block; margin-top:6px; font-size:11px; color:#1a73e8; word-break:break-all;">
+        ${esc(e.url)}</a>
+      ${e.page_date ? `<span style="font-size:11px; color:#8a8272; margin-left:6px;">（${esc(e.page_date)}）</span>` : ''}
+    </div>`).join('');
+  return `<div style="margin-top:14px;">
+            <div style="font-size:11px; font-weight:700; color:#8a8272;">一次資料からの引用（${evidence.length}件）</div>
+            ${items}
+          </div>`;
+}
+
+// 関門。固定文字列をやめ、返ってきた結果から実際に判定できることだけを書く。
+function renderGates(d) {
+  const ev = d.evidence || [];
+  const OFFICIAL = /^https:\/\/([^\/]*\.)?(go|lg)\.jp(\/|$)/i;
+  const rows = [];
+
+  const offAll = ev.length > 0 && ev.every(e => OFFICIAL.test(e.url || ''));
+  rows.push(['公的ドメイン（.go.jp / .lg.jp）限定',
+             ev.length === 0 ? ['—', '残った根拠が無いので判定なし']
+                             : [offAll ? 'PASS' : 'FAIL', `${ev.length}件すべてを検査`]]);
+
+  const okQ = ev.filter(e => e.quote_verified).length;
+  rows.push(['引用の逐語一致（要約は通さない）',
+             ev.length === 0 ? ['—', '検査対象なし']
+                             : [okQ === ev.length ? 'PASS' : 'FAIL', `${okQ} / ${ev.length} 件が取得ページに一字一句あった`]]);
+
+  if (d.proposed_patch) {
+    const ptr = d.proposed_patch.json_pointer || '';
+    rows.push(['書き換えてよい場所の制約', ['PASS', `${ptr} は許可された範囲内で、ノードに実在する`]]);
+    const up = ptr.endsWith('/verification_status') && d.proposed_patch.proposed === 'EXPERT_VERIFIED';
+    rows.push(['EXPERT_VERIFIED への格上げ禁止', [up ? 'FAIL' : 'PASS', '人以外がここへ上げる道はない']]);
+  } else {
+    rows.push(['修正案の有無', ['—', '提案なし（または関門で破棄）']]);
+  }
+
+  rows.push(['人の確認を外せないこと',
+             [d.human_review_required === true ? 'PASS' : 'FAIL', 'human_review_required は常に true']]);
+
+  const body = rows.map(([name, [verdict, detail]]) => {
+    const col = verdict === 'PASS' ? '#137333' : verdict === 'FAIL' ? '#c5221f' : '#8a8272';
+    return `<div style="display:flex; gap:7px; padding:4px 0; border-top:1px solid #f0ede6;">
+              <span style="color:${col}; font-weight:700; font-size:11px; min-width:34px;">${verdict}</span>
+              <span style="flex:1;"><span style="color:#3c3c3c;">${esc(name)}</span>
+                <span style="display:block; color:#8a8272; font-size:10.5px;">${esc(detail)}</span></span>
+            </div>`;
+  }).join('');
+
+  const rej = (d.rejected || []);
+  const rejBlock = rej.length ? `
+    <div style="margin-top:9px; background:#fdf1f0; border:1px solid #f0b4ae; border-radius:6px; padding:8px 11px;">
+      <div style="font-size:11px; font-weight:700; color:#c5221f;">関門で落としたもの（${rej.length}件）</div>
+      <ul style="margin:4px 0 0; padding-left:16px; font-size:11.5px; color:#7a2a24;">
+        ${rej.map(r => `<li>${esc(r)}</li>`).join('')}
+      </ul>
+    </div>` : `
+    <div style="margin-top:9px; font-size:11px; color:#137333;">関門で落としたものはありません。</div>`;
+
+  return `<div style="margin-top:14px;">
+            <div style="font-size:11px; font-weight:700; color:#8a8272; margin-bottom:2px;">関門の判定（機械が付けた結果）</div>
+            <div style="font-size:11.5px;">${body}</div>
+            ${rejBlock}
+          </div>`;
+}
+
+function renderDryRun(d) {
+  return `
+    <div style="margin-top:14px; font-size:12px; color:#444;">
+      <div style="font-size:11px; font-weight:700; color:#8a8272;">静的に読めたノードの記載</div>
+      <div style="margin-top:5px;">検証状態: <strong>${esc(d.verification_status)}</strong></div>
+      <div style="margin-top:3px; word-break:break-all;">根拠URL: ${esc(d.source_url || '未設定')}</div>
+      <div style="margin-top:3px;">根拠（下書き）: ${esc(d.source_draft || '—')}</div>
+    </div>`;
+}
+
 async function runAgentCheck() {
   if (!currentNodeId) return;
   const btn = document.getElementById('btn-run-check');
@@ -412,20 +590,29 @@ async function runAgentCheck() {
     if (!data.ok) throw new Error(data.error || '監査に失敗しました');
 
     const result = data.result || data.proposal;
-    resArea.innerHTML = `
-      <div style="background:#f7f9fa; border:1px solid #d2e3fc; border-radius:6px; padding:12px; margin-top:8px;">
-        <div style="font-weight:700; color:#174ea6; margin-bottom:4px;">監査判定: ${result.action || 'PROPOSAL'}</div>
-        <div style="font-size:12px; color:#333; margin-bottom:8px;">${result.reason || result.summary || '制度との整合性を確認しました。'}</div>
-        <div style="font-size:11px; color:#666;">
-          <strong>七つの関門判定:</strong><br>
-          ・公的ドメイン（.go.jp等）制約: PASS<br>
-          ・商品名排除ルール: PASS<br>
-          ・断定回避（結論非断定）: PASS
-        </div>
-      </div>
-    `;
+    const d = result.details || {};
+    const isDry = result.action === 'DRY_RUN';
+
+    const risk = d.risk_if_wrong || result.summary || result.reason || '';
+    const riskBlock = risk ? `
+      <div style="margin-top:11px;">
+        <div style="font-size:11px; font-weight:700; color:#8a8272;">まちがっていたときの影響（risk_if_wrong）</div>
+        <div style="font-size:12px; color:#444; margin-top:2px;">${esc(risk)}</div>
+      </div>` : '';
+    const escBlock = d.escalation ? `
+      <div style="margin-top:9px; font-size:11.5px; color:#6f6f6f;">
+        人に投げる理由: ${esc(d.escalation)}
+      </div>` : '';
+
+    resArea.innerHTML = [
+      renderVerdict(result.action, d.confidence),
+      riskBlock,
+      escBlock,
+      isDry ? renderDryRun(d)
+            : [renderPatch(d.proposed_patch), renderEvidence(d.evidence), renderGates(d)].join('')
+    ].join('');
   } catch (err) {
-    resArea.innerHTML = `<div style="color:#d93025; font-size:12px;">エラー: ${err.message}</div>`;
+    resArea.innerHTML = `<div style="color:#d93025; font-size:12px;">エラー: ${esc(err.message)}</div>`;
   } finally {
     btn.disabled = false;
     btn.innerText = 'Gemini で一次資料（.go.jp）を監査する';

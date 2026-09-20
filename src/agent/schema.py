@@ -11,7 +11,7 @@ from typing import Literal, Optional
 from pydantic import BaseModel, Field, field_validator
 
 # 答えは成功・失敗の二値ではない（S07 第2節）
-Verdict = Literal["UNCHANGED", "CHANGED", "AMBIGUOUS", "NOT_FOUND", "UNCERTAIN"]
+Verdict = Literal["UNCHANGED", "CHANGED", "AMBIGUOUS", "NOT_FOUND", "UNCERTAIN", "UNVERIFIED"]
 Confidence = Literal["HIGH", "MEDIUM", "LOW"]
 
 # 人以外がここへ上げる道はない
@@ -57,6 +57,11 @@ class CheckResult(BaseModel):
     risk_if_wrong: str = ""
     # 人に投げる理由（自治体差、ページなし など）
     escalation: Optional[str] = None
+    # UNVERIFIED 検出時の詳細情報（複数自治体ルール等）
+    detected_constraints: Optional[dict] = None
+    # 関門（guards.sanitize）が落としたものの理由。機械が付ける。
+    # 捨てると「なぜ根拠や修正案が消えたか」が分からなくなり、直しようがない。
+    rejected: list[str] = Field(default_factory=list)
     human_review_required: bool = True
 
     model_config = {"extra": "forbid"}

@@ -13,9 +13,67 @@ from google import genai
 from google.genai import types
 
 from src.agent.schema import CheckResult, Evidence, ProposedPatch
-from src.agent.guards import sanitize
-from src.agent.tools import search_public_sites, fetch_page_text, export_proposal
+from src.agent.guards import PATCHABLE_PREFIXES, is_official, sanitize
+from src.agent.tools import search_public_sites, fetch_page_text, export_proposal, detect_local_jurisdictions
 from src.config import config
+
+# 使うモデルは一箇所で決める。
+# gemini-2.5-flash は新規利用に対して 404（no longer available to new users）を返すため使えない。
+GEMINI_MODEL = "gemini-3.6-flash"
+
+# Gemini には書かせない項目。機械（関門）が付けるものを、モデルの自己申告で埋めさせない。
+_NOT_FOR_MODEL = frozenset({"rejected"})
+
+
+def gemini_schema(model: type) -> dict:
+    """
+    pydantic の JSON Schema を、Gemini の response_schema が受け付ける形に直す。
+
+    なぜ必要か。`model_config = {"extra": "forbid"}` は additionalProperties を生むが、
+    Gemini API はこのフィールドを知らないため、リクエスト全体が
+    400 INVALID_ARGUMENT（Unknown name "additional_properties"）で弾かれる。
+    forbid はバリデーション側に残したいので、送る側だけを削る。
+
+    あわせて、
+      ・$ref / $defs を展開する（Gemini は参照を解決しない）
+      ・Optional[X] の anyOf[X, null] を nullable: true に畳む
+      ・type を大文字にする（プロトコルの enum 名に合わせる）
+      ・_NOT_FOR_MODEL の項目を落とす
+    """
+    src = model.model_json_schema()
+    defs = src.get("$defs", {})
+
+    def conv(s):
+        if not isinstance(s, dict):
+            return s
+        if "$ref" in s:
+            return conv(defs[s["$ref"].rsplit("/", 1)[-1]])
+        if "anyOf" in s:
+            # Optional[X] は anyOf[X, null] で来る。X を取り出して nullable を立てる。
+            alts = [a for a in s["anyOf"] if a.get("type") != "null"]
+            out = conv(alts[0]) if alts else {}
+            if len(alts) != len(s["anyOf"]):
+                out["nullable"] = True
+            return out
+
+        out = {}
+        for k, v in s.items():
+            if k in ("additionalProperties", "$defs", "title", "default"):
+                continue
+            elif k == "properties":
+                out[k] = {pk: conv(pv) for pk, pv in v.items()
+                          if pk not in _NOT_FOR_MODEL}
+            elif k == "required":
+                out[k] = [r for r in v if r not in _NOT_FOR_MODEL]
+            elif k == "items":
+                out[k] = conv(v)
+            elif k == "type":
+                out[k] = v.upper()
+            else:
+                out[k] = v
+        return out
+
+    return conv(src)
 
 
 class ExplorerRole:
@@ -27,13 +85,13 @@ class ExplorerRole:
     def __init__(self, client=None):
         self.client = client
 
-    def generate_query_and_search(self, check: dict) -> list[dict]:
+    def generate_query_and_search(self, check: dict, node: Optional[dict] = None) -> list[dict]:
         question = check.get("question", "")
         claim = check.get("claim", "")
-        
+
         # デフォルトは質問と主張をそのまま利用
         query = f"{question} {claim}".strip()
-        
+
         if self.client:
             try:
                 # LLMを使って適切な公的検索用クエリ（キーワード3語以内）に最適化
@@ -44,7 +102,7 @@ class ExplorerRole:
                     "余計な説明や挨拶は一切含めず、検索キーワードのみを出力してください。"
                 )
                 response = self.client.models.generate_content(
-                    model="gemini-2.5-flash",
+                    model=GEMINI_MODEL,
                     contents=prompt
                 )
                 generated = response.text.strip()
@@ -55,7 +113,38 @@ class ExplorerRole:
                 pass
 
         # 検索実行
-        return search_public_sites(query[:200])
+        results = search_public_sites(query[:200])
+
+        # 検索そのものが使えないとき（鍵や CSE ID が無い、API 障害、該当なし）は、
+        # ノードが持っている一次資料を種にして、そこへ直接あたる。
+        if not results:
+            results = self.seed_from_node(node)
+        return results
+
+    @staticmethod
+    def seed_from_node(node: Optional[dict]) -> list[dict]:
+        """
+        検索に頼らず、ノードに書かれている一次資料の URL を種として返す。
+
+        **人が一次資料として確かめた（SOURCE_VERIFIED）URL だけを種にする。**
+        下書き段階の URL を機械が勝手に根拠として読みに行くと、
+        「確かめていないものを根拠にした」ことになる。そこは人の手前で止める。
+        """
+        if not node:
+            return []
+        lm = node.get("legal_metadata") or {}
+        if lm.get("verification_status") != "SOURCE_VERIFIED":
+            return []
+        url = lm.get("source_url")
+        if not url or not is_official(url):
+            return []
+        return [{
+            "title": node.get("title", ""),
+            "url": url,
+            "snippet": "",
+            # 検索ではなくノードの記載から来たことを、後段が見分けられるように残す
+            "seeded_from_node": True,
+        }]
 
 
 class ReaderRole:
@@ -113,14 +202,46 @@ class ShioriAgent:
 
         # 1. 探す役 (Explorer) の起動
         explorer = ExplorerRole(self.client)
-        search_results = explorer.generate_query_and_search(check)
+        search_results = explorer.generate_query_and_search(check, node)
+
+        # 1.5 複数自治体ローカルルール検出
+        jurisdiction_info = detect_local_jurisdictions(search_results)
+        has_multiple_jurisdictions = jurisdiction_info["has_multiple"]
 
         # 2. 読む役 (Reader) の起動
         reader = ReaderRole()
         pages = reader.fetch_pages(search_results)
 
+        # 複数の自治体ローカルルールが検出された場合は、UNVERIFIED を即時返す
+        if has_multiple_jurisdictions:
+            return CheckResult(
+                check_id=check["check_id"],
+                node_id=check["node_id"],
+                claim=check["claim"],
+                verdict="UNVERIFIED",
+                confidence="MEDIUM",
+                checked_at=today,
+                evidence=[result.get("url") and Evidence(url=result["url"], quote=result.get("snippet", "")) for result in search_results[:3] if result.get("url")],
+                proposed_patch=ProposedPatch(
+                    json_pointer="/next_actions",
+                    current=check.get("claim", ""),
+                    proposed="call_local_government_office",
+                    rationale=f"この手続きは管轄する自治体によって異なります。検出された自治体: {', '.join(jurisdiction_info['jurisdictions'])}。各自治体の公式サイトでご確認いただくか、該当する市区町村役所へお問い合わせください。"
+                ),
+                risk_if_wrong="自治体ごとに異なる手続きやルールを無視した場合、書類不備や期限超過につながる可能性があります。",
+                escalation=jurisdiction_info["detail"],
+                detected_constraints=jurisdiction_info,
+                human_review_required=True
+            )
+
         # 公的情報が全く取得できなかった場合は、NOT_FOUND を即時返す
         if not pages:
+            # なぜ取れなかったのかを残す。検索が0件だったのか、取得に失敗したのかで直し方が違う。
+            if not search_results:
+                why = ["検索が0件（GOOGLE_API_KEY / GOOGLE_CSE_ID の設定と、"
+                       "ノードの source_url（SOURCE_VERIFIED のみ種にする）を確かめる）"]
+            else:
+                why = [f"ページを取れていない: {r.get('url')}" for r in search_results[:3]]
             return CheckResult(
                 check_id=check["check_id"],
                 node_id=check["node_id"],
@@ -132,6 +253,7 @@ class ShioriAgent:
                 proposed_patch=None,
                 risk_if_wrong="公的情報が見つからなかった、または取得できませんでした。",
                 escalation="指定された条件に合致する公的サイトの情報が見つかりませんでした。",
+                rejected=why,
                 human_review_required=True
             )
 
@@ -168,27 +290,43 @@ class ShioriAgent:
                 "  - 'AMBIGUOUS': ページは存在するが、該当事項についての明確な記述が無い。\n"
                 "  - 'NOT_FOUND': ページそのもの、または関連情報が見つからない。\n"
                 "  - 'UNCERTAIN': 情報が矛盾している、または不確かである。\n"
+                "  - 'UNVERIFIED': 複数の自治体ローカルルール、または確定的な国家レベルの .go.jp が見つからない場合。この場合、detected_constraints に判定理由を記録し、proposed_patch で管轄窓口への電話確認などの提案を含めてください。\n"
                 "- evidence の quote には、ページ内から『一字一句そのまま（10文字以上）』一致する日本語テキストを正確に抜き出してください。"
                 "一文字でも差分がある場合や要約は、後続のガードによって徹底排除されます。\n"
-                "- 修正案（proposed_patch）を提示する場合、json_pointer はノードに存在する適切なキー"
-                "（例：'/deadline/absolute_date' や '/legal_metadata/source_draft'）を指し、"
-                "proposed（修正値）は current（現在値）と同じ型にしてください。絶対に status を EXPERT_VERIFIED に格上げするパッチを含めないでください。\n"
+                "- **verdict が 'CHANGED' の場合は、proposed_patch を必ず付けてください。**"
+                "古い記述を見つけただけで直す案を出さないなら、人は何を直せばよいか分かりません。\n"
+                "- 修正案（proposed_patch）の json_pointer は、次のいずれかで始まる場所だけを指してください。"
+                "ここに無い場所を指した案は、後続のガードで機械的に破棄されます：\n"
+                f"  {', '.join(PATCHABLE_PREFIXES)}\n"
+                "  さらに、その場所は上記ノードに実在するキーであること、"
+                "proposed（修正値）は current（現在値）と同じ型で、かつ現在値と異なる値であることが必要です。"
+                "絶対に status を EXPERT_VERIFIED に格上げするパッチを含めないでください。\n"
+                "- human_review_required は必ず true にしてください。"
+                "この仕組みは案を出すところで止まり、JSON を書き換えるのは人です。false にする道はありません。\n"
                 "- 出力は以下の Pydantic スキーマ（CheckResult）に準拠した JSON オブジェクトのみを返してください。不要な雑談や解説は一切含めないでください。\n\n"
             )
 
             # Structured Output の要請
             response = self.client.models.generate_content(
-                model="gemini-2.5-flash",
+                model=GEMINI_MODEL,
                 contents=prompt,
                 config=types.GenerateContentConfig(
                     response_mime_type="application/json",
-                    response_schema=CheckResult,
+                    response_schema=gemini_schema(CheckResult),
                 ),
             )
-            
+
+            payload = json.loads(response.text)
+            # 人以外がここを下げる道は作らない（schema.py の約束）。
+            # モデルは false や null を返してくることがあるので、自己申告は機械が上書きする。
+            payload["human_review_required"] = True
+            # 関門の判定結果は機械が付ける。モデルに書かせない。
+            for key in _NOT_FOR_MODEL:
+                payload.pop(key, None)
+
             # Pydanticモデルとしてデコード
-            result = CheckResult.model_validate_json(response.text)
-            
+            result = CheckResult.model_validate(payload)
+
         except Exception as e:
             # 万が一のパースエラーやAPIエラー時の安全なフォールバック
             return CheckResult(
@@ -207,4 +345,6 @@ class ShioriAgent:
 
         # 6. 関門（guards.py）による機械的バリデーションの適用
         sanitized_result, rejected = sanitize(result, pages, node, today)
+        # 落とした理由は捨てない。何が落ちたか分からないと、直しようがない。
+        sanitized_result.rejected = rejected
         return sanitized_result

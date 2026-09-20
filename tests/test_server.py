@@ -61,7 +61,7 @@ def test_every_map_is_served(key):
     assert r.status_code == 200
     assert "<svg" in r.text
     # どの地図にも、断っていない一文が付く（ルール15）
-    assert "個別の法律相談や税務相談ではありません" in r.text
+    assert "個別の法律相談や税務相談を提供するものではありません" in r.text
 
 
 def test_unknown_scenario_is_a_plain_404():

@@ -69,34 +69,38 @@ GROUPS = [
 ]
 
 INDEX_CSS = """
-:root{color-scheme:light}
+:root{color-scheme:light;--ink:#1a202c;--sub:#2d3748;--dim:#4a5568;--rule:#d8d2c4}
 *{box-sizing:border-box}
-body{margin:0;background:#fbfaf7;color:#2b2b2b;
+body{margin:0;background:#fbfaf7;color:var(--ink);
  font-family:"Hiragino Kaku Gothic ProN","Yu Gothic",system-ui,sans-serif;
  line-height:1.8}
 .wrap{max-width:760px;margin:0 auto;padding:34px 22px 60px}
-h1{font-size:22px;margin:0 0 6px;letter-spacing:.02em}
-.sub{color:#6f6f6f;font-size:13px;margin:0 0 22px}
-.about{background:#fff;border:1px solid #e7e3d9;border-radius:12px;
- padding:16px 18px;font-size:13.5px;margin:0 0 26px}
+h1{font-size:25px;margin:0 0 6px;letter-spacing:.02em}
+.sub{color:var(--sub);font-size:14.5px;margin:0 0 22px}
+.about{background:#fff;border:1px solid var(--rule);border-radius:12px;
+ padding:17px 19px;font-size:14.5px;margin:0 0 26px}
 .about p{margin:7px 0}
-.about b{color:#1c1c1c}
+.about b{color:#000}
 .does{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0 0}
-.does>div{background:#f7f5ef;border-radius:8px;padding:11px 13px;font-size:12.5px}
-.does h3{margin:0 0 5px;font-size:12.5px;color:#6b6455}
+.does>div{background:#f4f1ea;border:1px solid #e2dcce;border-radius:8px;
+ padding:12px 14px;font-size:13.5px;color:var(--sub)}
+.does h3{margin:0 0 5px;font-size:13.5px;color:var(--ink);font-weight:700}
 .does ul{margin:0;padding-left:17px}
-.does li{margin:2px 0}
-h2{font-size:15px;margin:30px 0 3px;padding-bottom:5px;border-bottom:1px solid #e7e3d9}
-.note{color:#8a8272;font-size:12.5px;margin:5px 0 12px}
-a.card{display:block;background:#fff;border:1px solid #e7e3d9;border-radius:10px;
- padding:12px 15px;margin:8px 0;text-decoration:none;color:#2b2b2b;
- transition:border-color .12s}
-a.card:hover{border-color:#b9b3a7}
-a.card .t{font-size:14px;font-weight:700}
-a.card .k{font-size:11.5px;color:#a89f8b;margin-top:2px;font-family:ui-monospace,monospace}
-footer{margin-top:36px;padding-top:14px;border-top:1px solid #e7e3d9;
- color:#6f6f6f;font-size:11.5px}
-.stat{display:flex;flex-wrap:wrap;gap:0 16px;font-size:12px;color:#6f6f6f;margin:10px 0 0}
+.does li{margin:3px 0}
+h2{font-size:17px;margin:30px 0 3px;padding-bottom:5px;border-bottom:2px solid var(--rule)}
+.note{color:var(--dim);font-size:13.5px;margin:5px 0 12px}
+/* 場面を選ぶカードは、この画面のいちばん大事な操作である。押せると分かる形にする。 */
+a.card{display:block;background:#fff;border:1.5px solid var(--rule);border-radius:10px;
+ padding:13px 16px;margin:9px 0;text-decoration:none;color:var(--ink);
+ transition:border-color .12s,background .12s,box-shadow .12s}
+a.card:hover{border-color:#1f4e79;background:#f7fafd;box-shadow:0 1px 6px rgba(31,78,121,.12)}
+a.card:focus-visible{outline:3px solid #1f4e79;outline-offset:2px}
+a.card:active{background:#eef4fa}
+a.card .t{font-size:15.5px;font-weight:700}
+a.card .k{font-size:12.5px;color:var(--dim);margin-top:2px;font-family:ui-monospace,monospace}
+footer{margin-top:36px;padding-top:14px;border-top:1px solid var(--rule);
+ color:var(--sub);font-size:13px}
+.stat{display:flex;flex-wrap:wrap;gap:0 16px;font-size:13.5px;color:var(--sub);margin:10px 0 0}
 @media(max-width:560px){.does{grid-template-columns:1fr}}
 """
 
@@ -333,25 +337,26 @@ def show_map(scenario: str, today: str | None = Query(default=None)) -> str:
 <div id="inspector-drawer" style="
   position:fixed; top:0; right:-450px; width:420px; height:100vh;
   background:#ffffff; box-shadow:-4px 0 20px rgba(0,0,0,0.08);
-  border-left:1px solid #e7e3d9; z-index:9999; transition:right 0.25s ease;
-  display:flex; flex-direction:column; font-family:system-ui,sans-serif; color:#2b2b2b;">
-  
-  <div style="padding:16px 20px; border-bottom:1px solid #eee; display:flex; justify-content:space-between; align-items:center; background:#faf8f5;">
+  border-left:1px solid #d8d2c4; z-index:9999; transition:right 0.25s ease;
+  display:flex; flex-direction:column; font-family:system-ui,sans-serif; color:#1a202c;">
+
+  <div style="padding:16px 20px; border-bottom:1px solid #e2dcce; display:flex; justify-content:space-between; align-items:center; background:#faf8f5;">
     <div>
-      <div style="font-size:11px; font-weight:700; color:#8a8272; letter-spacing:0.05em;">制度追従 外部監査エージェント</div>
-      <div id="drawer-node-title" style="font-size:15px; font-weight:700; margin-top:2px;">駅を選択してください</div>
+      <div style="font-size:12.5px; font-weight:700; color:#2d3748; letter-spacing:0.05em;">制度追従 外部監査エージェント</div>
+      <div id="drawer-node-title" style="font-size:17px; font-weight:700; margin-top:3px; line-height:1.45;">駅を選んでください</div>
     </div>
-    <button onclick="closeInspector()" style="background:none; border:none; font-size:20px; cursor:pointer; color:#888;">&times;</button>
+    <button onclick="closeInspector()" aria-label="閉じる" style="background:#f4f1ea; border:1.5px solid #c9c1af; border-radius:50%; width:32px; height:32px; font-size:18px; cursor:pointer; color:#2d3748; flex-shrink:0;">&times;</button>
   </div>
 
-  <div id="drawer-body" style="padding:20px; overflow-y:auto; flex:1; font-size:13px; line-height:1.7;">
-    <div style="color:#6f6f6f;">路線図上の駅をクリックすると、公的ドメイン（.go.jp）に対する制度追従状況と、Gemini による提案（Proposal）を表示・実行できます。</div>
+  <div id="drawer-body" style="padding:20px; overflow-y:auto; flex:1; font-size:14.5px; line-height:1.8;">
+    <div style="color:#2d3748;">路線図の駅を選ぶと、その手続について、国や省庁の公式ページ（.go.jp）といまの記載が合っているかを、Gemini がその場で確かめます。</div>
   </div>
 
-  <div style="padding:14px 20px; border-top:1px solid #eee; background:#faf8f5;">
+  <div style="padding:14px 20px; border-top:1px solid #e2dcce; background:#faf8f5;">
     <button id="btn-run-check" onclick="runAgentCheck()" style="
-      width:100%; padding:10px; background:#1a73e8; color:#fff; border:none;
-      border-radius:6px; font-weight:700; font-size:13px; cursor:pointer;">
+      width:100%; padding:13px; background:#1558c0; color:#fff; border:none;
+      border-radius:8px; font-weight:700; font-size:15px; cursor:pointer;
+      box-shadow:0 2px 6px rgba(21,88,192,.28); letter-spacing:.01em;">
       Gemini で一次資料（.go.jp）を監査する
     </button>
   </div>
@@ -376,24 +381,29 @@ function openInspector(nodeId, title, status, sourceUrl, needsCheck) {
   if (typeof P !== 'undefined' && P) {
     P.classList.add('closed');
   }
-  
+
+  // いま見ている駅に印を残す。動画では、どこを開いたのかが分からなくなる。
+  document.querySelectorAll('.st.sel').forEach(el => el.classList.remove('sel'));
+  const picked = document.querySelector('[data-id="' + nodeId + '"]');
+  if (picked) { picked.classList.add('sel'); }
+
   body.innerHTML = `
-    <div style="margin-bottom:12px;">
-      <span style="font-size:11px; background:#f0ede6; padding:2px 6px; border-radius:4px; font-family:monospace;">${nodeId}</span>
-      <span style="font-size:11px; background:${status==='SOURCE_VERIFIED'?'#e6f4ea':'#fce8e6'}; color:${status==='SOURCE_VERIFIED'?'#137333':'#c5221f'}; padding:2px 6px; border-radius:4px; margin-left:6px;">${status || 'DRAFT'}</span>
+    <div style="margin-bottom:13px;">
+      <span style="font-size:12.5px; background:#efece3; border:1px solid #d3cbb8; color:#2d3748; padding:3px 8px; border-radius:5px; font-family:ui-monospace,monospace;">${esc(nodeId)}</span>
+      <span style="font-size:12.5px; font-weight:700; background:${status==='SOURCE_VERIFIED'?'#dcf0e2':'#fbe0dd'}; color:${status==='SOURCE_VERIFIED'?'#0f5c2a':'#a01c16'}; padding:3px 8px; border-radius:5px; margin-left:6px;">${esc(status || 'DRAFT')}</span>
     </div>
-    <div style="margin-bottom:14px;">
-      <strong>根拠URL:</strong><br>
-      <a href="${sourceUrl}" target="_blank" rel="noopener" style="color:#1a73e8; word-break:break-all; font-size:12px;">${sourceUrl || '未設定（要確認）'}</a>
+    <div style="margin-bottom:15px;">
+      <div style="font-size:13px; font-weight:700; color:#2d3748;">よりどころにしている公式ページ</div>
+      <a href="${esc(sourceUrl)}" target="_blank" rel="noopener" style="color:#1558c0; word-break:break-all; font-size:13px;">${esc(sourceUrl || 'まだ設定されていません（確認が要ります）')}</a>
     </div>
-    <div style="margin-bottom:14px;">
-      <strong>未確認・追従項目 (${needsCheck ? needsCheck.length : 0}件):</strong>
-      <ul style="padding-left:18px; margin:4px 0; color:#555;">
-        ${(needsCheck || []).map(c => `<li>${c}</li>`).join('')}
+    <div style="margin-bottom:15px;">
+      <div style="font-size:13px; font-weight:700; color:#2d3748;">これから専門家と確かめるポイント（${needsCheck ? needsCheck.length : 0}件）</div>
+      <ul style="padding-left:19px; margin:5px 0 0; color:#1a202c;">
+        ${(needsCheck || []).map(c => `<li style="margin:3px 0;">${esc(c)}</li>`).join('')}
       </ul>
     </div>
-    <div id="agent-result-area" style="margin-top:16px; padding-top:14px; border-top:1px dashed #ddd;">
-      <div style="color:#888; font-size:12px;">下のボタンを押すと、制度追従エージェントが公的ドメインを照合し、「七つの関門」判定を実行します。</div>
+    <div id="agent-result-area" style="margin-top:17px; padding-top:15px; border-top:1px dashed #c9c1af;">
+      <div style="color:#2d3748;">下のボタンを押すと、この手続について、国や省庁の公式ページを読みに行き、いまの記載と食い違っていないかを確かめます。</div>
     </div>
   `;
   document.getElementById('inspector-drawer').style.right = '0';
@@ -414,28 +424,29 @@ function esc(s) {
 }
 
 // 判定ごとの見え方。CHANGED は「直すところがある」なので、最も目を引かせる。
+// 文言は、制度の当事者が不安なまま読んでも分かる日常語にする。
 const VERDICT_STYLE = {
-  CHANGED:    {bg:'#fef7e0', bd:'#f9c515', fg:'#7a5c00', label:'制度が変わっている（要修正）'},
-  UNCHANGED:  {bg:'#e6f4ea', bd:'#a8d5b5', fg:'#137333', label:'主張は現行の一次資料と一致'},
-  AMBIGUOUS:  {bg:'#f1f3f4', bd:'#d5d8da', fg:'#5f6368', label:'該当箇所の明確な記述が無い'},
-  NOT_FOUND:  {bg:'#f1f3f4', bd:'#d5d8da', fg:'#5f6368', label:'一次資料に到達できなかった'},
-  UNCERTAIN:  {bg:'#fce8e6', bd:'#f0b4ae', fg:'#c5221f', label:'情報が不確か・矛盾'},
-  UNVERIFIED: {bg:'#e8f0fe', bd:'#aecbfa', fg:'#174ea6', label:'自治体ごとに異なる（要問合せ）'},
-  DRY_RUN:    {bg:'#f1f3f4', bd:'#d5d8da', fg:'#5f6368', label:'静的検証モード（APIキー未設定）'}
+  CHANGED:    {bg:'#fdf3d4', bd:'#d99e00', fg:'#6b4e00', label:'制度が変わっていました。見直しをご提案します'},
+  UNCHANGED:  {bg:'#dcf0e2', bd:'#6aab84', fg:'#0f5c2a', label:'いまの記載は、公式発表のとおりでした'},
+  AMBIGUOUS:  {bg:'#eceef0', bd:'#a9b0b6', fg:'#33383d', label:'公式ページに、この点のはっきりした記載がありませんでした'},
+  NOT_FOUND:  {bg:'#eceef0', bd:'#a9b0b6', fg:'#33383d', label:'公式ページにたどり着けませんでした'},
+  UNCERTAIN:  {bg:'#fbe0dd', bd:'#d9776d', fg:'#a01c16', label:'記載が食い違っていて、まだ言い切れません'},
+  UNVERIFIED: {bg:'#e1ebfd', bd:'#7aa6e8', fg:'#123a75', label:'お住まいの市区町村で扱いが変わります'},
+  DRY_RUN:    {bg:'#eceef0', bd:'#a9b0b6', fg:'#33383d', label:'下読みだけの確認です（APIキーが設定されていません）'}
 };
 
 function renderVerdict(action, confidence) {
   const st = VERDICT_STYLE[action] || VERDICT_STYLE.AMBIGUOUS;
   const conf = confidence
-    ? `<span style="font-size:11px; color:${st.fg}; opacity:.85; margin-left:6px;">確信度 ${esc(confidence)}</span>`
+    ? `<span style="font-size:13px; color:${st.fg}; margin-left:8px; font-weight:700;">確からしさ ${esc(confidence)}</span>`
     : '';
   return `
-    <div style="background:${st.bg}; border:1px solid ${st.bd}; border-radius:8px; padding:11px 13px;">
-      <div style="font-size:11px; color:${st.fg}; opacity:.8; letter-spacing:.04em;">監査判定</div>
-      <div style="font-weight:700; color:${st.fg}; font-size:15px; margin-top:1px;">
+    <div style="background:${st.bg}; border:2px solid ${st.bd}; border-radius:9px; padding:13px 15px;">
+      <div style="font-size:12.5px; color:${st.fg}; letter-spacing:.04em; font-weight:700;">確かめた結果</div>
+      <div style="font-weight:700; color:${st.fg}; font-size:18px; margin-top:2px;">
         ${esc(action || 'PROPOSAL')}${conf}
       </div>
-      <div style="font-size:12px; color:${st.fg}; margin-top:3px;">${esc(st.label)}</div>
+      <div style="font-size:14px; color:${st.fg}; margin-top:4px; line-height:1.7;">${esc(st.label)}</div>
     </div>`;
 }
 
@@ -443,45 +454,49 @@ function renderVerdict(action, confidence) {
 function renderPatch(patch) {
   if (!patch) return '';
   return `
-    <div style="margin-top:14px; border:1px solid #f9c515; border-radius:8px; overflow:hidden;">
-      <div style="background:#fef7e0; padding:8px 12px; font-size:11px; font-weight:700; color:#7a5c00;">
-        修正パッチの提案（ProposedPatch）
+    <div style="margin-top:16px; border:2px solid #d99e00; border-radius:9px; overflow:hidden;">
+      <div style="background:#fdf3d4; padding:10px 13px; font-size:14px; font-weight:700; color:#6b4e00;">
+        手引きの見直し案（修正パッチ）
       </div>
-      <div style="padding:12px;">
-        <div style="font-size:11px; color:#8a8272;">書き換え先</div>
-        <div style="font-family:ui-monospace,monospace; font-size:12px; background:#f6f5f2;
-                    border-radius:4px; padding:4px 7px; margin:3px 0 10px; word-break:break-all;">
+      <div style="padding:14px;">
+        <div style="font-size:13px; color:#2d3748; font-weight:700;">見直す項目</div>
+        <div style="font-family:ui-monospace,monospace; font-size:13px; background:#efece3;
+                    border:1px solid #d3cbb8; color:#1a202c;
+                    border-radius:5px; padding:5px 9px; margin:4px 0 12px; word-break:break-all;">
           ${esc(patch.json_pointer)}
         </div>
 
-        <div style="border-left:3px solid #d93025; background:#fdf1f0; padding:7px 10px;
-                    border-radius:0 4px 4px 0; margin-bottom:6px;">
-          <div style="font-size:10.5px; color:#c5221f; font-weight:700;">いま（current）</div>
-          <div style="font-size:12.5px; color:#3c3c3c; margin-top:2px;">${esc(fmtVal(patch.current))}</div>
+        <div style="border-left:4px solid #a01c16; background:#fbe0dd; padding:9px 12px;
+                    border-radius:0 5px 5px 0; margin-bottom:7px;">
+          <div style="font-size:12.5px; color:#8f1710; font-weight:700;">いまの記載</div>
+          <div style="font-size:14px; color:#1a202c; margin-top:3px; line-height:1.75;">${esc(fmtVal(patch.current))}</div>
         </div>
-        <div style="text-align:center; color:#a89f8b; font-size:13px; line-height:1;">↓</div>
-        <div style="border-left:3px solid #137333; background:#eef7f0; padding:7px 10px;
-                    border-radius:0 4px 4px 0; margin-top:6px;">
-          <div style="font-size:10.5px; color:#137333; font-weight:700;">こう直す案（proposed）</div>
-          <div style="font-size:12.5px; color:#3c3c3c; margin-top:2px;">${esc(fmtVal(patch.proposed))}</div>
+        <div style="text-align:center; color:#6b6455; font-size:16px; line-height:1.2;">↓</div>
+        <div style="border-left:4px solid #0f5c2a; background:#dcf0e2; padding:9px 12px;
+                    border-radius:0 5px 5px 0; margin-top:7px;">
+          <div style="font-size:12.5px; color:#0f5c2a; font-weight:700;">こう直してはいかがでしょうか</div>
+          <div style="font-size:14px; color:#1a202c; margin-top:3px; line-height:1.75;">${esc(fmtVal(patch.proposed))}</div>
         </div>
 
         ${patch.rationale ? `
-        <div style="margin-top:10px;">
-          <div style="font-size:11px; color:#8a8272;">根拠（rationale）</div>
-          <div style="font-size:12px; color:#444; margin-top:2px;">${esc(patch.rationale)}</div>
+        <div style="margin-top:12px;">
+          <div style="font-size:13px; color:#2d3748; font-weight:700;">見直しの理由</div>
+          <div style="font-size:14px; color:#1a202c; margin-top:3px; line-height:1.75;">${esc(patch.rationale)}</div>
         </div>` : ''}
       </div>
-      <div style="background:#faf8f5; border-top:1px solid #eee; padding:8px 12px;
-                  font-size:11px; color:#6f6f6f;">
-        これは<strong>案</strong>である。JSON を書き換えるのは人であり、
-        エージェントがここから先へ進む道はない。
+      <div style="background:#1a202c; padding:12px 14px; font-size:13.5px; color:#fff; line-height:1.75;">
+        <span style="display:inline-block; font-size:12px; font-weight:700; letter-spacing:.06em;
+                     background:#fff; color:#1a202c; border-radius:4px; padding:2px 7px; margin-bottom:5px;">
+          最終判断は、人がします
+        </span><br>
+        これは<strong>案</strong>です。手引きを書き換えるのは人であり、
+        エージェントがここから先へ進む道はありません。
       </div>
     </div>`;
 }
 
 function fmtVal(v) {
-  if (v === null || v === undefined) return '（未設定 / null）';
+  if (v === null || v === undefined) return '（まだ入っていません）';
   if (typeof v === 'object') return JSON.stringify(v, null, 1);
   return v;
 }
@@ -489,27 +504,27 @@ function fmtVal(v) {
 // 根拠。引用が取得ページに一字一句あったかどうかは、機械が付けた印だけを信じる。
 function renderEvidence(evidence) {
   if (!evidence || !evidence.length) {
-    return `<div style="margin-top:14px; font-size:12px; color:#8a8272;">
-              残った根拠はありません（関門で落ちたか、そもそも取得できていません）。
+    return `<div style="margin-top:16px; font-size:14px; color:#2d3748;">
+              確かな引用は残りませんでした（チェックで落ちたか、ページを読めていません）。
             </div>`;
   }
   const items = evidence.map(e => `
-    <div style="border:1px solid #e7e3d9; border-radius:6px; padding:9px 11px; margin-top:7px; background:#fff;">
+    <div style="border:1.5px solid #d8d2c4; border-radius:7px; padding:11px 13px; margin-top:8px; background:#fff;">
       <div style="display:flex; justify-content:space-between; align-items:center; gap:6px;">
-        <span style="font-size:11px; color:#6f6f6f;">${esc(e.publisher || '公的機関')}</span>
+        <span style="font-size:13px; color:#1a202c; font-weight:700;">${esc(e.publisher || '公的機関')}</span>
         ${e.quote_verified
-          ? '<span style="font-size:10.5px; background:#e6f4ea; color:#137333; padding:2px 6px; border-radius:10px; white-space:nowrap;">✓ 逐語一致を機械で検証済み</span>'
-          : '<span style="font-size:10.5px; background:#fce8e6; color:#c5221f; padding:2px 6px; border-radius:10px; white-space:nowrap;">未検証</span>'}
+          ? '<span style="font-size:12px; font-weight:700; background:#dcf0e2; color:#0f5c2a; padding:3px 9px; border-radius:11px; white-space:nowrap;">✓ 原文どおりを機械で確認</span>'
+          : '<span style="font-size:12px; font-weight:700; background:#fbe0dd; color:#a01c16; padding:3px 9px; border-radius:11px; white-space:nowrap;">未確認</span>'}
       </div>
-      <blockquote style="margin:6px 0 0; padding-left:9px; border-left:3px solid #d2e3fc;
-                         font-size:12.5px; color:#2b2b2b;">「${esc(e.quote)}」</blockquote>
+      <blockquote style="margin:8px 0 0; padding-left:11px; border-left:4px solid #7aa6e8;
+                         font-size:14px; color:#1a202c; line-height:1.8;">「${esc(e.quote)}」</blockquote>
       <a href="${esc(e.url)}" target="_blank" rel="noopener"
-         style="display:inline-block; margin-top:6px; font-size:11px; color:#1a73e8; word-break:break-all;">
+         style="display:inline-block; margin-top:7px; font-size:12.5px; color:#1558c0; word-break:break-all;">
         ${esc(e.url)}</a>
-      ${e.page_date ? `<span style="font-size:11px; color:#8a8272; margin-left:6px;">（${esc(e.page_date)}）</span>` : ''}
+      ${e.page_date ? `<span style="font-size:12.5px; color:#4a5568; margin-left:6px;">（${esc(e.page_date)}）</span>` : ''}
     </div>`).join('');
-  return `<div style="margin-top:14px;">
-            <div style="font-size:11px; font-weight:700; color:#8a8272;">一次資料からの引用（${evidence.length}件）</div>
+  return `<div style="margin-top:16px;">
+            <div style="font-size:14px; font-weight:700; color:#1a202c;">公式発表（一次資料）からの確認（${evidence.length}件）</div>
             ${items}
           </div>`;
 }
@@ -521,60 +536,63 @@ function renderGates(d) {
   const rows = [];
 
   const offAll = ev.length > 0 && ev.every(e => OFFICIAL.test(e.url || ''));
-  rows.push(['公的ドメイン（.go.jp / .lg.jp）限定',
-             ev.length === 0 ? ['—', '残った根拠が無いので判定なし']
-                             : [offAll ? 'PASS' : 'FAIL', `${ev.length}件すべてを検査`]]);
+  rows.push(['根拠は国・自治体の公式ページだけか（.go.jp / .lg.jp）',
+             ev.length === 0 ? ['—', '残った引用がないため、判定していません']
+                             : [offAll ? 'PASS' : 'FAIL', `${ev.length}件すべてを調べました`]]);
 
   const okQ = ev.filter(e => e.quote_verified).length;
-  rows.push(['引用の逐語一致（要約は通さない）',
-             ev.length === 0 ? ['—', '検査対象なし']
-                             : [okQ === ev.length ? 'PASS' : 'FAIL', `${okQ} / ${ev.length} 件が取得ページに一字一句あった`]]);
+  rows.push(['引用は原文どおりか（要約は通しません）',
+             ev.length === 0 ? ['—', '調べる対象がありません']
+                             : [okQ === ev.length ? 'PASS' : 'FAIL', `${okQ} / ${ev.length} 件が、公式ページに一字一句ありました`]]);
 
   if (d.proposed_patch) {
     const ptr = d.proposed_patch.json_pointer || '';
-    rows.push(['書き換えてよい場所の制約', ['PASS', `${ptr} は許可された範囲内で、ノードに実在する`]]);
+    rows.push(['直してよい項目かどうか', ['PASS', `${ptr} は、あらかじめ許した範囲の中にあります`]]);
     const up = ptr.endsWith('/verification_status') && d.proposed_patch.proposed === 'EXPERT_VERIFIED';
-    rows.push(['EXPERT_VERIFIED への格上げ禁止', [up ? 'FAIL' : 'PASS', '人以外がここへ上げる道はない']]);
+    rows.push(['「専門家が確認済み」への格上げ禁止',
+               [up ? 'FAIL' : 'PASS', 'ここへ上げられるのは人だけです']]);
   } else {
-    rows.push(['修正案の有無', ['—', '提案なし（または関門で破棄）']]);
+    rows.push(['見直し案の有無', ['—', '見直し案はありません（またはチェックで取り下げました）']]);
   }
 
   rows.push(['人の確認を外せないこと',
-             [d.human_review_required === true ? 'PASS' : 'FAIL', 'human_review_required は常に true']]);
+             [d.human_review_required === true ? 'PASS' : 'FAIL', '人が見るまで、手引きは書き換わりません']]);
 
   const body = rows.map(([name, [verdict, detail]]) => {
-    const col = verdict === 'PASS' ? '#137333' : verdict === 'FAIL' ? '#c5221f' : '#8a8272';
-    return `<div style="display:flex; gap:7px; padding:4px 0; border-top:1px solid #f0ede6;">
-              <span style="color:${col}; font-weight:700; font-size:11px; min-width:34px;">${verdict}</span>
-              <span style="flex:1;"><span style="color:#3c3c3c;">${esc(name)}</span>
-                <span style="display:block; color:#8a8272; font-size:10.5px;">${esc(detail)}</span></span>
+    const col = verdict === 'PASS' ? '#0f5c2a' : verdict === 'FAIL' ? '#a01c16' : '#4a5568';
+    const bg  = verdict === 'PASS' ? '#dcf0e2' : verdict === 'FAIL' ? '#fbe0dd' : '#eceef0';
+    return `<div style="display:flex; gap:9px; padding:7px 0; border-top:1px solid #e2dcce; align-items:flex-start;">
+              <span style="color:${col}; background:${bg}; font-weight:700; font-size:12px;
+                           min-width:46px; text-align:center; border-radius:4px; padding:2px 0;">${verdict}</span>
+              <span style="flex:1;"><span style="color:#1a202c; font-size:13.5px;">${esc(name)}</span>
+                <span style="display:block; color:#2d3748; font-size:12.5px; margin-top:1px;">${esc(detail)}</span></span>
             </div>`;
   }).join('');
 
   const rej = (d.rejected || []);
   const rejBlock = rej.length ? `
-    <div style="margin-top:9px; background:#fdf1f0; border:1px solid #f0b4ae; border-radius:6px; padding:8px 11px;">
-      <div style="font-size:11px; font-weight:700; color:#c5221f;">関門で落としたもの（${rej.length}件）</div>
-      <ul style="margin:4px 0 0; padding-left:16px; font-size:11.5px; color:#7a2a24;">
+    <div style="margin-top:11px; background:#fbe0dd; border:1.5px solid #d9776d; border-radius:7px; padding:10px 13px;">
+      <div style="font-size:13px; font-weight:700; color:#8f1710;">チェックで取り下げたもの（${rej.length}件）</div>
+      <ul style="margin:5px 0 0; padding-left:18px; font-size:13px; color:#5e1410; line-height:1.75;">
         ${rej.map(r => `<li>${esc(r)}</li>`).join('')}
       </ul>
     </div>` : `
-    <div style="margin-top:9px; font-size:11px; color:#137333;">関門で落としたものはありません。</div>`;
+    <div style="margin-top:11px; font-size:13px; color:#0f5c2a; font-weight:700;">チェックで取り下げたものはありません。</div>`;
 
-  return `<div style="margin-top:14px;">
-            <div style="font-size:11px; font-weight:700; color:#8a8272; margin-bottom:2px;">関門の判定（機械が付けた結果）</div>
-            <div style="font-size:11.5px;">${body}</div>
+  return `<div style="margin-top:16px;">
+            <div style="font-size:14px; font-weight:700; color:#1a202c; margin-bottom:3px;">内部統制・七つの関門チェック</div>
+            <div style="font-size:13.5px;">${body}</div>
             ${rejBlock}
           </div>`;
 }
 
 function renderDryRun(d) {
   return `
-    <div style="margin-top:14px; font-size:12px; color:#444;">
-      <div style="font-size:11px; font-weight:700; color:#8a8272;">静的に読めたノードの記載</div>
-      <div style="margin-top:5px;">検証状態: <strong>${esc(d.verification_status)}</strong></div>
-      <div style="margin-top:3px; word-break:break-all;">根拠URL: ${esc(d.source_url || '未設定')}</div>
-      <div style="margin-top:3px;">根拠（下書き）: ${esc(d.source_draft || '—')}</div>
+    <div style="margin-top:16px; font-size:14px; color:#1a202c; line-height:1.8;">
+      <div style="font-size:14px; font-weight:700; color:#1a202c;">いま手引きに書いてあること</div>
+      <div style="margin-top:6px;">確認の段階: <strong>${esc(d.verification_status)}</strong></div>
+      <div style="margin-top:4px; word-break:break-all;">よりどころにしている公式ページ: ${esc(d.source_url || 'まだ設定されていません')}</div>
+      <div style="margin-top:4px;">根拠の下書き: ${esc(d.source_draft || '—')}</div>
     </div>`;
 }
 
@@ -583,8 +601,8 @@ async function runAgentCheck() {
   const btn = document.getElementById('btn-run-check');
   const resArea = document.getElementById('agent-result-area');
   btn.disabled = true;
-  btn.innerText = '公的資料を照合中（Gemini 監査中）...';
-  resArea.innerHTML = '<div style="color:#1a73e8; font-size:12px;">エージェントが .go.jp 一次資料を取得し、差分と関門を検証しています...</div>';
+  btn.innerText = '公式ページを読んでいます…';
+  resArea.innerHTML = '<div style="color:#1558c0; font-size:14px; font-weight:700;">国や省庁の公式ページ（.go.jp）を読み、いまの記載と食い違っていないかを確かめています。少しお待ちください。</div>';
 
   try {
     const res = await fetch('/api/agent/check', {
@@ -601,13 +619,13 @@ async function runAgentCheck() {
 
     const risk = d.risk_if_wrong || result.summary || result.reason || '';
     const riskBlock = risk ? `
-      <div style="margin-top:11px;">
-        <div style="font-size:11px; font-weight:700; color:#8a8272;">まちがっていたときの影響（risk_if_wrong）</div>
-        <div style="font-size:12px; color:#444; margin-top:2px;">${esc(risk)}</div>
+      <div style="margin-top:13px; background:#f7f5ef; border:1px solid #d8d2c4; border-radius:7px; padding:11px 13px;">
+        <div style="font-size:13px; font-weight:700; color:#1a202c;">もしこの案内が違っていた場合のご注意</div>
+        <div style="font-size:14px; color:#1a202c; margin-top:3px; line-height:1.8;">${esc(risk)}</div>
       </div>` : '';
     const escBlock = d.escalation ? `
-      <div style="margin-top:9px; font-size:11.5px; color:#6f6f6f;">
-        人に投げる理由: ${esc(d.escalation)}
+      <div style="margin-top:11px; font-size:13px; color:#2d3748; line-height:1.75;">
+        人にお願いしたいこと: ${esc(d.escalation)}
       </div>` : '';
 
     resArea.innerHTML = [
@@ -618,7 +636,7 @@ async function runAgentCheck() {
             : [renderPatch(d.proposed_patch), renderEvidence(d.evidence), renderGates(d)].join('')
     ].join('');
   } catch (err) {
-    resArea.innerHTML = `<div style="color:#d93025; font-size:12px;">エラー: ${esc(err.message)}</div>`;
+    resArea.innerHTML = `<div style="color:#a01c16; font-size:14px; font-weight:700;">うまく確かめられませんでした: ${esc(err.message)}</div>`;
   } finally {
     btn.disabled = false;
     btn.innerText = 'Gemini で一次資料（.go.jp）を監査する';

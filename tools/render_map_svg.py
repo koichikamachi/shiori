@@ -44,11 +44,13 @@ from src.engine.state import UserCondition                # noqa: E402
 from src.main import SCENARIOS, STREAM_LABEL              # noqa: E402
 
 # 色。状態は塗りと線と形で表す（刷ったとき白黒でも区別がつくように）
+# 線と印の色。**動画に落としたときに残るか**で決める。淡い灰は圧縮で消える。
+# 座標には触らない（矢印の通り道は現状のまま）。濃さだけを上げる。
 C = {
-    "bg": "#fbfaf7", "ink": "#2b2b2b", "sub": "#6f6f6f", "line": "#b9b3a7",
-    "done": "#4a7c59", "today": "#c2410c", "ready": "#1f4e79",
-    "notready": "#ffffff", "absent": "#d9d5cc", "fog": "#8d86a0",
-    "reset": "#b3261e", "lane": "#f4f1ea", "closed": "#9b8f86",
+    "bg": "#fbfaf7", "ink": "#1a202c", "sub": "#2d3748", "line": "#9a9384",
+    "done": "#3a6647", "today": "#a83c08", "ready": "#1f4e79",
+    "notready": "#ffffff", "absent": "#c4bfb3", "fog": "#6f6790",
+    "reset": "#a01c16", "lane": "#f4f1ea", "closed": "#7d7263",
 }
 
 # 出来事は、画面では日本語で言う。生の識別子は出さない。
@@ -253,7 +255,11 @@ def render(key, today):
     for k in range(maxd + 1):
         x = PAD + 120 + k * DX
         lab = DEPTH_LABEL[k] if k < len(DEPTH_LABEL) else f"{k+1}番目"
-        a(f'<text x="{x}" y="{TOP-16}" text-anchor="middle" class="col">'
+        # 見出しは囲って置く。駅や矢印の座標には触らない（囲みは見出しの周りだけ）。
+        bw = 34 + len(lab) * 14
+        a(f'<rect x="{x - bw // 2}" y="{TOP-34}" width="{bw}" height="24" '
+          f'rx="12" class="colbox"/>')
+        a(f'<text x="{x}" y="{TOP-17}" text-anchor="middle" class="col">'
           f'{k+1}　{esc(lab)}</text>')
         a(f'<line x1="{x}" y1="{TOP-8}" x2="{x}" y2="{int(H)-10}" '
           f'stroke="#eae6dc" stroke-width="1"/>')
@@ -388,24 +394,26 @@ def render(key, today):
 
 
 CSS = """
-:root{--bg:#fbfaf7;--ink:#2b2b2b;--sub:#6f6f6f;--rule:#e7e3d9}
+/* 色と大きさは、画面で読めるかではなく、**動画にしたときに読めるか**で決める。
+   淡い灰色は紙では上品だが、圧縮された映像では消える。 */
+:root{--bg:#fbfaf7;--ink:#1a202c;--sub:#2d3748;--dim:#4a5568;--rule:#d8d2c4}
 :root{color-scheme:light}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);
  font-family:"Hiragino Kaku Gothic ProN","Yu Gothic",system-ui,sans-serif}
 .wrap{padding:22px 24px 40px;max-width:1520px;margin:0 auto}
-h1{font-size:20px;margin:0 0 4px;letter-spacing:.01em}
-.meta{margin:0 0 10px;color:var(--sub);font-size:12.5px}
-.counts{font-size:13px;color:#4a4a4a}
-.counts b{font-size:15px;color:var(--ink)}
-.counts .sep{color:#cfc9bc;margin:0 9px}
+h1{font-size:23px;margin:0 0 5px;letter-spacing:.01em;font-weight:700}
+.meta{margin:0 0 10px;color:var(--dim);font-size:13.5px}
+.counts{font-size:14.5px;color:var(--sub)}
+.counts b{font-size:17px;color:var(--ink)}
+.counts .sep{color:#a89f8b;margin:0 9px}
 .bar{height:6px;background:#eae6dc;border-radius:99px;margin:9px 0 0;max-width:420px;
  overflow:hidden}
 .bar i{display:block;height:100%;background:#4a7c59;border-radius:99px}
 .legend{display:flex;flex-wrap:wrap;align-items:center;gap:14px;margin:16px 0 10px;
- font-size:12px;color:var(--sub)}
+ font-size:13.5px;color:var(--sub)}
 .legend span{display:flex;align-items:center;gap:5px}
-.legend .axis{color:#8c857a;margin-left:auto;font-size:11.5px}
+.legend .axis{color:var(--dim);margin-left:auto;font-size:12.5px}
 .k{width:13px;height:13px;border-radius:50%;display:inline-block;border:2.4px solid}
 .k.done{background:#4a7c59;border-color:#4a7c59}
 .k.today{background:#c2410c;border-color:#c2410c}
@@ -418,56 +426,72 @@ h1{font-size:20px;margin:0 0 4px;letter-spacing:.01em}
  border-radius:12px;padding:6px 6px 10px}
 svg{display:block}
 text{font-family:"Hiragino Kaku Gothic ProN","Yu Gothic",system-ui,sans-serif}
-.col{font-size:11.5px;fill:#a49b88;letter-spacing:.06em}
-.lane{font-size:13.5px;font-weight:700;fill:#77705f}
-.lanesub{font-size:11.5px;font-weight:400;fill:#a89f8b}
-.stt{font-size:11.5px;fill:#2b2b2b;stroke:#fff;stroke-width:3.2px;paint-order:stroke;stroke-linejoin:round}
-.num{font-size:14px;font-weight:700;fill:#fff}
-.dl.closed{fill:#9b8f86;font-weight:400}
-.dl.assumed{font-weight:400}
-.dl{font-size:11px;fill:#b3261e;font-weight:700;stroke:#fff;stroke-width:3.2px;paint-order:stroke;stroke-linejoin:round}
-.resetlbl{font-size:10.5px;fill:#b3261e;stroke:#f4f1ea;stroke-width:3.4px;paint-order:stroke;stroke-linejoin:round}
+/* 順序の見出し（1 はじめに／2 これが済んでから …）。
+   X軸が何を意味するかは、この一行でしか伝わらない。濃く、大きく、囲って置く。 */
+.colbox{fill:#efebe1;stroke:#c9c1af;stroke-width:1}
+.col{font-size:13px;fill:#1a202c;font-weight:700;letter-spacing:.04em}
+.lane{font-size:15px;font-weight:700;fill:#2d3748}
+.lanesub{font-size:12.5px;font-weight:400;fill:#4a5568}
+.stt{font-size:12.5px;fill:#1a202c;stroke:#fff;stroke-width:3.4px;paint-order:stroke;stroke-linejoin:round}
+.num{font-size:15px;font-weight:700;fill:#fff}
+.dl.closed{fill:#6b6455;font-weight:700}
+.dl.assumed{font-weight:700}
+.dl{font-size:12.5px;fill:#a01c16;font-weight:700;stroke:#fff;stroke-width:3.4px;paint-order:stroke;stroke-linejoin:round}
+.resetlbl{font-size:12px;fill:#a01c16;font-weight:700;stroke:#f4f1ea;stroke-width:3.4px;paint-order:stroke;stroke-linejoin:round}
 .st{cursor:pointer}
-.st:hover circle{stroke-width:4}
+.st:hover circle{stroke-width:4.5}
 .st:focus{outline:none}
-.st:focus circle{stroke-width:4}
+.st:focus-visible circle{stroke-width:5;stroke:#1f4e79}
+/* いま開いている駅。動画では「どこを見ているか」が分からなくなるので印を残す。
+   霧のノードは駅ではなく chip で出るので、そちらにも同じ印を付ける。 */
+.st.sel circle{stroke-width:5.5}
+.st.sel .stt{font-weight:700}
+.chip.sel{background:#1f4e79;border-color:#1f4e79;color:#fff;font-weight:700}
+details.fog .chip.sel{background:#1f4e79;border-color:#1f4e79;color:#fff;border-style:solid}
 details.side{margin-top:14px;background:#fff;border:1px solid var(--rule);
  border-radius:12px;padding:12px 16px}
-details.side summary{cursor:pointer;font-size:13px;font-weight:700;color:#6b6455}
-details.side.fog summary{color:#6b6280}
-details.side b{font-size:15px}
-.hint2{font-weight:400;color:#a89f8b;font-size:11.5px;margin-left:6px}
-.why{font-size:12px;color:var(--sub);margin:9px 0 4px;line-height:1.7}
-.why strong{color:#6b6280}
+details.side summary{cursor:pointer;font-size:14.5px;font-weight:700;color:#2d3748}
+details.side summary:focus-visible{outline:2px solid #1f4e79;outline-offset:3px}
+details.side.fog summary{color:#4c4470}
+details.side b{font-size:16.5px}
+.hint2{font-weight:400;color:#4a5568;font-size:12.5px;margin-left:6px}
+.why{font-size:13.5px;color:var(--sub);margin:9px 0 4px;line-height:1.75}
+.why strong{color:#4c4470}
 .grp{margin:10px 0 0}
-.grp h3{font-size:11.5px;color:#a89f8b;margin:0 0 5px;font-weight:700}
-.chip{font:inherit;font-size:11.5px;cursor:pointer;background:#f4f1ea;color:#8a8272;
- border:1px solid #e7e3d9;border-radius:99px;padding:4px 11px;margin:0 5px 5px 0}
-details.fog .chip{background:#fff;border-style:dashed;border-color:#b9b2c6;color:#6b6280}
-.chip:hover{background:#ece7db}
+.grp h3{font-size:12.5px;color:#4a5568;margin:0 0 5px;font-weight:700}
+/* 押せるものは、押せると分かる形にする（枠・濃い字・触れたときの変化） */
+.chip{font:inherit;font-size:13px;cursor:pointer;background:#f4f1ea;color:#2d3748;
+ border:1.5px solid #c9c1af;border-radius:99px;padding:5px 13px;margin:0 5px 6px 0;
+ transition:background .12s,border-color .12s}
+details.fog .chip{background:#fff;border-style:dashed;border-color:#9a92b4;color:#4c4470}
+.chip:hover{background:#e6e0d2;border-color:#8c8472}
+.chip:focus-visible{outline:2px solid #1f4e79;outline-offset:2px}
+.chip:active{background:#d9d2c0}
 aside{position:fixed;top:0;right:0;width:390px;max-width:92vw;height:100vh;background:#fff;
  border-left:1px solid var(--rule);box-shadow:-14px 0 34px rgba(0,0,0,.07);
- padding:22px 24px;overflow:auto;font-size:13px;line-height:1.8;
+ padding:22px 24px;overflow:auto;font-size:14.5px;line-height:1.85;
  transition:transform .18s ease}
 aside.closed{transform:translateX(102%)}
-#x{position:absolute;top:12px;right:14px;border:0;background:#f4f1ea;border-radius:50%;
- width:28px;height:28px;font-size:16px;color:#8a8272;cursor:pointer}
-aside h2{font-size:16px;margin:0 8px 8px 0;padding-right:26px}
-aside .tag{display:inline-block;font-size:11px;padding:2px 8px;border-radius:99px;
- background:#f2efe8;color:#7a7364;margin:0 4px 8px 0}
-aside .band{background:#fff5f2;border-left:3px solid #b3261e;padding:9px 11px;
+#x{position:absolute;top:12px;right:14px;border:1.5px solid #c9c1af;background:#f4f1ea;
+ border-radius:50%;width:32px;height:32px;font-size:18px;color:#2d3748;cursor:pointer}
+#x:hover{background:#e6e0d2}
+#x:focus-visible{outline:2px solid #1f4e79;outline-offset:2px}
+aside h2{font-size:18px;margin:0 8px 8px 0;padding-right:30px;line-height:1.5}
+aside .tag{display:inline-block;font-size:12.5px;padding:3px 10px;border-radius:99px;
+ background:#eee9dd;color:#2d3748;margin:0 4px 8px 0;border:1px solid #d3cbb8}
+aside .band{background:#fff5f2;border-left:4px solid #a01c16;padding:10px 12px;
  border-radius:0 6px 6px 0;margin:10px 0}
-aside .band b{color:#b3261e}
-aside dl{margin:10px 0 0}aside dt{font-size:11.5px;color:var(--sub);margin-top:10px}
+aside .band b{color:#8f1710}
+aside dl{margin:10px 0 0}aside dt{font-size:12.5px;color:var(--dim);margin-top:10px;font-weight:700}
 aside dd{margin:2px 0 0}
-aside .src{font-size:11.5px;color:#8a8272;margin-top:3px}
-aside .src a{color:#6b6455}
-aside .assumed{background:#f7f5ef;border-left:3px solid #b9b3a7;padding:9px 11px;border-radius:0 6px 6px 0;margin:10px 0;font-size:12.5px}
-aside .assumed b{color:#6b6455}
-aside .shut{background:#f4f1ea;border-left:3px solid #9b8f86;padding:9px 11px;border-radius:0 6px 6px 0;margin:10px 0}
-aside .shut b{color:#6b6455}
-aside .note{background:#f7f5ef;padding:9px 11px;border-radius:6px;margin:10px 0}
-footer{color:var(--sub);font-size:11.5px;margin-top:22px;
+aside .src{font-size:12.5px;color:#4a5568;margin-top:3px}
+aside .src a{color:#1f4e79}
+aside .assumed{background:#f7f5ef;border-left:4px solid #8c8472;padding:10px 12px;border-radius:0 6px 6px 0;margin:10px 0;font-size:13.5px}
+aside .assumed b{color:#4a4335}
+aside .shut{background:#f4f1ea;border-left:4px solid #6b6455;padding:10px 12px;border-radius:0 6px 6px 0;margin:10px 0}
+aside .shut b{color:#4a4335}
+aside .note{background:#f7f5ef;padding:10px 12px;border-radius:6px;margin:10px 0}
+footer{color:var(--sub);font-size:13px;margin-top:22px;
  border-top:1px solid var(--rule);padding-top:12px;line-height:1.8}
 @media(max-width:760px){.wrap{padding:16px 14px 30px}.legend .axis{margin-left:0}}
 """
@@ -548,8 +572,11 @@ def page(key, today, home=None):
             f'<meta name="viewport" content="width=device-width,initial-scale=1">'
             f'<title>しおり／地図 — {html.escape(sc["title"])}</title>'
             f'<style>{CSS}'
-            f'.back{{font-size:12.5px;color:#6b6455;text-decoration:none}}'
-            f'.back:hover{{text-decoration:underline}}'
+            f'.back{{font-size:14px;font-weight:700;color:#1f4e79;text-decoration:none;'
+            f'display:inline-block;border:1.5px solid #c9c1af;border-radius:99px;'
+            f'padding:5px 14px;background:#fff}}'
+            f'.back:hover{{background:#f7fafd;border-color:#1f4e79}}'
+            f'.back:focus-visible{{outline:2px solid #1f4e79;outline-offset:2px}}'
             f'</style></head><body>{back}{body}'
             f'<div class="wrap" style="padding-top:0"><footer>{NOTICE}</footer></div>'
             f'<script>{JS}</script></body></html>')

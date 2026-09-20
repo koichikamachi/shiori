@@ -467,27 +467,76 @@ function esc(s) {
 // 判定ごとの見え方。CHANGED は「直すところがある」なので、最も目を引かせる。
 // 文言は、制度の当事者が不安なまま読んでも分かる日常語にする。
 const VERDICT_STYLE = {
-  CHANGED:    {bg:'#fdf3d4', bd:'#d99e00', fg:'#6b4e00', label:'制度が変わっていました。見直しをご提案します'},
-  UNCHANGED:  {bg:'#dcf0e2', bd:'#6aab84', fg:'#0f5c2a', label:'いまの記載は、公式発表のとおりでした'},
-  AMBIGUOUS:  {bg:'#eceef0', bd:'#a9b0b6', fg:'#33383d', label:'公式ページに、この点のはっきりした記載がありませんでした'},
-  NOT_FOUND:  {bg:'#eceef0', bd:'#a9b0b6', fg:'#33383d', label:'公式ページにたどり着けませんでした'},
-  UNCERTAIN:  {bg:'#fbe0dd', bd:'#d9776d', fg:'#a01c16', label:'記載が食い違っていて、まだ言い切れません'},
-  UNVERIFIED: {bg:'#e1ebfd', bd:'#7aa6e8', fg:'#123a75', label:'お住まいの市区町村で扱いが変わります'},
-  DRY_RUN:    {bg:'#eceef0', bd:'#a9b0b6', fg:'#33383d', label:'下読みだけの確認です（APIキーが設定されていません）'}
+  CHANGED:    {bg:'#fdf3d4', bd:'#d99e00', fg:'#6b4e00',
+               badge:'【要改訂】制度変更を検知',
+               label:'公的発表において制度の変更が確認されたため、案内の見直しが必要です。'},
+  UNCHANGED:  {bg:'#dcf0e2', bd:'#6aab84', fg:'#0f5c2a',
+               badge:'【整合】公式発表と一致',
+               label:'現在の案内内容は、指定された公式ページ（一次資料）の記載と合致しています。'},
+  AMBIGUOUS:  {bg:'#eceef0', bd:'#a9b0b6', fg:'#33383d',
+               badge:'【要精査】判断保留・一部未記載',
+               label:'公式資料の一部とは合致していますが、論点全体の確定には専門家による確認が必要です。'},
+  NOT_FOUND:  {bg:'#eceef0', bd:'#a9b0b6', fg:'#33383d',
+               badge:'【未検知】該当記述なし',
+               label:'指定された公式ページの中から、該当する制度の明確な記述を確認できませんでした。'},
+  UNCERTAIN:  {bg:'#fbe0dd', bd:'#d9776d', fg:'#a01c16',
+               badge:'【要確認】記載に食い違い',
+               label:'公的資料の記載に食い違いがあり、現時点では確定的な判定を行えません。'},
+  UNVERIFIED: {bg:'#e1ebfd', bd:'#7aa6e8', fg:'#123a75',
+               badge:'【要照会】自治体ごとに相違',
+               label:'取扱いが市区町村ごとに異なるため、管轄の窓口への照会が必要です。'},
+  DRY_RUN:    {bg:'#eceef0', bd:'#a9b0b6', fg:'#33383d',
+               badge:'【静的確認】一次資料の照合は未実行',
+               label:'APIキーが設定されていないため、ノードの記載内容のみを静的に確認しています。'}
 };
+
+// 確度は機械の値（HIGH/MEDIUM/LOW）で持ち、画面には日本語で出す。
+const CONFIDENCE_JA = {HIGH: '高', MEDIUM: '中', LOW: '低'};
 
 function renderVerdict(action, confidence) {
   const st = VERDICT_STYLE[action] || VERDICT_STYLE.AMBIGUOUS;
   const conf = confidence
-    ? `<span style="font-size:13px; color:${st.fg}; margin-left:8px; font-weight:700;">確からしさ ${esc(confidence)}</span>`
+    ? `<span style="font-size:13px; color:${st.fg}; margin-left:9px; font-weight:700;">（照合確度: ${esc(CONFIDENCE_JA[confidence] || confidence)}）</span>`
     : '';
   return `
     <div style="background:${st.bg}; border:2px solid ${st.bd}; border-radius:9px; padding:13px 15px;">
-      <div style="font-size:12.5px; color:${st.fg}; letter-spacing:.04em; font-weight:700;">確かめた結果</div>
-      <div style="font-weight:700; color:${st.fg}; font-size:18px; margin-top:2px;">
-        ${esc(action || 'PROPOSAL')}${conf}
+      <div style="display:flex; justify-content:space-between; align-items:baseline; gap:8px;">
+        <span style="font-size:12.5px; color:${st.fg}; letter-spacing:.04em; font-weight:700;">公的資料との照合結果</span>
+        <span style="font-size:11px; color:${st.fg}; opacity:.75; font-family:ui-monospace,monospace;">${esc(action || 'PROPOSAL')}</span>
+      </div>
+      <div style="font-weight:700; color:${st.fg}; font-size:17px; margin-top:3px; line-height:1.5;">
+        ${esc(st.badge)}${conf}
       </div>
       <div style="font-size:14px; color:${st.fg}; margin-top:4px; line-height:1.7;">${esc(st.label)}</div>
+    </div>`;
+}
+
+// 自律監査プロセスの足跡。
+// **実際に踏んだ段だけを濃く出す。** 通っていない段まで並べると、
+// 固定文字列の「PASS」を並べていた頃と同じ、意味のない証跡に戻ってしまう。
+function renderProcess(d, action) {
+  const ev = d.evidence || [];
+  const rej = d.rejected || [];
+  const steps = [
+    ['一次資料取得', ev.length > 0],
+    ['差分検知', ev.length > 0 && (action === 'CHANGED' || action === 'UNCHANGED')],
+    ['リスク評価', !!d.risk_if_wrong],
+    ['パッチ起草', !!d.proposed_patch],
+    ['内部統制（七つの関門）検証通過', rej.length === 0 && d.human_review_required === true],
+  ];
+  const done = steps.filter(s => s[1]).length;
+  const body = steps.map(([name, ok], i) => {
+    const sep = i ? '<span style="color:#9aa4ad; margin:0 5px;">➔</span>' : '';
+    return sep + (ok
+      ? `<span style="color:#123a75; font-weight:700;">${esc(name)}</span>`
+      : `<span style="color:#9aa4ad; text-decoration:line-through;">${esc(name)}</span>`);
+  }).join('');
+  const head = done === steps.length ? '自律監査プロセス完了' : `自律監査プロセス（${done} / ${steps.length} 段）`;
+  return `
+    <div style="margin-top:13px; background:#f3f6fb; border:1px solid #c9d7ec; border-radius:7px;
+                padding:8px 11px; font-size:11.5px; line-height:1.85;">
+      <span style="color:#123a75; font-weight:700; letter-spacing:.03em;">${esc(head)}:</span>
+      <span style="margin-left:5px;">${body}</span>
     </div>`;
 }
 
@@ -671,6 +720,7 @@ async function runAgentCheck() {
 
     resArea.innerHTML = [
       renderVerdict(result.action, d.confidence),
+      isDry ? '' : renderProcess(d, result.action),
       riskBlock,
       escBlock,
       isDry ? renderDryRun(d)

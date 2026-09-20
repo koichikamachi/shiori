@@ -180,3 +180,52 @@ def test_the_drawer_script_does_not_collide_with_the_map_script():
     # 4. onclick から呼んでいる名前が、ちゃんと出ていること
     called = set(re.findall(r'onclick="([A-Za-z_$][\w$]*)\(', html))
     assert called <= exported, f"onclick から呼ぶのに window に無い: {sorted(called - exported)}"
+
+
+def test_the_drawer_carries_the_audit_labels_and_the_process_bar():
+    """
+    判定ラベルと「自律監査プロセス」の段は、画面に出る言葉そのものである。
+    ここが勝手に変わると、公的監査の見え方が崩れる。文言を固定する。
+    """
+    script = _drawer_script(client.get("/map/surv-day1").text)
+
+    assert "公的資料との照合結果" in script
+    for badge, note in (
+        ("【要改訂】制度変更を検知", "公的発表において制度の変更が確認されたため、案内の見直しが必要です。"),
+        ("【整合】公式発表と一致", "現在の案内内容は、指定された公式ページ（一次資料）の記載と合致しています。"),
+        ("【要精査】判断保留・一部未記載", "論点全体の確定には専門家による確認が必要です。"),
+        ("【未検知】該当記述なし", "該当する制度の明確な記述を確認できませんでした。"),
+    ):
+        assert badge in script, badge
+        assert note in script, note
+
+    # 確度は機械の値で持ち、画面には日本語で出す
+    assert "照合確度" in script
+    for ja in ("'高'", "'中'", "'低'"):
+        assert ja in script, ja
+
+    # 自律監査プロセスの五段
+    for step in ("一次資料取得", "差分検知", "リスク評価", "パッチ起草",
+                 "内部統制（七つの関門）検証通過"):
+        assert step in script, step
+    assert "自律監査プロセス完了" in script
+
+
+def test_the_process_bar_is_derived_from_the_result_not_hardcoded():
+    """
+    段は、実際に踏んだものだけを濃く出す。
+    通っていない段まで「完了」と書いたら、固定の PASS を並べていた頃に戻る。
+    """
+    script = _drawer_script(client.get("/map/surv-day1").text)
+    import re
+
+    body = re.search(r"function renderProcess\(d, action\) \{(.*?)\n\}", script, re.S)
+    assert body, "renderProcess が無い"
+    body = body.group(1)
+
+    # 各段が、結果のどこかを見て決まっていること
+    for source in ("ev.length", "action ===", "d.risk_if_wrong",
+                   "d.proposed_patch", "rej.length", "d.human_review_required"):
+        assert source in body, f"{source} を見ていない"
+    # 全段そろったときだけ「完了」と名乗る
+    assert "done === steps.length" in body

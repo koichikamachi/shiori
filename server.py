@@ -86,13 +86,13 @@ h1{font-size:30px;font-weight:700;letter-spacing:.05em;line-height:1.3;margin:0 
 
 /* 試作品の説明 */
 .about{background:#fff;border:1px solid var(--rule);border-radius:12px;
- padding:20px 22px;font-size:14px;line-height:1.75;margin:0 0 8px}
+ padding:20px 22px;font-size:14px;font-weight:500;line-height:1.75;margin:0 0 8px}
 .about p{margin:0 0 10px}
 .about p:last-of-type{margin-bottom:0}
 .about b{color:#000;font-weight:700}
 .does{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0 0}
 .does>div{background:#f4f1ea;border:1px solid #e2dcce;border-radius:8px;
- padding:13px 15px;font-size:13px;line-height:1.7;color:#333}
+ padding:13px 15px;font-size:13px;font-weight:500;line-height:1.7;color:#1f2937}
 .does h3{margin:0 0 6px;font-size:13px;color:var(--ink);font-weight:700;letter-spacing:.02em}
 .does ul{margin:0;padding-left:18px}
 .does li{margin:2px 0}

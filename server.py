@@ -69,39 +69,56 @@ GROUPS = [
 ]
 
 INDEX_CSS = """
-:root{color-scheme:light;--ink:#1a202c;--sub:#2d3748;--dim:#4a5568;--rule:#d8d2c4}
+/* 入口の文字は、大きさ・太さ・余白の段で読む順序を作る。
+   標題 → 副題 → 説明 → 見出し → 場面カード、の五段。
+   同じ大きさが二つ並ぶと、どちらが先か分からなくなる。 */
+:root{color-scheme:light;--ink:#1a202c;--sub:#555;--dim:#777;--faint:#888;--rule:#d8d2c4}
 *{box-sizing:border-box}
 body{margin:0;background:#fbfaf7;color:var(--ink);
  font-family:"Hiragino Kaku Gothic ProN","Yu Gothic",system-ui,sans-serif;
  line-height:1.8}
-.wrap{max-width:760px;margin:0 auto;padding:34px 22px 60px}
-h1{font-size:25px;margin:0 0 6px;letter-spacing:.02em}
-.sub{color:var(--sub);font-size:14.5px;margin:0 0 22px}
+.wrap{max-width:760px;margin:0 auto;padding:40px 22px 64px}
+
+/* 標題 */
+h1{font-size:30px;font-weight:700;letter-spacing:.05em;line-height:1.3;margin:0 0 10px}
+/* 副題 */
+.sub{color:var(--sub);font-size:14px;line-height:1.6;margin:0 0 26px}
+
+/* 試作品の説明 */
 .about{background:#fff;border:1px solid var(--rule);border-radius:12px;
- padding:17px 19px;font-size:14.5px;margin:0 0 26px}
-.about p{margin:7px 0}
-.about b{color:#000}
-.does{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0 0}
+ padding:20px 22px;font-size:14px;line-height:1.75;margin:0 0 8px}
+.about p{margin:0 0 10px}
+.about p:last-of-type{margin-bottom:0}
+.about b{color:#000;font-weight:700}
+.does{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0 0}
 .does>div{background:#f4f1ea;border:1px solid #e2dcce;border-radius:8px;
- padding:12px 14px;font-size:13.5px;color:var(--sub)}
-.does h3{margin:0 0 5px;font-size:13.5px;color:var(--ink);font-weight:700}
-.does ul{margin:0;padding-left:17px}
-.does li{margin:3px 0}
-h2{font-size:17px;margin:30px 0 3px;padding-bottom:5px;border-bottom:2px solid var(--rule)}
-.note{color:var(--dim);font-size:13.5px;margin:5px 0 12px}
-/* 場面を選ぶカードは、この画面のいちばん大事な操作である。押せると分かる形にする。 */
+ padding:13px 15px;font-size:13px;line-height:1.7;color:#333}
+.does h3{margin:0 0 6px;font-size:13px;color:var(--ink);font-weight:700;letter-spacing:.02em}
+.does ul{margin:0;padding-left:18px}
+.does li{margin:2px 0}
+.stat{display:flex;flex-wrap:wrap;gap:2px 14px;font-size:12px;line-height:1.7;
+ color:var(--dim);margin:14px 0 0;padding-top:12px;border-top:1px dashed #e2dcce}
+
+/* 見出し。前のかたまりから切り離すため、上の余白を広く取り、左に印を置く。 */
+h2{font-size:21px;font-weight:700;line-height:1.4;letter-spacing:.02em;
+ margin:32px 0 6px;padding:2px 0 2px 12px;border-left:4px solid #222;border-bottom:0}
+.note{color:var(--dim);font-size:13px;line-height:1.6;margin:0 0 12px;padding-left:16px}
+
+/* 場面を選ぶカードは、この画面のいちばん大事な操作である。
+   日本語の題名が主役。識別子は目に入らない大きさに落とす。 */
 a.card{display:block;background:#fff;border:1.5px solid var(--rule);border-radius:10px;
- padding:13px 16px;margin:9px 0;text-decoration:none;color:var(--ink);
- transition:border-color .12s,background .12s,box-shadow .12s}
-a.card:hover{border-color:#1f4e79;background:#f7fafd;box-shadow:0 1px 6px rgba(31,78,121,.12)}
+ padding:14px 18px;margin:10px 0;text-decoration:none;color:var(--ink);
+ transition:border-color .15s,box-shadow .15s,transform .15s}
+a.card:hover{border-color:#333;box-shadow:0 3px 10px rgba(0,0,0,.08);transform:translateY(-1px)}
 a.card:focus-visible{outline:3px solid #1f4e79;outline-offset:2px}
-a.card:active{background:#eef4fa}
-a.card .t{font-size:15.5px;font-weight:700}
-a.card .k{font-size:12.5px;color:var(--dim);margin-top:2px;font-family:ui-monospace,monospace}
-footer{margin-top:36px;padding-top:14px;border-top:1px solid var(--rule);
- color:var(--sub);font-size:13px}
-.stat{display:flex;flex-wrap:wrap;gap:0 16px;font-size:13.5px;color:var(--sub);margin:10px 0 0}
-@media(max-width:560px){.does{grid-template-columns:1fr}}
+a.card:active{transform:translateY(0);box-shadow:0 1px 3px rgba(0,0,0,.08)}
+a.card .t{font-size:16px;font-weight:700;line-height:1.5}
+a.card .k{font-size:10.5px;color:var(--faint);margin-top:3px;letter-spacing:.02em;
+ font-family:ui-monospace,monospace}
+
+footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--rule);
+ color:var(--dim);font-size:12.5px;line-height:1.7}
+@media(max-width:560px){.does{grid-template-columns:1fr}h1{font-size:28px}}
 """
 
 

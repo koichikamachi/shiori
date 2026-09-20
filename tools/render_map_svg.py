@@ -483,7 +483,8 @@ aside .band{background:#fff5f2;border-left:4px solid #a01c16;padding:10px 12px;
  border-radius:0 6px 6px 0;margin:10px 0}
 aside .band b{color:#8f1710}
 aside dl{margin:10px 0 0}aside dt{font-size:12.5px;color:var(--dim);margin-top:10px;font-weight:700}
-aside dd{margin:2px 0 0}
+/* 手順を番号で分けて書いたノードがある。改行を潰すと一行に繋がって読めなくなる。 */
+aside dd{margin:2px 0 0;white-space:pre-line}
 aside .src{font-size:12.5px;color:#4a5568;margin-top:3px}
 aside .src a{color:#1f4e79}
 aside .assumed{background:#f7f5ef;border-left:4px solid #8c8472;padding:10px 12px;border-radius:0 6px 6px 0;margin:10px 0;font-size:13.5px}
@@ -523,7 +524,7 @@ function show(id){
   if(d.closed)h+='<div class="shut"><b>この期間は、もう動かせないかもしれません。</b><br>'
     +esc(d.closednote)+'</div>';
   if(d.fact)h+='<div class="band"><b>【事実】</b> '+esc(d.fact)+'<br><br><b>【ただし】</b> '+esc(d.exc)
-    +(d.lost?'<br><br><span style="font-size:11.5px;color:#7a7364">失われるもの … '+esc(d.lost)+'</span>':'')+'</div>';
+    +(d.lost?'<br><br><span style="font-size:13px;color:#5e1410;font-weight:700">失われるもの … '+esc(d.lost)+'</span>':'')+'</div>';
   h+='<dl>';
   h+='<dt>やること</dt><dd>'+esc(d.today)+'</dd>';
   if(d.assumed)h+='<div class="assumed"><b>この日数は、亡くなった日から数えたものです。</b><br>'

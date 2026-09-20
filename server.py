@@ -54,7 +54,7 @@ ROOT = Path(__file__).resolve().parent
 
 app = FastAPI(
     title="しおり（Shiori）",
-    description="相続と、亡くなったあとの手続を、順序と期限の地図として示す試作品",
+    description="相続と、亡くなったあとの手続を、順序と期限の地図として整理",
     docs_url=None, redoc_url=None,
 )
 
@@ -105,7 +105,7 @@ h1{font-size:30px;font-weight:700;letter-spacing:.05em;line-height:1.3;margin:0 
 /* 見出し。前のかたまりから切り離すため、上の余白を広く取り、左に印を置く。 */
 h2{font-size:21px;font-weight:700;line-height:1.4;letter-spacing:.02em;
  margin:32px 0 6px;padding:2px 0 2px 12px;border-left:4px solid #222;border-bottom:0}
-.note{color:var(--dim);font-size:13px;line-height:1.6;margin:0 0 12px;padding-left:16px}
+.note{color:#334155;font-size:15px;line-height:1.7;margin:0 0 14px;padding-left:16px}
 
 /* 場面を選ぶカードは、この画面のいちばん大事な操作である。
    日本語の題名が主役。識別子は目に入らない大きさに落とす。 */
@@ -119,8 +119,11 @@ a.card .t{font-size:16px;font-weight:700;line-height:1.5}
 /* 内部キー（surv-day1 等）は画面に出さない。読む人には意味が無い。 */
 a.card .k{display:none}
 
-footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--rule);
- color:#333333;font-size:14px;line-height:1.8}
+/* 免責と注記。独立した案内枠として、敷きの上に置く。 */
+footer{margin-top:40px;background:#f9f8f6;border:1px solid #e8e6df;border-radius:6px;
+ padding:16px 18px;color:#262626;font-size:14px;line-height:1.8}
+footer p{margin:0}
+footer p+p{margin-top:8px}
 @media(max-width:560px){.does{grid-template-columns:1fr}h1{font-size:28px}}
 """
 
@@ -182,7 +185,7 @@ def index(today: str | None = Query(default=None)) -> str:
 
     a('<h1>しおり</h1>')
     a('<p class="sub">相続と、亡くなったあとの手続を、'
-      '順序と期限の地図として示す試作品</p>')
+      '順序と期限の地図として整理</p>')
 
     a('<div class="about">')
     a('<p>これは、自身の終活から着想を得て設計された、手続地図の'
@@ -191,7 +194,7 @@ def index(today: str | None = Query(default=None)) -> str:
       'しなければならないのか。<br>'
       'その迷いをゼロにするために、公的資料（一次証憑）を自律監査するAIエージェントと共に、'
       '手続の順序と不可逆な期限を一枚の地図に体系化しました。<br>'
-      '同じ課題に直面するすべての方のために、無償のオープンアーキテクチャとして公開しています。</p>')
+      '同じ課題を抱いている方へ、お届けします。</p>')
     a('<div class="does">')
     a('<div><h3>このアプリがすること</h3><ul>'
       '<li>手続の順序と、依存関係を示す</li>'
@@ -225,9 +228,9 @@ def index(today: str | None = Query(default=None)) -> str:
               f'<div class="t">{esc(v["title"])}</div>'
               f'<div class="k">{esc(k)}</div></a>')
 
-    a(f'<footer>{esc(NOTICE)}<br>'
-      f'この画面は {d.isoformat()} を「今日」として計算しています。'
-      f'状態は何も保存していません。ログインも要りません。</footer>')
+    a(f'<footer><p>{esc(NOTICE)}</p>'
+      f'<p>この画面は {d.isoformat()} を「今日」として計算しています。'
+      f'状態は何も保存していません。ログインも要りません。</p></footer>')
     a('</div></body></html>')
     return "".join(o)
 

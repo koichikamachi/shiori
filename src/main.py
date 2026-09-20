@@ -23,7 +23,7 @@ ROOT = Path(__file__).resolve().parents[1]
 # 提出時の「動作確認の方法」にも、そのまま使う想定の状況一覧
 SCENARIOS = {
     "surv-day1": {
-        "title": "遺族・死の直後（1日目）。何も残されていない",
+        "title": "遺族・亡くなった直後（1日目）。本人のメモなど何も残されていない場合",
         "scope": "SURVIVOR",
         # 1日目は、ほとんど何も分かっていない。「いいえ」ではなく「まだ分からない」である。
         "cond": dict(days_since_death=1,

@@ -96,8 +96,11 @@ h1{font-size:30px;font-weight:700;letter-spacing:.05em;line-height:1.3;margin:0 
 .does h3{margin:0 0 6px;font-size:13px;color:var(--ink);font-weight:700;letter-spacing:.02em}
 .does ul{margin:0;padding-left:18px}
 .does li{margin:2px 0}
-.stat{display:flex;flex-wrap:wrap;gap:2px 14px;font-size:12px;line-height:1.7;
+.stat{display:flex;flex-wrap:wrap;gap:2px 0;font-size:12px;line-height:1.7;
  color:var(--dim);margin:14px 0 0;padding-top:12px;border-top:1px dashed #e2dcce}
+.stat span{white-space:nowrap}
+/* 区切りの「｜」は項目に付けて運ぶ。別の要素にすると、折り返しで行末に取り残される。 */
+.stat span+span::before{content:"｜";color:#c9c1af;margin:0 8px}
 
 /* 見出し。前のかたまりから切り離すため、上の余白を広く取り、左に印を置く。 */
 h2{font-size:21px;font-weight:700;line-height:1.4;letter-spacing:.02em;
@@ -182,31 +185,32 @@ def index(today: str | None = Query(default=None)) -> str:
       '順序と期限の地図として示す試作品</p>')
 
     a('<div class="about">')
-    a('<p>これは、自分の終活のために作った地図の、<b>試作品</b>です。'
-      '研究途上のもので、完成版ではありません。</p>')
-    a('<p>自分が亡くなったあと、家族が何を、どの順番で、いつまでに'
-      'しなければならないのか。それを知りたくて、AIに手伝ってもらいながら、'
-      '手続の順序と期限を一枚の地図に描いてきました。'
-      '同じことで困る方がおられるだろうと思い、そのまま置いています。無償です。</p>')
+    a('<p>これは、自身の終活から着想を得て設計された、手続地図の'
+      '<b>実証プロトタイプ（PoC）</b>です。</p>')
+    a('<p>自分が亡くなったあと、残された家族は何を、どの順番で、いつまでに'
+      'しなければならないのか。<br>'
+      'その迷いをゼロにするために、公的資料（一次証憑）を自律監査するAIエージェントと共に、'
+      '手続の順序と不可逆な期限を一枚の地図に体系化しました。<br>'
+      '同じ課題に直面するすべての方のために、無償のオープンアーキテクチャとして公開しています。</p>')
     a('<div class="does">')
     a('<div><h3>このアプリがすること</h3><ul>'
-      '<li>手続の順序を示す</li>'
-      '<li>期限の長さと、いつから数えるかを示す</li>'
-      '<li>通り過ぎると戻れない地点を示す</li>'
-      '<li>何を誰に聞けばよいかを示す</li>'
+      '<li>手続の順序と、依存関係を示す</li>'
+      '<li>期限の長さと、起算点（いつから数えるか）を示す</li>'
+      '<li>一度踏むと戻れない「不可逆な地点（法的リスク）」を示す</li>'
+      '<li>何を誰に確認すべきかの公的窓口を示す</li>'
       '</ul></div>')
-    a('<div><h3>このアプリがしないこと</h3><ul>'
-      '<li>あなたの場合の結論は出さない</li>'
-      '<li>金額を計算しない。入力欄もない</li>'
-      '<li>書類を作らない。代理もしない</li>'
-      '<li>法律相談・税務相談に答えない</li>'
+    a('<div><h3>このアプリがしないこと（法規範の遵守）</h3><ul>'
+      '<li>個別の事情に応じた法的な結論は出さない</li>'
+      '<li>税額や財産の計算は行わない（入力欄も持たない）</li>'
+      '<li>公的書類の自動作成や申請代理は行わない</li>'
+      '<li>弁護士法・税理士法に抵触する個別相談には答えない</li>'
       '</ul></div>')
     a('</div>')
     a(f'<div class="stat">'
-      f'<span>手続 {c["nodes"]} 件</span>'
-      f'<span>うち期限のあるもの {c["deadlines"]} 件（全部、公的機関の資料で確認済み）</span>'
-      f'<span>一次資料で確認済み {c["verified"]} 件</span>'
-      f'<span>まだ確かめていない項目 {c["checks"]} 件</span>'
+      f'<span>手続 {c["nodes"]}件</span>'
+      f'<span>期限あり {c["deadlines"]}件（公的機関の資料で確認済み）</span>'
+      f'<span>一次資料照合済み {c["verified"]}件</span>'
+      f'<span>専門家による検証待ち項目 {c["checks"]}件</span>'
       f'</div>')
     a('</div>')
 

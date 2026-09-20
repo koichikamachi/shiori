@@ -101,3 +101,109 @@ def test_api_agent_check_live_run_mock(mock_run_check, monkeypatch):
 
     # エージェントのrun_checkが呼び出されたことを確認
     mock_run_check.assert_called_once()
+
+
+# ---- 生成文の言葉づかい --------------------------------------------------
+# プロンプトで過剰敬語を禁じているが、言葉づかいは揺れる。
+# 「〜可能性がございます」のような接客口調が混じると、公的案内の品格が落ちる。
+# 人が読む手前で機械が均す。ここはその最後の一段である。
+
+def test_over_polite_wording_is_flattened_before_it_reaches_the_reader():
+    from server import _tidy
+
+    assert _tidy("混乱を生じさせる可能性がございます。") == "混乱を生じさせる可能性があります。"
+    assert _tidy("こちらが最新の期限でございます。") == "こちらが最新の期限です。"
+    assert _tidy("該当する記載はございません。") == "該当する記載はありません。"
+    assert _tidy("延長の措置がございます。") == "延長の措置があります。"
+    assert _tidy("法務省が示しております。") == "法務省が示しています。"
+    assert _tidy("修正をご提案いたします。") == "修正をご提案します。"
+    assert _tidy("修正をご提案致します。") == "修正をご提案します。"
+
+    # 端正な言い方は、そのまま通す（直しすぎない）
+    for kept in ("令和9年3月31日までと定められています。",
+                 "混乱を招く可能性があります。",
+                 "相続登記の申請義務が始まりました。"):
+        assert _tidy(kept) == kept
+
+    # 文字列でないものは触らない
+    assert _tidy(None) is None
+    assert _tidy(3) == 3
+
+
+def test_the_tidy_filter_never_touches_the_verified_quote_or_the_patch_value():
+    """
+    引用は「取得ページに一字一句あった」ことを機械が確かめた文字列である。
+    ここを整えると、検証そのものが嘘になる。
+    パッチの値も文章ではないので触らない。
+    """
+    from server import _tidy_details
+
+    details = {
+        "risk_if_wrong": "混乱が生じる可能性がございます。",
+        "escalation": "専門家の確認が要る箇所でございます。",
+        "evidence": [{"url": "https://www.moj.go.jp/x.html",
+                      "quote": "こちらに記載がございます",      # ← ページの原文
+                      "quote_verified": True}],
+        "proposed_patch": {"json_pointer": "/deadline/note",
+                           "current": "旧い記載でございます",
+                           "proposed": "新しい記載でございます",
+                           "rationale": "公式ページに定めがございます。"},
+    }
+    out = _tidy_details(details)
+
+    # 説明の文は直る
+    assert out["risk_if_wrong"] == "混乱が生じる可能性があります。"
+    assert out["escalation"] == "専門家の確認が要る箇所です。"
+    assert out["proposed_patch"]["rationale"] == "公式ページに定めがあります。"
+
+    # 引用とパッチの値は、一字も変わらない
+    assert out["evidence"][0]["quote"] == "こちらに記載がございます"
+    assert out["proposed_patch"]["current"] == "旧い記載でございます"
+    assert out["proposed_patch"]["proposed"] == "新しい記載でございます"
+
+
+def test_the_tidy_filter_survives_a_result_without_a_patch():
+    """パッチが無い回答（UNCHANGED など）でも落ちないこと。"""
+    from server import _tidy_details
+
+    out = _tidy_details({"risk_if_wrong": "影響はございません。", "proposed_patch": None})
+    assert out["risk_if_wrong"] == "影響はありません。"
+    assert out["proposed_patch"] is None
+    assert _tidy_details({}) == {}
+
+
+@patch("src.agent.agent.ShioriAgent.run_check")
+def test_the_api_response_is_already_tidied(mock_run_check, monkeypatch):
+    """
+    整形はヘルパーの中だけでなく、**エンドポイントの返答**で効いていること。
+    ドロワーはここを読んで描くので、ここを通らなければ意味がない。
+    """
+    monkeypatch.setenv("GEMINI_API_KEY", "test_gemini_api_key_12345")
+    from src.agent.schema import Evidence, ProposedPatch
+
+    mock_run_check.return_value = CheckResult(
+        check_id="SURV_REAL_ESTATE_REGISTRATION#1",
+        node_id="SURV_REAL_ESTATE_REGISTRATION",
+        claim="不動産の名義変更",
+        verdict="CHANGED",
+        confidence="MEDIUM",
+        checked_at="2026-09-20",
+        evidence=[Evidence(url="https://www.moj.go.jp/x.html",
+                           quote="こちらに記載がございます", quote_verified=True)],
+        proposed_patch=ProposedPatch(json_pointer="/deadline/note",
+                                     current="旧", proposed="新",
+                                     rationale="公式ページに定めがございます。"),
+        risk_if_wrong="混乱が生じる可能性がございます。",
+        escalation="専門家の確認が要る箇所でございます。",
+        human_review_required=True,
+    )
+
+    d = client.post("/api/agent/check",
+                    json={"node_id": "SURV_REAL_ESTATE_REGISTRATION"}).json()["result"]
+
+    assert d["summary"] == "混乱が生じる可能性があります。"
+    assert d["details"]["risk_if_wrong"] == "混乱が生じる可能性があります。"
+    assert d["details"]["escalation"] == "専門家の確認が要る箇所です。"
+    assert d["details"]["proposed_patch"]["rationale"] == "公式ページに定めがあります。"
+    # 検証済みの引用は、返答でも一字一句そのまま
+    assert d["details"]["evidence"][0]["quote"] == "こちらに記載がございます"

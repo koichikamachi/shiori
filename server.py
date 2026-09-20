@@ -261,6 +261,47 @@ def _find_check(node_id: str) -> dict | None:
     return None
 
 
+# 生成文にまぎれる過剰敬語を、人が読む手前で端正な「です・ます調」にそろえる。
+# プロンプトでも禁じてあるが、言葉づかいは揺れる。デパートの接客調になると、
+# 公的な案内としての品格が落ちる。最後は機械で均す。
+_POLITE_FIXES = (
+    ("可能性がございます", "可能性があります"),
+    ("でございます", "です"),
+    ("ございません", "ありません"),
+    ("ございます", "あります"),
+    ("ております", "ています"),
+    ("いたします", "します"),
+    ("致します", "します"),
+)
+
+
+def _tidy(text):
+    """接客口調をやめる。文字列でなければ、そのまま返す。"""
+    if not isinstance(text, str):
+        return text
+    for before, after in _POLITE_FIXES:
+        text = text.replace(before, after)
+    return text
+
+
+def _tidy_details(details: dict) -> dict:
+    """
+    人が読む「説明の文」だけを直す。
+
+    **引用（evidence[].quote）には触らない。** あれは取得ページに一字一句あることを
+    機械が確かめた文字列で、書き換えたら検証そのものが嘘になる。
+    パッチの current / proposed も触らない。あれは文章ではなく、
+    関門を通したうえで人が手引きに当てる値である。
+    """
+    for key in ("risk_if_wrong", "escalation"):
+        if key in details:
+            details[key] = _tidy(details[key])
+    patch = details.get("proposed_patch")
+    if isinstance(patch, dict) and "rationale" in patch:
+        patch["rationale"] = _tidy(patch["rationale"])
+    return details
+
+
 @app.post("/api/agent/check")
 def agent_check(req: AgentCheckRequest):
     # Validate node_id securely against formatting or path traversal injection
@@ -315,8 +356,8 @@ def agent_check(req: AgentCheckRequest):
             "result": {
                 "action": result.verdict,
                 "reason": f"一次資料（.go.jp）に基づく自動監査結果。判定: {result.verdict}（確信度: {result.confidence}）",
-                "summary": result.risk_if_wrong or "制度との整合性を検証・確認しました。",
-                "details": result.model_dump()
+                "summary": _tidy(result.risk_if_wrong) or "制度との整合性を検証・確認しました。",
+                "details": _tidy_details(result.model_dump())
             }
         }
     except Exception as e:

@@ -151,8 +151,11 @@ def test_every_shutting_gate_carries_its_words_and_a_bridge():
 def test_fog_section_says_it_is_not_a_road_you_skip():
     """霧の見出しは、「通らなくて済む」と読まれてはならない（ルール15）。"""
     h = body("surv-day10-nomemo")
+    # 霧の箱の見出しと、その直下の一文。「不要と決まった」とは読ませない。
+    assert "状況に応じて必要になる手続き" in h
+    assert "『不要と決まった』という意味ではありません" in h
+    # 駅の札と、上の件数の行には「まだ分からない」が残る
     assert "まだ分からない" in h
-    assert "「通らなくて済む」という意味ではありません" in h
 
 
 def test_fog_and_absent_are_in_separate_boxes():

@@ -116,11 +116,11 @@ a.card:hover{border-color:#333;box-shadow:0 3px 10px rgba(0,0,0,.08);transform:t
 a.card:focus-visible{outline:3px solid #1f4e79;outline-offset:2px}
 a.card:active{transform:translateY(0);box-shadow:0 1px 3px rgba(0,0,0,.08)}
 a.card .t{font-size:16px;font-weight:700;line-height:1.5}
-a.card .k{font-size:10.5px;color:var(--faint);margin-top:3px;letter-spacing:.02em;
- font-family:ui-monospace,monospace}
+/* 内部キー（surv-day1 等）は画面に出さない。読む人には意味が無い。 */
+a.card .k{display:none}
 
 footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--rule);
- color:var(--dim);font-size:12.5px;line-height:1.7}
+ color:#333333;font-size:14px;line-height:1.8}
 @media(max-width:560px){.does{grid-template-columns:1fr}h1{font-size:28px}}
 """
 

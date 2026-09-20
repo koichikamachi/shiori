@@ -105,7 +105,7 @@ SCENARIOS = {
         "done": set(),
     },
     "self-foreign": {
-        "title": "本人・海外に口座と部屋がある",
+        "title": "本人・海外に口座や不動産がある",
         "scope": "SELF",
         "cond": dict(has_foreign_assets=True, has_own_home=True, has_spouse=True,
                      estate_over_basic_deduction=True),
@@ -129,13 +129,13 @@ SCENARIOS = {
         "done": set(),
     },
     "self-debt": {
-        "title": "本人・借入と保証がある",
+        "title": "本人・借入金や連帯保証などがある",
         "scope": "SELF",
         "cond": dict(has_debt_or_guarantee=True, has_spouse=True, children_count=2),
         "done": set(),
     },
     "self-after-one": {
-        "title": "本人・銀行名を一行書き終えたところ（一つやると何が変わるか）",
+        "title": "【体験シミュレーション】銀行名を1行書き残してみた（備えによる変化を見る）",
         "scope": "SELF",
         "cond": dict(has_own_home=True, has_spouse=True, children_count=2),
         "done": {"SELF_BANK_LIST"},

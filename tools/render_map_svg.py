@@ -62,6 +62,16 @@ EVENT_LABEL = {
     "FOREIGN_ASSET_FOUND": "海外の資産が出てきたら",
 }
 
+# 「状況に応じて必要になる手続き」の中だけで使う見出し。
+# 流れの名前（STREAM_LABEL）は路線と札で使うので短くしてある。
+# 霧の箱では、なぜここに入っているのかが分かる言い方に替える。
+FOG_GROUP_LABEL = {
+    "ESTATE_SUCCESSION": "■ 相続税の申告・財産承継に関する確認",
+}
+FOG_GROUP_NOTE = {
+    "ESTATE_SUCCESSION": "以下の項目は、遺産の総額や特例の条件によって対応が必要になります。",
+}
+
 # 深さの見出し。左が先、右があと。時刻ではなく順序である。
 DEPTH_LABEL = ["はじめに", "これが済んでから", "そのあと", "さらにあと",
                "その先", "いちばん先"]
@@ -225,7 +235,7 @@ def render(key, today):
 
     a('<div class="wrap"><div class="head">')
     a(f'<h1>{esc(sc["title"])}</h1>')
-    a(f'<p class="meta">{esc(key)}　／　{today.isoformat()} 時点</p>')
+    a(f'<p class="meta">{today.isoformat()} 時点</p>')
     a('<div class="counts">'
       f'<b>{prog["present"]}</b> 件が、あなたの道です'
       f'<span class="sep">／</span>済んだ <b>{done_n}</b> 件'
@@ -370,13 +380,15 @@ def render(key, today):
 
     if fogs:
         n = sum(len(v) for _, v in fogs)
-        a(f'<details class="side fog" open><summary>まだ分からない　'
-          f'<b>{n}</b> 件</summary>'
-          f'<p class="why">答えていただいていない項目があるので、'
-          f'通るかどうかが決まっていません。'
-          f'<strong>「通らなくて済む」という意味ではありません。</strong></p>')
+        a(f'<details class="side fog" open><summary>状況に応じて必要になる手続き'
+          f'（未確定 <b>{n}</b>件）</summary>'
+          f'<p class="why">財産の状況やご意向によって、対応が必要になるかどうかが変わる手続きです。'
+          f'<strong>（『不要と決まった』という意味ではありません）</strong></p>')
         for s, v in fogs:
-            a(f'<div class="grp"><h3>{esc(STREAM_LABEL.get(s, s))}</h3>{chips(v)}</div>')
+            a(f'<div class="grp"><h3>{esc(FOG_GROUP_LABEL.get(s, STREAM_LABEL.get(s, s)))}</h3>')
+            if s in FOG_GROUP_NOTE:
+                a(f'<p class="grpnote">{esc(FOG_GROUP_NOTE[s])}</p>')
+            a(f'{chips(v)}</div>')
         a('</details>')
 
     if gones:
@@ -450,7 +462,7 @@ text{font-family:"Hiragino Kaku Gothic ProN","Yu Gothic",system-ui,sans-serif}
 .st.sel circle{stroke-width:5.5}
 .st.sel .stt{font-weight:700}
 .chip.sel{background:#1f4e79;border-color:#1f4e79;color:#fff;font-weight:700}
-details.fog .chip.sel{background:#1f4e79;border-color:#1f4e79;color:#fff;border-style:solid}
+details.fog .chip.sel{background:#1f4e79;border-color:#1f4e79;color:#fff}
 details.side{margin-top:14px;background:#fff;border:1px solid var(--rule);
  border-radius:12px;padding:12px 16px}
 details.side summary{cursor:pointer;font-size:14.5px;font-weight:700;color:#2d3748}
@@ -461,13 +473,14 @@ details.side b{font-size:16.5px}
 .why{font-size:13.5px;color:var(--sub);margin:9px 0 4px;line-height:1.75}
 .why strong{color:#4c4470}
 .grp{margin:10px 0 0}
-.grp h3{font-size:12.5px;color:#4a5568;margin:0 0 5px;font-weight:700}
+.grp h3{font-size:13px;color:#1a1a1a;margin:0 0 4px;font-weight:700}
+.grpnote{font-size:12.5px;color:#4a5568;margin:0 0 8px;line-height:1.7}
 /* 押せるものは、押せると分かる形にする（枠・濃い字・触れたときの変化） */
-.chip{font:inherit;font-size:13px;cursor:pointer;background:#f4f1ea;color:#2d3748;
- border:1.5px solid #c9c1af;border-radius:99px;padding:5px 13px;margin:0 5px 6px 0;
- transition:background .12s,border-color .12s}
-details.fog .chip{background:#fff;border-style:dashed;border-color:#9a92b4;color:#4c4470}
-.chip:hover{background:#e6e0d2;border-color:#8c8472}
+.chip{font:inherit;font-size:13px;font-weight:500;cursor:pointer;background:#f9f8f5;color:#1a1a1a;
+ border:1px solid #b8b4a8;border-radius:99px;padding:5px 13px;margin:0 5px 6px 0;
+ transition:background .12s,border-color .12s,box-shadow .12s}
+details.fog .chip{background:#f9f8f5;border:1px solid #b8b4a8;color:#1a1a1a}
+.chip:hover{background:#efece5;border-color:#1a1a1a;box-shadow:0 1px 4px rgba(0,0,0,.08)}
 .chip:focus-visible{outline:2px solid #1f4e79;outline-offset:2px}
 .chip:active{background:#d9d2c0}
 aside{position:fixed;top:0;right:0;width:390px;max-width:92vw;height:100vh;background:#fff;
@@ -495,7 +508,7 @@ aside .assumed b{color:#4a4335}
 aside .shut{background:#f4f1ea;border-left:4px solid #6b6455;padding:10px 12px;border-radius:0 6px 6px 0;margin:10px 0}
 aside .shut b{color:#4a4335}
 aside .note{background:#f7f5ef;padding:10px 12px;border-radius:6px;margin:10px 0}
-footer{color:var(--sub);font-size:13px;margin-top:22px;
+footer{color:#333333;font-size:14px;margin-top:22px;
  border-top:1px solid var(--rule);padding-top:12px;line-height:1.8}
 @media(max-width:760px){.wrap{padding:16px 14px 30px}.legend .axis{margin-left:0}}
 """

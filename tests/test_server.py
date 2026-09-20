@@ -229,3 +229,33 @@ def test_the_process_bar_is_derived_from_the_result_not_hardcoded():
         assert source in body, f"{source} を見ていない"
     # 全段そろったときだけ「完了」と名乗る
     assert "done === steps.length" in body
+
+
+def test_the_internal_control_panel_reads_as_a_quality_report():
+    """
+    関門の欄は、開発者の独白ではなく、利用者が読んで納得できる保証の言葉で書く。
+    内部変数の名前や「要約は通しません」のような言い回しを出さない。
+    """
+    script = _drawer_script(client.get("/map/surv-day1").text)
+
+    assert "AIの安全性と品質の検証（内部統制）" in script
+    for title in ("公式発表への参照限定", "公式原文との完全一致", "更新範囲の厳格な制限",
+                  "専門家承認の必須化", "専門家（人間）による最終確認", "手引きの更新要否"):
+        assert title in script, title
+    for note in ("不確かな民間情報を排除しています",
+                 "AIによる勝手な要約や歪曲を防ぐため",
+                 "あらかじめ定められた項目以外をAIが勝手に改ざんできないよう制限しています。",
+                 "AIが自らを「検証済み」へ格上げすることを禁止しています。",
+                 "専門家が目視で確認・承認するまで更新をブロックします。",
+                 "修正案の作成は不要と判断しました。"):
+        assert note in script, note
+
+    # まとめの一文
+    assert "すべての安全基準（内部統制）に適合しています。" in script
+    assert "安全基準に抵触したため、AIの提案を取り下げました。" in script
+
+    # 開発者の独白は残っていないこと
+    for gone in ("要約は通しません", "人が見るまで、手引きは書き換わりません",
+                 "チェックで取り下げたものはありません", "内部統制・七つの関門チェック",
+                 "ここへ上げられるのは人だけです", "あらかじめ許した範囲の中にあります"):
+        assert gone not in script, gone

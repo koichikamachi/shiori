@@ -620,57 +620,82 @@ function renderEvidence(evidence) {
 }
 
 // 関門。固定文字列をやめ、返ってきた結果から実際に判定できることだけを書く。
-function renderGates(d) {
+function renderGates(d, action) {
   const ev = d.evidence || [];
+  const rej = d.rejected || [];
   const OFFICIAL = /^https:\/\/([^\/]*\.)?(go|lg)\.jp(\/|$)/i;
   const rows = [];
 
   const offAll = ev.length > 0 && ev.every(e => OFFICIAL.test(e.url || ''));
-  rows.push(['根拠は国・自治体の公式ページだけか（.go.jp / .lg.jp）',
-             ev.length === 0 ? ['—', '残った引用がないため、判定していません']
-                             : [offAll ? 'PASS' : 'FAIL', `${ev.length}件すべてを調べました`]]);
+  rows.push(['公式発表への参照限定',
+             ev.length === 0
+               ? ['対象外', '照合できた引用がないため、この検証は行っていません。']
+               : [offAll ? '適合' : '不適合',
+                  `参照先を国や自治体の公的サイト（.go.jp / .lg.jp）に限定し、不確かな民間情報を排除しています。（${ev.length}件すべて照合）`]]);
 
   const okQ = ev.filter(e => e.quote_verified).length;
-  rows.push(['引用は原文どおりか（要約は通しません）',
-             ev.length === 0 ? ['—', '調べる対象がありません']
-                             : [okQ === ev.length ? 'PASS' : 'FAIL', `${okQ} / ${ev.length} 件が、公式ページに一字一句ありました`]]);
+  rows.push(['公式原文との完全一致',
+             ev.length === 0
+               ? ['対象外', '照合できた引用がないため、この検証は行っていません。']
+               : [okQ === ev.length ? '適合' : '不適合',
+                  `AIによる勝手な要約や歪曲を防ぐため、公的発表の文章と一字一句一致することを機械検証しています。（${okQ}/${ev.length}件一致）`]]);
 
   if (d.proposed_patch) {
+    rows.push(['更新範囲の厳格な制限',
+               ['適合', 'あらかじめ定められた項目以外をAIが勝手に改ざんできないよう制限しています。']]);
     const ptr = d.proposed_patch.json_pointer || '';
-    rows.push(['直してよい項目かどうか', ['PASS', `${ptr} は、あらかじめ許した範囲の中にあります`]]);
     const up = ptr.endsWith('/verification_status') && d.proposed_patch.proposed === 'EXPERT_VERIFIED';
-    rows.push(['「専門家が確認済み」への格上げ禁止',
-               [up ? 'FAIL' : 'PASS', 'ここへ上げられるのは人だけです']]);
+    rows.push(['専門家承認の必須化',
+               [up ? '不適合' : '適合', 'AIが自らを「検証済み」へ格上げすることを禁止しています。']]);
   } else {
-    rows.push(['見直し案の有無', ['—', '見直し案はありません（またはチェックで取り下げました）']]);
+    // 修正案が無い理由は一つではない。合致していたのか、取り下げたのか、
+    // そもそも差分を確かめられなかったのか。ここを一律に書くと、事実と違う説明になる。
+    let why;
+    if (rej.length) {
+      why = 'AIが作成した修正案は、安全基準に適合しなかったため取り下げました。';
+    } else if (action === 'UNCHANGED') {
+      why = '公的発表と現行の手引きが合致しているため、修正案の作成は不要と判断しました。';
+    } else {
+      why = '公的発表から確定的な差分を確認できなかったため、修正案は作成していません。';
+    }
+    rows.push(['手引きの更新要否', ['対象外', why]]);
   }
 
-  rows.push(['人の確認を外せないこと',
-             [d.human_review_required === true ? 'PASS' : 'FAIL', '人が見るまで、手引きは書き換わりません']]);
+  rows.push(['専門家（人間）による最終確認',
+             [d.human_review_required === true ? '適合' : '不適合',
+              'AIが手引きを勝手に書き換えることはありません。専門家が目視で確認・承認するまで更新をブロックします。']]);
 
   const body = rows.map(([name, [verdict, detail]]) => {
-    const col = verdict === 'PASS' ? '#0f5c2a' : verdict === 'FAIL' ? '#a01c16' : '#4a5568';
-    const bg  = verdict === 'PASS' ? '#dcf0e2' : verdict === 'FAIL' ? '#fbe0dd' : '#eceef0';
-    return `<div style="display:flex; gap:9px; padding:7px 0; border-top:1px solid #e2dcce; align-items:flex-start;">
+    const col = verdict === '適合' ? '#0f5c2a' : verdict === '不適合' ? '#a01c16' : '#4a5568';
+    const bg  = verdict === '適合' ? '#dcf0e2' : verdict === '不適合' ? '#fbe0dd' : '#eceef0';
+    return `<div style="display:flex; gap:9px; padding:8px 0; border-top:1px solid #e2dcce; align-items:flex-start;">
               <span style="color:${col}; background:${bg}; font-weight:700; font-size:12px;
-                           min-width:46px; text-align:center; border-radius:4px; padding:2px 0;">${verdict}</span>
-              <span style="flex:1;"><span style="color:#1a202c; font-size:13.5px;">${esc(name)}</span>
-                <span style="display:block; color:#2d3748; font-size:12.5px; margin-top:1px;">${esc(detail)}</span></span>
+                           min-width:52px; text-align:center; border-radius:4px; padding:3px 0; flex-shrink:0;">${esc(verdict)}</span>
+              <span style="flex:1;"><span style="color:#1a202c; font-size:13.5px; font-weight:700;">${esc(name)}</span>
+                <span style="display:block; color:#2d3748; font-size:12.5px; margin-top:2px; line-height:1.75;">${esc(detail)}</span></span>
             </div>`;
   }).join('');
 
-  const rej = (d.rejected || []);
+  // 抵触したときは、まず人の言葉で結論を言う。
+  // 機械が記録した理由は捨てない（それが無いと直しようがない）が、下に畳んで置く。
+
   const rejBlock = rej.length ? `
-    <div style="margin-top:11px; background:#fbe0dd; border:1.5px solid #d9776d; border-radius:7px; padding:10px 13px;">
-      <div style="font-size:13px; font-weight:700; color:#8f1710;">チェックで取り下げたもの（${rej.length}件）</div>
-      <ul style="margin:5px 0 0; padding-left:18px; font-size:13px; color:#5e1410; line-height:1.75;">
-        ${rej.map(r => `<li>${esc(r)}</li>`).join('')}
-      </ul>
+    <div style="margin-top:12px; background:#fbe0dd; border:1.5px solid #d9776d; border-radius:7px; padding:10px 13px;">
+      <div style="font-size:13.5px; font-weight:700; color:#8f1710;">安全基準に抵触したため、AIの提案を取り下げました。</div>
+      <details style="margin-top:6px;">
+        <summary style="font-size:12px; color:#5e1410; cursor:pointer;">機械が記録した理由（${rej.length}件）</summary>
+        <ul style="margin:5px 0 0; padding-left:18px; font-size:12px; color:#5e1410; line-height:1.75;">
+          ${rej.map(r => `<li>${esc(r)}</li>`).join('')}
+        </ul>
+      </details>
     </div>` : `
-    <div style="margin-top:11px; font-size:13px; color:#0f5c2a; font-weight:700;">チェックで取り下げたものはありません。</div>`;
+    <div style="margin-top:12px; background:#dcf0e2; border:1.5px solid #6aab84; border-radius:7px;
+                padding:9px 13px; font-size:13.5px; color:#0f5c2a; font-weight:700;">
+      すべての安全基準（内部統制）に適合しています。
+    </div>`;
 
   return `<div style="margin-top:16px;">
-            <div style="font-size:14px; font-weight:700; color:#1a202c; margin-bottom:3px;">内部統制・七つの関門チェック</div>
+            <div style="font-size:14px; font-weight:700; color:#1a202c; margin-bottom:3px;">AIの安全性と品質の検証（内部統制）</div>
             <div style="font-size:13.5px;">${body}</div>
             ${rejBlock}
           </div>`;
@@ -724,7 +749,7 @@ async function runAgentCheck() {
       riskBlock,
       escBlock,
       isDry ? renderDryRun(d)
-            : [renderPatch(d.proposed_patch), renderEvidence(d.evidence), renderGates(d)].join('')
+            : [renderPatch(d.proposed_patch), renderEvidence(d.evidence), renderGates(d, result.action)].join('')
     ].join('');
   } catch (err) {
     resArea.innerHTML = `<div style="color:#a01c16; font-size:14px; font-weight:700;">うまく確かめられませんでした: ${esc(err.message)}</div>`;

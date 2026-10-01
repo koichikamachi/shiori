@@ -364,6 +364,124 @@
               "description": "開発中の内部点検で読んだ日（YYYY-MM-DD）。これは対外的な保証ではない。専門家の確認を受けたことを意味しない。表示にも使わない。"
             }
           }
+        },
+        "branches": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "paths",
+            "note"
+          ],
+          "description": "この駅から分かれる道。選び方は示さず、どの場面で検討される道かを並べる。",
+          "properties": {
+            "paths": {
+              "type": "array",
+              "minItems": 2,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "key",
+                  "label",
+                  "when",
+                  "to_text",
+                  "basis"
+                ],
+                "properties": {
+                  "key": {
+                    "type": "string"
+                  },
+                  "label": {
+                    "type": "string",
+                    "description": "道の名前（例：放棄する（相続放棄））"
+                  },
+                  "when": {
+                    "type": "string",
+                    "description": "この道が検討される場面。指図ではなく場面を書く"
+                  },
+                  "to_text": {
+                    "type": "string",
+                    "description": "行き先（言葉）"
+                  },
+                  "to_node": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "description": "行き先の駅。地図に無い行き先は null"
+                  },
+                  "deadline": {
+                    "type": "string"
+                  },
+                  "basis": {
+                    "type": "string",
+                    "description": "根拠条文"
+                  },
+                  "aside": {
+                    "type": "string",
+                    "description": "道の下に小さく出す補足"
+                  },
+                  "whisker": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "description": "地図に行き先の駅が無いとき、点線の先に出す短い札"
+                  },
+                  "station": {
+                    "type": "string",
+                    "description": "ミニ路線図の終点の駅名（短い名詞）"
+                  },
+                  "rail_tag": {
+                    "type": "string",
+                    "description": "レールの上に置く札（期限の無い道に使う。例：手続は不要）"
+                  }
+                }
+              }
+            },
+            "note": {
+              "type": "string"
+            },
+            "origin": {
+              "type": "string",
+              "description": "ミニ路線図の起点の駅名（短い名詞）"
+            },
+            "when_label": {
+              "type": "string",
+              "description": "道の条件の見出し。既定は「検討される場面」。事実で決まる分岐は「当てはまる場合」"
+            },
+            "footnotes": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "共通の一文の下に添える参考情報（任意の配慮など）"
+            },
+            "siding": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "maxItems": 3,
+              "description": "待避線の札（1〜3行）。既定は期間の延長"
+            }
+          }
+        },
+        "short_title": {
+          "type": "string",
+          "description": "地図やドロワーの見出しに使う短い名詞（8字前後）。無ければ title を使う"
+        },
+        "express": {
+          "type": "boolean",
+          "description": "急行停車駅（主要駅）なら true、各駅なら false。指定なしは通常の大きさ"
+        },
+        "important_note": {
+          "type": "string",
+          "description": "ドロワーの【さらに大事なこと】に出す、人が書いた手引きの文（照合結果とは別）"
+        },
+        "deadline_boxed": {
+          "type": "boolean",
+          "description": "地図の期限の札を枠で囲んで目立たせるなら true（見落としやすい期限の駅に使う）"
         }
       }
     }

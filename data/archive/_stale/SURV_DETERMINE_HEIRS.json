@@ -1,0 +1,216 @@
+{
+  "node_id": "SURV_DETERMINE_HEIRS",
+  "archived_at": "2026-09-24T09:10:29+09:00",
+  "search_route": "Gemini × Google 検索",
+  "result": {
+    "action": "UNVERIFIED",
+    "reason": "一次資料（.go.jp）に基づく自動照合結果。判定: UNVERIFIED（確信度: MEDIUM）",
+    "summary": "自治体ごとに異なる手続きやルールを無視した場合、書類不備や期限超過につながる可能性があります。",
+    "details": {
+      "check_id": "SURV_DETERMINE_HEIRS#1",
+      "node_id": "SURV_DETERMINE_HEIRS",
+      "claim": "相続人を確定する　根拠（下書き）: 民法第887条〜第890条（相続人）",
+      "verdict": "UNVERIFIED",
+      "confidence": "MEDIUM",
+      "checked_at": "2026-09-24",
+      "evidence": [
+        {
+          "url": "https://www.courts.go.jp/sendai/vc-files/sendai/file/2018shosiki2.pdf",
+          "publisher": "",
+          "page_date": null,
+          "quote": "",
+          "quote_verified": false
+        },
+        {
+          "url": "https://www.city.funabashi.lg.jp/machi/juutaku/009/p097365.html",
+          "publisher": "",
+          "page_date": null,
+          "quote": "",
+          "quote_verified": false
+        },
+        {
+          "url": "https://www.city.nichinan.lg.jp/soshikikarasagasu/zeimuka/1/1/6792.html",
+          "publisher": "",
+          "page_date": null,
+          "quote": "",
+          "quote_verified": false
+        }
+      ],
+      "proposed_patch": {
+        "json_pointer": "/next_actions",
+        "current": "相続人を確定する　根拠（下書き）: 民法第887条〜第890条（相続人）",
+        "proposed": "call_local_government_office",
+        "rationale": "この手続きは管轄する自治体によって異なります。検出された自治体: funabashi市, nichinan市, sosa市。各自治体の公式サイトでご確認いただくか、該当する市区町村役所へお問い合わせください。"
+      },
+      "risk_if_wrong": "自治体ごとに異なる手続きやルールを無視した場合、書類不備や期限超過につながる可能性があります。",
+      "escalation": "複数の自治体ローカルルールが検出されました: funabashi市, nichinan市, sosa市",
+      "detected_constraints": {
+        "has_multiple": true,
+        "jurisdictions": [
+          "funabashi市",
+          "nichinan市",
+          "sosa市"
+        ],
+        "confidence": "HIGH",
+        "detail": "複数の自治体ローカルルールが検出されました: funabashi市, nichinan市, sosa市"
+      },
+      "detected_ambiguities": [],
+      "early_warnings": [
+        "✓ 『courts.go.jp』を選定"
+      ],
+      "rejected": [],
+      "human_review_required": true
+    },
+    "detected_ambiguities": [],
+    "early_warnings": [
+      "✓ 『courts.go.jp』を選定"
+    ],
+    "search_route": "Gemini × Google 検索"
+  },
+  "logs": [
+    {
+      "timestamp": "2026-09-24T09:09:56.578113",
+      "role": "System",
+      "action": "✓ 検証開始",
+      "detail": "check_id=SURV_DETERMINE_HEIRS#1"
+    },
+    {
+      "timestamp": "2026-09-24T09:10:00.791069",
+      "role": "Explorer",
+      "action": "🧭 検索クエリを生成",
+      "detail": "相続人 順位 代襲相続"
+    },
+    {
+      "timestamp": "2026-09-24T09:10:00.791183",
+      "role": "Explorer",
+      "action": "🔍 Gemini × Google 検索で公的ドメイン（go.jp / lg.jp）を探索中...",
+      "detail": ""
+    },
+    {
+      "timestamp": "2026-09-24T09:10:15.921174",
+      "role": "Explorer",
+      "action": "🌐 www.courts.go.jp",
+      "detail": "courts.go.jp"
+    },
+    {
+      "timestamp": "2026-09-24T09:10:15.921257",
+      "role": "Explorer",
+      "action": "🌐 www.city.funabashi.lg.jp",
+      "detail": "funabashi.lg.jp"
+    },
+    {
+      "timestamp": "2026-09-24T09:10:15.921294",
+      "role": "Explorer",
+      "action": "🌐 www.city.nichinan.lg.jp",
+      "detail": "nichinan.lg.jp"
+    },
+    {
+      "timestamp": "2026-09-24T09:10:15.921317",
+      "role": "Explorer",
+      "action": "🌐 www.town.tokushima-tsurugi.lg.jp",
+      "detail": "tokushima-tsurugi.lg.jp"
+    },
+    {
+      "timestamp": "2026-09-24T09:10:15.921352",
+      "role": "Explorer",
+      "action": "🌐 www.city.sosa.lg.jp",
+      "detail": "sosa.lg.jp"
+    },
+    {
+      "timestamp": "2026-09-24T09:10:15.921391",
+      "role": "Explorer",
+      "action": "✓ 探索完了",
+      "detail": "公的ページ 5 件（経路: Gemini × Google 検索）"
+    },
+    {
+      "timestamp": "2026-09-24T09:10:15.921405",
+      "role": "Evaluator",
+      "action": "⚖️ 候補を一件ずつ評価し、一次証憑を選定中...",
+      "detail": ""
+    },
+    {
+      "timestamp": "2026-09-24T09:10:18.904118",
+      "role": "Evaluator",
+      "action": "✓ 一次資料（官報・公式ページ） — www.courts.go.jp",
+      "detail": "courts.go.jp"
+    },
+    {
+      "timestamp": "2026-09-24T09:10:21.122670",
+      "role": "Evaluator",
+      "action": "✓ 一次資料（官報・公式ページ） — www.city.funabashi.lg.jp",
+      "detail": "funabashi.lg.jp"
+    },
+    {
+      "timestamp": "2026-09-24T09:10:23.980360",
+      "role": "Evaluator",
+      "action": "✓ 一次資料（官報・公式ページ） — www.city.nichinan.lg.jp",
+      "detail": "nichinan.lg.jp"
+    },
+    {
+      "timestamp": "2026-09-24T09:10:26.825720",
+      "role": "Evaluator",
+      "action": "✓ 一次資料（官報・公式ページ） — www.town.tokushima-tsurugi.lg.jp",
+      "detail": "tokushima-tsurugi.lg.jp"
+    },
+    {
+      "timestamp": "2026-09-24T09:10:29.069865",
+      "role": "Evaluator",
+      "action": "✓ 一次資料（官報・公式ページ） — www.city.sosa.lg.jp",
+      "detail": "sosa.lg.jp"
+    },
+    {
+      "timestamp": "2026-09-24T09:10:29.069919",
+      "role": "Evaluator",
+      "action": "📌 一次証憑として選定",
+      "detail": "https://www.courts.go.jp/sendai/vc-files/sendai/file/2018shosiki2.pdf"
+    },
+    {
+      "timestamp": "2026-09-24T09:10:29.069934",
+      "role": "Evaluator",
+      "action": "✓ 曖昧さの兆候は見つかりませんでした",
+      "detail": ""
+    },
+    {
+      "timestamp": "2026-09-24T09:10:29.069942",
+      "role": "System",
+      "action": "🏘️ 自治体判定中...",
+      "detail": ""
+    },
+    {
+      "timestamp": "2026-09-24T09:10:29.070176",
+      "role": "Disruptor",
+      "action": "⚠️ UNVERIFIED: 複数の自治体ルール検出",
+      "detail": "自治体: funabashi市, nichinan市, sosa市"
+    },
+    {
+      "timestamp": "2026-09-24T09:10:29.070188",
+      "role": "Reader",
+      "action": "📖 公的ページの本文を取得中...",
+      "detail": ""
+    },
+    {
+      "timestamp": "2026-09-24T09:10:29.296916",
+      "role": "Reader",
+      "action": "📄 本文を取得（372,554 字）",
+      "detail": "https://www.courts.go.jp/sendai/vc-files/sendai/file/2018shosiki2.pdf"
+    },
+    {
+      "timestamp": "2026-09-24T09:10:29.831608",
+      "role": "Reader",
+      "action": "📄 本文を取得（2,763 字）",
+      "detail": "https://www.city.funabashi.lg.jp/machi/juutaku/009/p097365.html"
+    },
+    {
+      "timestamp": "2026-09-24T09:10:29.953194",
+      "role": "Reader",
+      "action": "📄 本文を取得（3,612 字）",
+      "detail": "https://www.city.nichinan.lg.jp/soshikikarasagasu/zeimuka/1/1/6792.html"
+    },
+    {
+      "timestamp": "2026-09-24T09:10:29.953241",
+      "role": "Reader",
+      "action": "✓ ページ取得完了",
+      "detail": "3 ページ"
+    }
+  ]
+}

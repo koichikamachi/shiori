@@ -1,0 +1,203 @@
+{
+  "node_id": "SURV_FIND_WILL",
+  "archived_at": "2026-09-26T23:43:46+09:00",
+  "search_route": "Gemini × Google 検索",
+  "result": {
+    "action": "UNCHANGED",
+    "reason": "一次資料（.go.jp）に基づく自動照合結果。判定: UNCHANGED（確信度: HIGH）",
+    "summary": "検認が必要な自筆証書遺言を勝手に開封して手続を進めてしまうと、変造などを疑われて揉め事になるかもしれない。法務局に預けたものかどうか（遺言書情報証明書）を確かめておけば、手続を間違えずにすみそうだ。",
+    "details": {
+      "check_id": "SURV_FIND_WILL#1",
+      "node_id": "SURV_FIND_WILL",
+      "claim": "遺言があるかどうかを調べる　根拠（下書き）: 法務局における遺言書の保管等に関する法律、民法第1004条（遺言書の検認）",
+      "verdict": "UNCHANGED",
+      "confidence": "HIGH",
+      "checked_at": "2026-09-26",
+      "evidence": [
+        {
+          "url": "https://www.courts.go.jp/saiban/syurui/syurui_kazi/kazi_06_17/index.html",
+          "publisher": "裁判所",
+          "page_date": null,
+          "quote": "なお，公正証書による遺言のほか，法務局において保管されている自筆証書遺言※に関して交付される「遺言書情報証明書」は，検認の必要はありません。",
+          "quote_verified": true
+        },
+        {
+          "url": "https://www.moj.go.jp/MINJI/01.html",
+          "publisher": "法務省",
+          "page_date": null,
+          "quote": "【２】　相続開始後、家庭裁判所における検認が不要です!",
+          "quote_verified": true
+        }
+      ],
+      "proposed_patch": null,
+      "risk_if_wrong": "検認が必要な自筆証書遺言を勝手に開封して手続を進めてしまうと、変造などを疑われて揉め事になるかもしれない。法務局に預けたものかどうか（遺言書情報証明書）を確かめておけば、手続を間違えずにすみそうだ。",
+      "escalation": "見つかった遺言書が法務局の保管制度を利用したものか分からないときは、最寄りの法務局（遺言書保管所）や家庭裁判所に一度確かめてみよう。",
+      "detected_constraints": null,
+      "detected_ambiguities": [],
+      "early_warnings": [
+        "✓ 『moj.go.jp』を選定"
+      ],
+      "rejected": [],
+      "human_review_required": true
+    },
+    "detected_ambiguities": [],
+    "early_warnings": [
+      "✓ 『moj.go.jp』を選定"
+    ],
+    "search_route": "Gemini × Google 検索",
+    "sources_found": 3,
+    "pages_read": 2
+  },
+  "logs": [
+    {
+      "timestamp": "2026-09-26T23:43:03.950991",
+      "role": "System",
+      "action": "✓ 検証開始",
+      "detail": "check_id=SURV_FIND_WILL#1"
+    },
+    {
+      "timestamp": "2026-09-26T23:43:09.160555",
+      "role": "Explorer",
+      "action": "🧭 検索クエリを生成",
+      "detail": "自筆証書遺言 検認 不要"
+    },
+    {
+      "timestamp": "2026-09-26T23:43:09.160662",
+      "role": "Explorer",
+      "action": "🔍 Gemini × Google 検索で公的ドメイン（go.jp / lg.jp）を探索中...",
+      "detail": ""
+    },
+    {
+      "timestamp": "2026-09-26T23:43:25.052176",
+      "role": "Explorer",
+      "action": "🌐 www.moj.go.jp",
+      "detail": "moj.go.jp"
+    },
+    {
+      "timestamp": "2026-09-26T23:43:25.052212",
+      "role": "Explorer",
+      "action": "🌐 www.courts.go.jp",
+      "detail": "courts.go.jp"
+    },
+    {
+      "timestamp": "2026-09-26T23:43:25.052223",
+      "role": "Explorer",
+      "action": "🌐 www.gov-online.go.jp",
+      "detail": "gov-online.go.jp"
+    },
+    {
+      "timestamp": "2026-09-26T23:43:25.052245",
+      "role": "Explorer",
+      "action": "✓ 探索完了",
+      "detail": "公的ページ 3 件（経路: Gemini × Google 検索）"
+    },
+    {
+      "timestamp": "2026-09-26T23:43:25.052252",
+      "role": "Evaluator",
+      "action": "⚖️ 候補を一件ずつ評価し、一次証憑を選定中...",
+      "detail": ""
+    },
+    {
+      "timestamp": "2026-09-26T23:43:28.538010",
+      "role": "Evaluator",
+      "action": "✓ 一次資料（官報・公式ページ） — www.moj.go.jp",
+      "detail": "moj.go.jp"
+    },
+    {
+      "timestamp": "2026-09-26T23:43:31.702891",
+      "role": "Evaluator",
+      "action": "✓ 一次資料（官報・公式ページ） — www.courts.go.jp",
+      "detail": "courts.go.jp"
+    },
+    {
+      "timestamp": "2026-09-26T23:43:36.835219",
+      "role": "Evaluator",
+      "action": "✓ 一次資料（官報・公式ページ） — www.gov-online.go.jp",
+      "detail": "gov-online.go.jp"
+    },
+    {
+      "timestamp": "2026-09-26T23:43:36.835273",
+      "role": "Evaluator",
+      "action": "📌 一次証憑として選定",
+      "detail": "https://www.moj.go.jp/MINJI/01.html"
+    },
+    {
+      "timestamp": "2026-09-26T23:43:36.835280",
+      "role": "Evaluator",
+      "action": "✓ 曖昧さの兆候は見つかりませんでした",
+      "detail": ""
+    },
+    {
+      "timestamp": "2026-09-26T23:43:36.835295",
+      "role": "Reader",
+      "action": "📖 公的ページの本文を取得中...",
+      "detail": ""
+    },
+    {
+      "timestamp": "2026-09-26T23:43:36.902552",
+      "role": "Reader",
+      "action": "📄 本文を取得（1,382 字）",
+      "detail": "https://www.moj.go.jp/MINJI/01.html"
+    },
+    {
+      "timestamp": "2026-09-26T23:43:36.973454",
+      "role": "Reader",
+      "action": "📄 本文を取得（3,425 字）",
+      "detail": "https://www.courts.go.jp/saiban/syurui/syurui_kazi/kazi_06_17/index.html"
+    },
+    {
+      "timestamp": "2026-09-26T23:43:37.048450",
+      "role": "Reader",
+      "action": "⚠️ 取得できませんでした",
+      "detail": "https://www.gov-online.go.jp/article/202009/entry-7835.html"
+    },
+    {
+      "timestamp": "2026-09-26T23:43:37.048719",
+      "role": "Reader",
+      "action": "✓ ページ取得完了",
+      "detail": "2 ページ"
+    },
+    {
+      "timestamp": "2026-09-26T23:43:37.048734",
+      "role": "Comparator",
+      "action": "🔄 Comparator: ノードと公的情報を照合中...",
+      "detail": ""
+    },
+    {
+      "timestamp": "2026-09-26T23:43:37.048742",
+      "role": "Disruptor",
+      "action": "🤔 Disruptor: 根拠データを懐疑的に検証中...",
+      "detail": ""
+    },
+    {
+      "timestamp": "2026-09-26T23:43:37.048748",
+      "role": "Writer",
+      "action": "✍️ Writer: CheckResult を生成中...",
+      "detail": ""
+    },
+    {
+      "timestamp": "2026-09-26T23:43:37.049750",
+      "role": "Writer",
+      "action": "🖋️ 文体ルールを読み込み",
+      "detail": "writer_style.md（2,342 字）"
+    },
+    {
+      "timestamp": "2026-09-26T23:43:46.685645",
+      "role": "Writer",
+      "action": "✓ 判定完了: UNCHANGED",
+      "detail": "確信度=HIGH"
+    },
+    {
+      "timestamp": "2026-09-26T23:43:46.685680",
+      "role": "Guards",
+      "action": "🛡️ セキュリティ関門によるバリデーション中...",
+      "detail": ""
+    },
+    {
+      "timestamp": "2026-09-26T23:43:46.689413",
+      "role": "System",
+      "action": "✓ 検証完了",
+      "detail": "verdict=UNCHANGED"
+    }
+  ]
+}

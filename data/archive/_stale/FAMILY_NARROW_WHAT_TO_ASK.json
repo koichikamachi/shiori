@@ -1,0 +1,160 @@
+{
+  "node_id": "FAMILY_NARROW_WHAT_TO_ASK",
+  "archived_at": "2026-09-24T12:13:08+09:00",
+  "search_route": "Gemini × Google 検索",
+  "result": {
+    "action": "AMBIGUOUS",
+    "reason": "一次資料（.go.jp）に基づく自動照合結果。判定: AMBIGUOUS（確信度: LOW）",
+    "summary": "親に確認すべきことが絞り込めていないと、一度で聞ききれずに二度手間になったり、大事な聞き取りを忘れてしまったりするかもしれない（確認漏れ）。",
+    "details": {
+      "check_id": "FAMILY_NARROW_WHAT_TO_ASK#1",
+      "node_id": "FAMILY_NARROW_WHAT_TO_ASK",
+      "claim": "親にしか答えられないことだけに絞る",
+      "verdict": "AMBIGUOUS",
+      "confidence": "LOW",
+      "checked_at": "2026-09-24",
+      "evidence": [
+        {
+          "url": "https://www.mext.go.jp/a_menu/koutou/hutankeigen/1422578.htm",
+          "publisher": "文部科学省",
+          "page_date": null,
+          "quote": "文部科学省では、国立教育政策研究所と共同で、高校3年生の保護者を対象としたアンケート調査を抽出調査により実施します。",
+          "quote_verified": true
+        }
+      ],
+      "proposed_patch": null,
+      "risk_if_wrong": "親に確認すべきことが絞り込めていないと、一度で聞ききれずに二度手間になったり、大事な聞き取りを忘れてしまったりするかもしれない（確認漏れ）。",
+      "escalation": "親から聞き出すべき具体的な項目について、手続きの担当窓口や専門家に一度相談してみよう。",
+      "detected_constraints": null,
+      "detected_ambiguities": [],
+      "early_warnings": [
+        "✓ 『mext.go.jp』を選定"
+      ],
+      "rejected": [],
+      "human_review_required": true
+    },
+    "detected_ambiguities": [],
+    "early_warnings": [
+      "✓ 『mext.go.jp』を選定"
+    ],
+    "search_route": "Gemini × Google 検索",
+    "sources_found": 1,
+    "pages_read": 1
+  },
+  "logs": [
+    {
+      "timestamp": "2026-09-24T12:12:32.260940",
+      "role": "System",
+      "action": "✓ 検証開始",
+      "detail": "check_id=FAMILY_NARROW_WHAT_TO_ASK#1"
+    },
+    {
+      "timestamp": "2026-09-24T12:12:37.803152",
+      "role": "Explorer",
+      "action": "🧭 検索クエリを生成",
+      "detail": "保護者 回答 項目"
+    },
+    {
+      "timestamp": "2026-09-24T12:12:37.803274",
+      "role": "Explorer",
+      "action": "🔍 Gemini × Google 検索で公的ドメイン（go.jp / lg.jp）を探索中...",
+      "detail": ""
+    },
+    {
+      "timestamp": "2026-09-24T12:12:55.214230",
+      "role": "Explorer",
+      "action": "🌐 www.mext.go.jp",
+      "detail": "mext.go.jp"
+    },
+    {
+      "timestamp": "2026-09-24T12:12:55.214313",
+      "role": "Explorer",
+      "action": "✓ 探索完了",
+      "detail": "公的ページ 1 件（経路: Gemini × Google 検索）"
+    },
+    {
+      "timestamp": "2026-09-24T12:12:55.214332",
+      "role": "Evaluator",
+      "action": "⚖️ 候補を一件ずつ評価し、一次証憑を選定中...",
+      "detail": ""
+    },
+    {
+      "timestamp": "2026-09-24T12:12:57.853747",
+      "role": "Evaluator",
+      "action": "✓ 一次資料（官報・公式ページ） — www.mext.go.jp",
+      "detail": "mext.go.jp"
+    },
+    {
+      "timestamp": "2026-09-24T12:12:57.853928",
+      "role": "Evaluator",
+      "action": "📌 一次証憑として選定",
+      "detail": "https://www.mext.go.jp/a_menu/koutou/hutankeigen/1422578.htm"
+    },
+    {
+      "timestamp": "2026-09-24T12:12:57.853955",
+      "role": "Evaluator",
+      "action": "✓ 曖昧さの兆候は見つかりませんでした",
+      "detail": ""
+    },
+    {
+      "timestamp": "2026-09-24T12:12:57.853990",
+      "role": "Reader",
+      "action": "📖 公的ページの本文を取得中...",
+      "detail": ""
+    },
+    {
+      "timestamp": "2026-09-24T12:12:57.992946",
+      "role": "Reader",
+      "action": "📄 本文を取得（2,844 字）",
+      "detail": "https://www.mext.go.jp/a_menu/koutou/hutankeigen/1422578.htm"
+    },
+    {
+      "timestamp": "2026-09-24T12:12:57.993033",
+      "role": "Reader",
+      "action": "✓ ページ取得完了",
+      "detail": "1 ページ"
+    },
+    {
+      "timestamp": "2026-09-24T12:12:57.993053",
+      "role": "Comparator",
+      "action": "🔄 Comparator: ノードと公的情報を照合中...",
+      "detail": ""
+    },
+    {
+      "timestamp": "2026-09-24T12:12:57.993070",
+      "role": "Disruptor",
+      "action": "🤔 Disruptor: 根拠データを懐疑的に検証中...",
+      "detail": ""
+    },
+    {
+      "timestamp": "2026-09-24T12:12:57.993085",
+      "role": "Writer",
+      "action": "✍️ Writer: CheckResult を生成中...",
+      "detail": ""
+    },
+    {
+      "timestamp": "2026-09-24T12:12:57.994794",
+      "role": "Writer",
+      "action": "🖋️ 文体ルールを読み込み",
+      "detail": "writer_style.md（1,798 字）"
+    },
+    {
+      "timestamp": "2026-09-24T12:13:08.135238",
+      "role": "Writer",
+      "action": "✓ 判定完了: AMBIGUOUS",
+      "detail": "確信度=LOW"
+    },
+    {
+      "timestamp": "2026-09-24T12:13:08.135302",
+      "role": "Guards",
+      "action": "🛡️ セキュリティ関門によるバリデーション中...",
+      "detail": ""
+    },
+    {
+      "timestamp": "2026-09-24T12:13:08.136967",
+      "role": "System",
+      "action": "✓ 検証完了",
+      "detail": "verdict=AMBIGUOUS"
+    }
+  ]
+}

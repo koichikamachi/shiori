@@ -1,0 +1,232 @@
+{
+  "node_id": "SURV_DIGITAL_CLEANUP",
+  "archived_at": "2026-09-26T23:52:53+09:00",
+  "search_route": "Gemini × Google 検索",
+  "result": {
+    "action": "AMBIGUOUS",
+    "reason": "一次資料（.go.jp）に基づく自動照合結果。判定: AMBIGUOUS（確信度: MEDIUM）",
+    "summary": "良かれと思って携帯やサブスクを解約したことが（単純承認）とみなされたら、後から借金まで引き継ぐことにならないだろうか。勝手に進めず、手続きの扱いを慎重に確かめておけば問題は防げそうだ。",
+    "details": {
+      "check_id": "SURV_DIGITAL_CLEANUP#1",
+      "node_id": "SURV_DIGITAL_CLEANUP",
+      "claim": "携帯と定期サービスの解約",
+      "verdict": "AMBIGUOUS",
+      "confidence": "MEDIUM",
+      "checked_at": "2026-09-26",
+      "evidence": [
+        {
+          "url": "https://www.courts.go.jp/saiban/syurui/syurui_kazi/kazi_06_13/index.html",
+          "publisher": "裁判所",
+          "page_date": null,
+          "quote": "相続人が被相続人（亡くなった方）の土地の所有権等の権利や借金等の義務をすべて受け継ぐ単純承認",
+          "quote_verified": true
+        }
+      ],
+      "proposed_patch": null,
+      "risk_if_wrong": "良かれと思って携帯やサブスクを解約したことが（単純承認）とみなされたら、後から借金まで引き継ぐことにならないだろうか。勝手に進めず、手続きの扱いを慎重に確かめておけば問題は防げそうだ。",
+      "escalation": "携帯や定期サービスの解約が（処分行為）にあたるかどうか、自分だけで判断するのは難しいな。弁護士や法テラスなどの専門家に、解約しても大丈夫か確認してみよう。",
+      "detected_constraints": null,
+      "detected_ambiguities": [],
+      "early_warnings": [
+        "✓ 『courts.go.jp』を選定"
+      ],
+      "rejected": [],
+      "human_review_required": true
+    },
+    "detected_ambiguities": [],
+    "early_warnings": [
+      "✓ 『courts.go.jp』を選定"
+    ],
+    "search_route": "Gemini × Google 検索",
+    "sources_found": 5,
+    "pages_read": 2
+  },
+  "logs": [
+    {
+      "timestamp": "2026-09-26T23:51:50.769731",
+      "role": "System",
+      "action": "✓ 検証開始",
+      "detail": "check_id=SURV_DIGITAL_CLEANUP#1"
+    },
+    {
+      "timestamp": "2026-09-26T23:51:54.820593",
+      "role": "Explorer",
+      "action": "🧭 検索クエリを生成",
+      "detail": "相続 単純承認 解約"
+    },
+    {
+      "timestamp": "2026-09-26T23:51:54.820705",
+      "role": "Explorer",
+      "action": "🔍 Gemini × Google 検索で公的ドメイン（go.jp / lg.jp）を探索中...",
+      "detail": ""
+    },
+    {
+      "timestamp": "2026-09-26T23:52:16.505164",
+      "role": "Explorer",
+      "action": "🌐 www.courts.go.jp",
+      "detail": "courts.go.jp"
+    },
+    {
+      "timestamp": "2026-09-26T23:52:16.505196",
+      "role": "Explorer",
+      "action": "🌐 www.nta.go.jp",
+      "detail": "nta.go.jp"
+    },
+    {
+      "timestamp": "2026-09-26T23:52:16.505200",
+      "role": "Explorer",
+      "action": "🌐 dl.ndl.go.jp",
+      "detail": "ndl.go.jp"
+    },
+    {
+      "timestamp": "2026-09-26T23:52:16.505204",
+      "role": "Explorer",
+      "action": "🌐 www.courts.go.jp",
+      "detail": "courts.go.jp"
+    },
+    {
+      "timestamp": "2026-09-26T23:52:16.505209",
+      "role": "Explorer",
+      "action": "🌐 www.courts.go.jp",
+      "detail": "courts.go.jp"
+    },
+    {
+      "timestamp": "2026-09-26T23:52:16.505246",
+      "role": "Explorer",
+      "action": "✓ 探索完了",
+      "detail": "公的ページ 5 件（経路: Gemini × Google 検索）"
+    },
+    {
+      "timestamp": "2026-09-26T23:52:16.505253",
+      "role": "Evaluator",
+      "action": "⚖️ 候補を一件ずつ評価し、一次証憑を選定中...",
+      "detail": ""
+    },
+    {
+      "timestamp": "2026-09-26T23:52:21.976555",
+      "role": "Evaluator",
+      "action": "✓ 一次資料（官報・公式ページ） — www.courts.go.jp",
+      "detail": "courts.go.jp"
+    },
+    {
+      "timestamp": "2026-09-26T23:52:26.256173",
+      "role": "Evaluator",
+      "action": "✓ 一次資料（官報・公式ページ） — dl.ndl.go.jp",
+      "detail": "ndl.go.jp"
+    },
+    {
+      "timestamp": "2026-09-26T23:52:32.056421",
+      "role": "Evaluator",
+      "action": "✗ テーマと無関係のため除外 — www.courts.go.jp",
+      "detail": "courts.go.jp"
+    },
+    {
+      "timestamp": "2026-09-26T23:52:37.574995",
+      "role": "Evaluator",
+      "action": "✓ 一次資料（官報・公式ページ） — www.nta.go.jp",
+      "detail": "nta.go.jp"
+    },
+    {
+      "timestamp": "2026-09-26T23:52:41.578291",
+      "role": "Evaluator",
+      "action": "✓ 一次資料（官報・公式ページ） — www.courts.go.jp",
+      "detail": "courts.go.jp"
+    },
+    {
+      "timestamp": "2026-09-26T23:52:41.578435",
+      "role": "Evaluator",
+      "action": "✗ テーマと無関係な公的ページを 1 件除外しました",
+      "detail": ""
+    },
+    {
+      "timestamp": "2026-09-26T23:52:41.578445",
+      "role": "Evaluator",
+      "action": "📌 一次証憑として選定",
+      "detail": "https://www.courts.go.jp/saiban/syurui/syurui_kazi/kazi_06_13/index.html"
+    },
+    {
+      "timestamp": "2026-09-26T23:52:41.578451",
+      "role": "Evaluator",
+      "action": "✓ 曖昧さの兆候は見つかりませんでした",
+      "detail": ""
+    },
+    {
+      "timestamp": "2026-09-26T23:52:41.578464",
+      "role": "Reader",
+      "action": "📖 公的ページの本文を取得中...",
+      "detail": ""
+    },
+    {
+      "timestamp": "2026-09-26T23:52:41.672781",
+      "role": "Reader",
+      "action": "📄 本文を取得（3,689 字）",
+      "detail": "https://www.courts.go.jp/saiban/syurui/syurui_kazi/kazi_06_13/index.html"
+    },
+    {
+      "timestamp": "2026-09-26T23:52:41.921824",
+      "role": "Reader",
+      "action": "📄 本文を取得（292,066 字）",
+      "detail": "https://dl.ndl.go.jp/view/prepareDownload?itemId=info%3Andljp%2Fpid%2F8732960&contentNo=1"
+    },
+    {
+      "timestamp": "2026-09-26T23:52:41.921870",
+      "role": "Reader",
+      "action": "⏭️ PDF は読み取り対象外のため飛ばします",
+      "detail": "https://www.nta.go.jp/about/organization/ntc/kohon/souzoku/pdf/all.pdf"
+    },
+    {
+      "timestamp": "2026-09-26T23:52:41.921879",
+      "role": "Reader",
+      "action": "⏭️ PDF は読み取り対象外のため飛ばします",
+      "detail": "https://www.courts.go.jp/kanazawa/vc-files/kanazawa/2024/kaji/3-03-06-1syouninhoukikikanshinchou.pdf"
+    },
+    {
+      "timestamp": "2026-09-26T23:52:41.921885",
+      "role": "Reader",
+      "action": "✓ ページ取得完了",
+      "detail": "2 ページ"
+    },
+    {
+      "timestamp": "2026-09-26T23:52:41.921889",
+      "role": "Comparator",
+      "action": "🔄 Comparator: ノードと公的情報を照合中...",
+      "detail": ""
+    },
+    {
+      "timestamp": "2026-09-26T23:52:41.921893",
+      "role": "Disruptor",
+      "action": "🤔 Disruptor: 根拠データを懐疑的に検証中...",
+      "detail": ""
+    },
+    {
+      "timestamp": "2026-09-26T23:52:41.921896",
+      "role": "Writer",
+      "action": "✍️ Writer: CheckResult を生成中...",
+      "detail": ""
+    },
+    {
+      "timestamp": "2026-09-26T23:52:41.922778",
+      "role": "Writer",
+      "action": "🖋️ 文体ルールを読み込み",
+      "detail": "writer_style.md（2,342 字）"
+    },
+    {
+      "timestamp": "2026-09-26T23:52:53.791190",
+      "role": "Writer",
+      "action": "✓ 判定完了: AMBIGUOUS",
+      "detail": "確信度=HIGH"
+    },
+    {
+      "timestamp": "2026-09-26T23:52:53.791221",
+      "role": "Guards",
+      "action": "🛡️ セキュリティ関門によるバリデーション中...",
+      "detail": ""
+    },
+    {
+      "timestamp": "2026-09-26T23:52:53.792049",
+      "role": "System",
+      "action": "✓ 検証完了",
+      "detail": "verdict=AMBIGUOUS"
+    }
+  ]
+}

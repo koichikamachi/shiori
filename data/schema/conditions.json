@@ -69,6 +69,13 @@
       "scope": "self",
       "label": "籍を入れていない相手がいる"
     },
+    "no_family_to_rely": {
+      "type": "bool",
+      "kind": "input",
+      "scope": "self",
+      "label": "亡くなった後を任せられる家族がいない",
+      "note": "「相続人がいない」とは分ける。法律上の相続人（兄弟姉妹・甥姪など）がいても、疎遠で頼れない人がいるため。"
+    },
     "has_will": {
       "type": "bool",
       "kind": "input",

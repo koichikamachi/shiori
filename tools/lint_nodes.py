@@ -44,6 +44,11 @@ ALLOWED = set(REQUIRED) | {
     "is_warning_only", "absent_note",
     "mitigates_nodes", "irreversibility", "caution",
     "deadline", "specialist_bridge",
+    "branches",   # この駅から分かれる道（選び方は示さず、検討される場面を並べる）
+    "short_title",  # 地図・ドロワーの見出しに使う短い名詞
+    "express",      # 急行停車駅（主要駅）なら true、各駅なら false
+    "important_note",  # ドロワーの【さらに大事なこと】に出す、人が書いた手引きの文
+    "deadline_boxed",  # 地図の期限の札を枠で囲む（見落としやすい期限の駅）
 }
 
 ENUMS = {
@@ -142,6 +147,11 @@ for name, nodes in by_file.items():
         for key in node:
             if key not in ALLOWED:
                 err(w, f"定義にない項目がある: {key}")
+        # 分かれる道の行き先の駅が、実在すること
+        for p in (node.get("branches") or {}).get("paths", []):
+            tn = p.get("to_node")
+            if tn and tn not in all_ids:
+                err(w, f"分かれる道の行き先の駅が無い: {tn}")
 
         if not ID_RE.match(nid):
             err(w, "id の付け方が規則に合わない（SELF_ / FAMILY_ / SURV_ で始まる大文字とアンダースコア）")

@@ -1,0 +1,233 @@
+{
+  "node_id": "SURV_RENOUNCE_TELL_NEXT",
+  "archived_at": "2026-09-26T22:57:53+09:00",
+  "search_route": "Gemini × Google 検索",
+  "result": {
+    "action": "AMBIGUOUS",
+    "reason": "一次資料（.go.jp）に基づく自動照合結果。判定: AMBIGUOUS（確信度: HIGH）",
+    "summary": "次順位の人に連絡すべきか分からないままだと、急に借金の督促がいって関係がこじれてしまうかもしれない。法的な通知義務の有無や実務上の適切な伝え方を押さえておけば、無用なトラブルを防げて安心できそうだ。",
+    "details": {
+      "check_id": "SURV_RENOUNCE_TELL_NEXT#1",
+      "node_id": "SURV_RENOUNCE_TELL_NEXT",
+      "claim": "自分が放棄するなら、次に相続人になる人に自分から伝える　根拠（下書き）: 民法第939条（放棄の効力）、第915条（熟慮期間）",
+      "verdict": "AMBIGUOUS",
+      "confidence": "HIGH",
+      "checked_at": "2026-09-26",
+      "evidence": [
+        {
+          "url": "https://www.city.nichinan.lg.jp/soshikikarasagasu/zeimuka/1/1/6792.html",
+          "publisher": "日南市",
+          "page_date": "2025-12-10",
+          "quote": "相続放棄をした場合、その相続人は初めから相続人ではなかったものとして扱われ、相続権は次順位の相続人に移ります。",
+          "quote_verified": true
+        },
+        {
+          "url": "https://www.courts.go.jp/saiban/syurui/syurui_kazi/kazi_06_13/index.html",
+          "publisher": "裁判所",
+          "page_date": null,
+          "quote": "相続人が，2の相続放棄又は3の限定承認をするには，家庭裁判所にその旨の申述をしなければなりません。",
+          "quote_verified": true
+        }
+      ],
+      "proposed_patch": null,
+      "risk_if_wrong": "次順位の人に連絡すべきか分からないままだと、急に借金の督促がいって関係がこじれてしまうかもしれない。法的な通知義務の有無や実務上の適切な伝え方を押さえておけば、無用なトラブルを防げて安心できそうだ。",
+      "escalation": "自分から知らせるべきか、裁判所の通知に任せていいのだろうか？家庭裁判所の担当窓口や弁護士などの専門家に、放棄後の次順位者への連絡に関する実務上の注意点を聞いてみよう。",
+      "detected_constraints": null,
+      "detected_ambiguities": [],
+      "early_warnings": [
+        "✓ 『courts.go.jp』を選定"
+      ],
+      "rejected": [],
+      "human_review_required": true
+    },
+    "detected_ambiguities": [],
+    "early_warnings": [
+      "✓ 『courts.go.jp』を選定"
+    ],
+    "search_route": "Gemini × Google 検索",
+    "sources_found": 5,
+    "pages_read": 2
+  },
+  "logs": [
+    {
+      "timestamp": "2026-09-26T22:56:59.481423",
+      "role": "System",
+      "action": "✓ 検証開始",
+      "detail": "check_id=SURV_RENOUNCE_TELL_NEXT#1"
+    },
+    {
+      "timestamp": "2026-09-26T22:57:03.674642",
+      "role": "Explorer",
+      "action": "🧭 検索クエリを生成",
+      "detail": "相続放棄 次順位 通知義務"
+    },
+    {
+      "timestamp": "2026-09-26T22:57:03.674697",
+      "role": "Explorer",
+      "action": "🔍 Gemini × Google 検索で公的ドメイン（go.jp / lg.jp）を探索中...",
+      "detail": ""
+    },
+    {
+      "timestamp": "2026-09-26T22:57:23.699615",
+      "role": "Explorer",
+      "action": "🌐 www.courts.go.jp",
+      "detail": "courts.go.jp"
+    },
+    {
+      "timestamp": "2026-09-26T22:57:23.699666",
+      "role": "Explorer",
+      "action": "🌐 laws.e-gov.go.jp",
+      "detail": "e-gov.go.jp"
+    },
+    {
+      "timestamp": "2026-09-26T22:57:23.699677",
+      "role": "Explorer",
+      "action": "🌐 laws.e-gov.go.jp",
+      "detail": "e-gov.go.jp"
+    },
+    {
+      "timestamp": "2026-09-26T22:57:23.699687",
+      "role": "Explorer",
+      "action": "🌐 www.city.nichinan.lg.jp",
+      "detail": "nichinan.lg.jp"
+    },
+    {
+      "timestamp": "2026-09-26T22:57:23.699695",
+      "role": "Explorer",
+      "action": "🌐 www.moj.go.jp",
+      "detail": "moj.go.jp"
+    },
+    {
+      "timestamp": "2026-09-26T22:57:23.699721",
+      "role": "Explorer",
+      "action": "✓ 探索完了",
+      "detail": "公的ページ 5 件（経路: Gemini × Google 検索）"
+    },
+    {
+      "timestamp": "2026-09-26T22:57:23.699728",
+      "role": "Evaluator",
+      "action": "⚖️ 候補を一件ずつ評価し、一次証憑を選定中...",
+      "detail": ""
+    },
+    {
+      "timestamp": "2026-09-26T22:57:27.257093",
+      "role": "Evaluator",
+      "action": "✓ 一次資料（官報・公式ページ） — www.courts.go.jp",
+      "detail": "courts.go.jp"
+    },
+    {
+      "timestamp": "2026-09-26T22:57:30.766502",
+      "role": "Evaluator",
+      "action": "✓ 一次資料（官報・公式ページ） — laws.e-gov.go.jp",
+      "detail": "e-gov.go.jp"
+    },
+    {
+      "timestamp": "2026-09-26T22:57:34.051320",
+      "role": "Evaluator",
+      "action": "✓ 一次資料（官報・公式ページ） — laws.e-gov.go.jp",
+      "detail": "e-gov.go.jp"
+    },
+    {
+      "timestamp": "2026-09-26T22:57:37.322072",
+      "role": "Evaluator",
+      "action": "✓ 一次資料（官報・公式ページ） — www.city.nichinan.lg.jp",
+      "detail": "nichinan.lg.jp"
+    },
+    {
+      "timestamp": "2026-09-26T22:57:42.305096",
+      "role": "Evaluator",
+      "action": "✓ 一次資料（官報・公式ページ） — www.moj.go.jp",
+      "detail": "moj.go.jp"
+    },
+    {
+      "timestamp": "2026-09-26T22:57:42.305222",
+      "role": "Evaluator",
+      "action": "📌 一次証憑として選定",
+      "detail": "https://www.courts.go.jp/saiban/syurui/syurui_kazi/kazi_06_13/index.html"
+    },
+    {
+      "timestamp": "2026-09-26T22:57:42.305247",
+      "role": "Evaluator",
+      "action": "✓ 曖昧さの兆候は見つかりませんでした",
+      "detail": ""
+    },
+    {
+      "timestamp": "2026-09-26T22:57:42.305598",
+      "role": "Disruptor",
+      "action": "🏘️ 自治体のページが混じっています（国の制度の解説として参考扱い）",
+      "detail": "www.city.nichinan.lg.jp"
+    },
+    {
+      "timestamp": "2026-09-26T22:57:42.305616",
+      "role": "Reader",
+      "action": "📖 公的ページの本文を取得中...",
+      "detail": ""
+    },
+    {
+      "timestamp": "2026-09-26T22:57:42.439558",
+      "role": "Reader",
+      "action": "📄 本文を取得（3,689 字）",
+      "detail": "https://www.courts.go.jp/saiban/syurui/syurui_kazi/kazi_06_13/index.html"
+    },
+    {
+      "timestamp": "2026-09-26T22:57:42.733668",
+      "role": "Reader",
+      "action": "📄 本文を取得（3,612 字）",
+      "detail": "https://www.city.nichinan.lg.jp/soshikikarasagasu/zeimuka/1/1/6792.html"
+    },
+    {
+      "timestamp": "2026-09-26T22:57:42.733733",
+      "role": "Reader",
+      "action": "⏭️ PDF は読み取り対象外のため飛ばします",
+      "detail": "https://www.moj.go.jp/content/001324101.pdf"
+    },
+    {
+      "timestamp": "2026-09-26T22:57:42.733760",
+      "role": "Reader",
+      "action": "✓ ページ取得完了",
+      "detail": "2 ページ"
+    },
+    {
+      "timestamp": "2026-09-26T22:57:42.733770",
+      "role": "Comparator",
+      "action": "🔄 Comparator: ノードと公的情報を照合中...",
+      "detail": ""
+    },
+    {
+      "timestamp": "2026-09-26T22:57:42.733777",
+      "role": "Disruptor",
+      "action": "🤔 Disruptor: 根拠データを懐疑的に検証中...",
+      "detail": ""
+    },
+    {
+      "timestamp": "2026-09-26T22:57:42.733784",
+      "role": "Writer",
+      "action": "✍️ Writer: CheckResult を生成中...",
+      "detail": ""
+    },
+    {
+      "timestamp": "2026-09-26T22:57:42.749766",
+      "role": "Writer",
+      "action": "🖋️ 文体ルールを読み込み",
+      "detail": "writer_style.md（2,342 字）"
+    },
+    {
+      "timestamp": "2026-09-26T22:57:53.465264",
+      "role": "Writer",
+      "action": "✓ 判定完了: AMBIGUOUS",
+      "detail": "確信度=HIGH"
+    },
+    {
+      "timestamp": "2026-09-26T22:57:53.465324",
+      "role": "Guards",
+      "action": "🛡️ セキュリティ関門によるバリデーション中...",
+      "detail": ""
+    },
+    {
+      "timestamp": "2026-09-26T22:57:53.472277",
+      "role": "System",
+      "action": "✓ 検証完了",
+      "detail": "verdict=AMBIGUOUS"
+    }
+  ]
+}

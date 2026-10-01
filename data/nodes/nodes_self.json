@@ -35,7 +35,9 @@
         "verified_by": null,
         "source_draft": "預貯金の相続実務",
         "needs_check": []
-      }
+      },
+      "short_title": "口座メモ",
+      "express": true
     },
     {
       "id": "SELF_INSURANCE_NOTE",
@@ -70,7 +72,9 @@
         "needs_check": [
           "時効の年数と、時効経過後の実務上の取扱い"
         ]
-      }
+      },
+      "short_title": "保険メモ",
+      "express": true
     },
     {
       "id": "SELF_DIGITAL_PASS_NOTE",
@@ -103,7 +107,9 @@
         "verified_by": null,
         "source_draft": null,
         "needs_check": []
-      }
+      },
+      "short_title": "スマホと契約メモ",
+      "express": false
     },
     {
       "id": "SELF_DESIGNATE_OPERATOR",
@@ -131,7 +137,9 @@
         "needs_check": [
           "委任契約の要否と、契約がない場合に近親者ができる範囲"
         ]
-      }
+      },
+      "short_title": "死後事務の担い手",
+      "express": true
     },
     {
       "id": "SELF_WISHES_EFFECTIVE_OR_NOT",
@@ -162,7 +170,9 @@
         "needs_check": [
           "ペットの引き取りを法的に確実にする方法（負担付遺贈・信託・生前契約）"
         ]
-      }
+      },
+      "short_title": "希望の書き分け",
+      "express": false
     },
     {
       "id": "SELF_ENTRY_AND_KEY",
@@ -202,7 +212,9 @@
         "needs_check": [
           "第三者に預けた封書の開封が、遺言書の検認を要する場合にあたらないかの確認"
         ]
-      }
+      },
+      "short_title": "入口と鍵の預け先",
+      "express": true
     },
     {
       "id": "SELF_EXPORT_SNAPSHOT",
@@ -231,7 +243,9 @@
         "verified_by": null,
         "source_draft": null,
         "needs_check": []
-      }
+      },
+      "short_title": "一枚への書き出し",
+      "express": true
     },
     {
       "id": "SELF_HOME_TITLE_CHECK",
@@ -264,7 +278,9 @@
         "needs_check": [
           "義務化の施行日、期限の数え方、過去の相続への遡及の有無、過料の運用"
         ]
-      }
+      },
+      "short_title": "自宅の名義",
+      "express": false
     },
     {
       "id": "SELF_TAX_BOUNDARY",
@@ -294,6 +310,52 @@
         "needs_check": [
           "基礎控除の算式と、法定相続人の数え方（放棄した人・養子の扱い）"
         ]
+      },
+      "short_title": "相続税の境界",
+      "express": true,
+      "branches": {
+        "origin": "相続税の境界",
+        "when_label": "当てはまる場合",
+        "paths": [
+          {
+            "key": "A",
+            "label": "準備は要らない見込み",
+            "station": "準備は不要",
+            "when": "財産の総額が基礎控除（3,000万円＋600万円×法定相続人の数）以下と見込まれるとき",
+            "to_text": "相続税の準備は要らない見込み。ほかの備えへ",
+            "to_node": null,
+            "rail_tag": "手続は不要",
+            "deadline": "",
+            "basis": "相続税法第15条",
+            "aside": "財産の額や相続人の数が変われば、見込みも変わります。",
+            "whisker": null
+          },
+          {
+            "key": "B",
+            "label": "税額の見当をつける",
+            "station": "納税額の見当",
+            "when": "財産の総額が基礎控除を超えそうなとき",
+            "to_text": "納める税額の桁を見当づける",
+            "to_node": "SELF_TAX_MAGNITUDE",
+            "deadline": "",
+            "basis": "相続税法第15条・第16条",
+            "aside": "",
+            "whisker": null
+          },
+          {
+            "key": "C",
+            "label": "自宅の土地の特例を確かめる",
+            "station": "小規模宅地",
+            "when": "基礎控除を超えそうで、自宅の土地があるとき",
+            "to_text": "自宅の土地の評価を下げられる特例が使えるか確かめる",
+            "to_node": "SELF_LAND_SMALL_RESIDENTIAL",
+            "deadline": "",
+            "basis": "租税特別措置法第69条の4",
+            "aside": "この特例は、亡くなった後に家族が申告してはじめて使えます。",
+            "whisker": null
+          }
+        ],
+        "note": "見込みの計算は、このアプリでは行いません。財産の評価しだいで結果が変わるので、税務署や税理士に確かめてください。"
       }
     },
     {
@@ -322,7 +384,9 @@
         "verified_by": null,
         "source_draft": null,
         "needs_check": []
-      }
+      },
+      "short_title": "納税額の見当",
+      "express": false
     },
     {
       "id": "SELF_CASH_FOR_TAX",
@@ -362,7 +426,9 @@
           "非課税枠の算式と、放棄した人の扱い",
           "延納・物納の要件"
         ]
-      }
+      },
+      "short_title": "納税資金の用意",
+      "express": false
     },
     {
       "id": "SELF_TAX_PREP_ENVELOPE",
@@ -395,7 +461,9 @@
         "verified_by": null,
         "source_draft": null,
         "needs_check": []
-      }
+      },
+      "short_title": "税理士用の封筒",
+      "express": false
     },
     {
       "id": "SELF_INCAPACITY_PLAN",
@@ -431,7 +499,9 @@
         "needs_check": [
           "任意後見・財産管理委任・家族信託の使い分けと費用感"
         ]
-      }
+      },
+      "short_title": "判断力低下への備え",
+      "express": false
     },
     {
       "id": "SELF_LAND_ENVELOPE",
@@ -468,7 +538,9 @@
         "needs_check": [
           "名寄帳で把握できる範囲と、把握できない不動産（未登記建物・共有私道など）"
         ]
-      }
+      },
+      "short_title": "不動産書類の封筒",
+      "express": false
     },
     {
       "id": "SELF_LAND_ANCESTOR_TITLE",
@@ -507,7 +579,9 @@
         "needs_check": [
           "数次相続の登記手続と、義務化との関係"
         ]
-      }
+      },
+      "short_title": "先代名義の土地",
+      "express": false
     },
     {
       "id": "SELF_LAND_BOUNDARY",
@@ -543,7 +617,9 @@
         "needs_check": [
           "確定測量と筆界特定の使い分け、費用の相場"
         ]
-      }
+      },
+      "short_title": "隣地との境界",
+      "express": false
     },
     {
       "id": "SELF_LAND_LEASE_NOTE",
@@ -572,7 +648,9 @@
         "verified_by": null,
         "source_draft": "借地借家法",
         "needs_check": []
-      }
+      },
+      "short_title": "貸地・借地の一覧",
+      "express": false
     },
     {
       "id": "SELF_LAND_SMALL_RESIDENTIAL",
@@ -622,7 +700,9 @@
       "why_only_you": "同居を始める、生活費の流れを整える、持ち家を買わずにおく——どれも生前にしかできない。亡くなったあとで要件を作ることはできない。",
       "caution": {
         "note": "【急所】この特例は、相続税の申告期限までに遺産分割が成立していないと使えない。生前に遺言を書いておけば、未分割にならず、特例が確実に使える。／限度面積と減額割合は、自宅330㎡80％、事業用400㎡80％、同族会社の事業用400㎡80％、貸付用200㎡50％。自宅と事業用は合わせて730㎡まで使えるが、貸付用が混ざると調整計算になる。／別居の子に継がせる場合（いわゆる家なき子）は要件が細かく、親や配偶者の親が持つ家に住んでいると使えないなど、踏み抜きやすい。／個人で事業をしている場合、事業用の土地について個人版事業承継税制とは併用できない。どちらを取るかを先に決めること。"
-      }
+      },
+      "short_title": "小規模宅地の特例",
+      "express": false
     },
     {
       "id": "SELF_BIZ_STOCK_REGISTER",
@@ -655,7 +735,9 @@
           "名義株の整理方法",
           "定款による譲渡制限と相続人に対する売渡請求（会社法第174条）"
         ]
-      }
+      },
+      "short_title": "株主名簿と持株",
+      "express": false
     },
     {
       "id": "SELF_BIZ_GUARANTEE_NOTE",
@@ -701,7 +783,9 @@
           "保証債務が相続される範囲（根保証の元本確定を含む）",
           "経営者保証の解除の実務"
         ]
-      }
+      },
+      "short_title": "個人保証の一覧",
+      "express": false
     },
     {
       "id": "SELF_BIZ_LOAN_BETWEEN",
@@ -733,7 +817,9 @@
         "needs_check": [
           "役員貸付金・借入金の相続税上の評価"
         ]
-      }
+      },
+      "short_title": "会社との貸し借り",
+      "express": false
     },
     {
       "id": "SELF_BIZ_SUCCESSION_TAX",
@@ -787,7 +873,9 @@
           "適用期限（令和9年12月31日）が今後さらに延長されないか、年に一度は確かめる。"
         ],
         "in_house_reviewed_at": "2026-09-03"
-      }
+      },
+      "short_title": "事業承継税制（法人）",
+      "express": false
     },
     {
       "id": "SELF_BIZ_INDIVIDUAL_SUCCESSION_TAX",
@@ -844,7 +932,9 @@
       },
       "caution": {
         "note": "【急所】事業用の土地について、この特例と小規模宅地等の特例（特定事業用宅地等）は併用できない。どちらを使うかは、生前に決めておくこと。／計画の提出期限と、実際に渡す期限は別である。法人版とも一年ずれている。"
-      }
+      },
+      "short_title": "事業承継税制（個人）",
+      "express": false
     },
     {
       "id": "SELF_BIZ_CONTINUITY_KIT",
@@ -874,7 +964,9 @@
         "verified_by": null,
         "source_draft": null,
         "needs_check": []
-      }
+      },
+      "short_title": "翌日の支払い体制",
+      "express": false
     },
     {
       "id": "SELF_FOREIGN_COUNTRY_NOTE",
@@ -908,7 +1000,9 @@
         "verified_by": null,
         "source_draft": null,
         "needs_check": []
-      }
+      },
+      "short_title": "海外資産のメモ",
+      "express": false
     },
     {
       "id": "SELF_FOREIGN_PROBATE_CHECK",
@@ -955,7 +1049,9 @@
         ],
         "source_url": "https://laws.e-gov.go.jp/law/418AC0000000078",
         "in_house_reviewed_at": "2026-09-03"
-      }
+      },
+      "short_title": "現地手続の要否",
+      "express": false
     },
     {
       "id": "SELF_FOREIGN_REPORT_CHECK",
@@ -989,7 +1085,9 @@
           "国外財産調書の提出基準額、判定日、提出期限",
           "未提出・過少記載の場合の加算税の扱い"
         ]
-      }
+      },
+      "short_title": "国外財産の届出",
+      "express": false
     },
     {
       "id": "SELF_DEBT_LIST_NOTE",
@@ -1023,7 +1121,9 @@
         "verified_by": null,
         "source_draft": null,
         "needs_check": []
-      }
+      },
+      "short_title": "借入・保証の一覧",
+      "express": false
     },
     {
       "id": "SELF_DEBT_LEAVE_INSTRUCTION",
@@ -1055,7 +1155,9 @@
         "verified_by": null,
         "source_draft": "民法第915条第1項（熟慮期間）、民法第921条第1号（法定単純承認）",
         "needs_check": []
-      }
+      },
+      "short_title": "相談の書き置き",
+      "express": false
     },
     {
       "id": "SELF_DEBT_INSURANCE_ROUTE",
@@ -1090,7 +1192,9 @@
           "受取人が『相続人』と指定されている場合の扱い",
           "放棄した者に対する死亡保険金の非課税枠の適用可否"
         ]
-      }
+      },
+      "short_title": "放棄後も残る道",
+      "express": false
     },
     {
       "id": "SELF_RESERVED_SHARE_CHECK",
@@ -1122,7 +1226,9 @@
           "遺留分の割合と、権利を持つ人の範囲",
           "請求の期限"
         ]
-      }
+      },
+      "short_title": "遺留分の確認",
+      "express": false
     },
     {
       "id": "SELF_BEQUEST_ORG_CHECK",
@@ -1157,7 +1263,9 @@
         "needs_check": [
           "換価してから遺贈する場合の課税（譲渡所得の扱い）"
         ]
-      }
+      },
+      "short_title": "遺贈先への打診",
+      "express": false
     },
     {
       "id": "SELF_DESIGNATE_EXECUTOR",
@@ -1169,8 +1277,8 @@
       "title": "遺言を実行する人を決めて、引き受けてもらう",
       "today_action": "遺言のとおりに手続をする人を決め、引き受けてもらえるかを確かめる。あわせて、その人が困らないよう、書類の在処と相手の連絡先を渡しておく。",
       "why_only_you": "家族に頼むのは酷である。自分の取り分が減る内容を、自分の手で実行させることになる。",
-      "exists_if": "condition.wishes_donation == true || condition.has_will == true || condition.has_unmarried_partner == true",
-      "absent_note": "遺言も、家族以外に渡す予定も、籍を入れていない相手もないので、遺言を実行する人を決めておく必要はありません。",
+      "exists_if": "condition.wishes_donation == true || condition.has_will == true || condition.has_unmarried_partner == true || condition.no_family_to_rely == true",
+      "absent_note": "遺言も、家族以外に渡す予定も、籍を入れていない相手もなく、亡くなった後を任せられる家族もいるので、遺言を実行する人を決めておく必要はありません。",
       "prerequisites": [
         "SELF_BEQUEST_ORG_CHECK"
       ],
@@ -1191,7 +1299,9 @@
         "verified_by": null,
         "source_draft": "民法第1006条（遺言執行者の指定）",
         "needs_check": []
-      }
+      },
+      "short_title": "遺言執行者",
+      "express": false
     },
     {
       "id": "SELF_PARTNER_PROVISION",
@@ -1226,7 +1336,9 @@
           "相続人以外の者が財産を取得した場合の相続税額の加算",
           "居住権の確保の手立て"
         ]
-      }
+      },
+      "short_title": "パートナーへの手立て",
+      "express": false
     },
     {
       "id": "SELF_HEIR_ESTIMATE",
@@ -1263,6 +1375,51 @@
           "代襲相続の範囲（子の代襲は制限なし、兄弟姉妹の代襲は甥姪の一代まで）",
           "普通養子・特別養子で実親との関係がどう変わるか"
         ]
+      },
+      "short_title": "相続人の見込み",
+      "express": true,
+      "branches": {
+        "origin": "相続人の見込み",
+        "when_label": "当てはまる場合",
+        "paths": [
+          {
+            "key": "A",
+            "label": "子がいる",
+            "station": "戸籍の先取り",
+            "when": "子がいるとき",
+            "to_text": "自分の戸籍を、生きているうちに取っておく",
+            "to_node": "SELF_KOSEKI_AHEAD",
+            "deadline": "",
+            "basis": "民法第887条",
+            "aside": "",
+            "whisker": null
+          },
+          {
+            "key": "B",
+            "label": "子がいない",
+            "station": "子がいない場合",
+            "when": "子がいないとき",
+            "to_text": "親、いなければ兄弟姉妹（亡くなっていれば甥姪）が相続人になる",
+            "to_node": "SELF_NO_CHILD_ROUTE",
+            "deadline": "",
+            "basis": "民法第889条",
+            "aside": "",
+            "whisker": null
+          },
+          {
+            "key": "C",
+            "label": "相続人がいない",
+            "station": "相続人がいない",
+            "when": "相続人が一人もいない見込みのとき",
+            "to_text": "遺言がないと、財産は清算人が整理し、最後は国のものになる",
+            "to_node": "SELF_NO_HEIR_DESTINATION",
+            "deadline": "",
+            "basis": "民法第951条",
+            "aside": "",
+            "whisker": null
+          }
+        ],
+        "note": "配偶者は、いつも相続人になります（民法第890条）。"
       }
     },
     {
@@ -1305,7 +1462,9 @@
           "広域交付で取れる範囲と、取れない書類（コンピュータ化されていない戸籍など）",
           "手数料と、一度に何通まで請求できるか"
         ]
-      }
+      },
+      "short_title": "戸籍の先取り",
+      "express": false
     },
     {
       "id": "SELF_NO_CHILD_ROUTE",
@@ -1357,7 +1516,9 @@
         ],
         "source_url": "https://laws.e-gov.go.jp/law/322AC0000000224",
         "in_house_reviewed_at": "2026-09-03"
-      }
+      },
+      "short_title": "子がいない場合",
+      "express": false
     },
     {
       "id": "SELF_RENOUNCE_CHAIN_WARN",
@@ -1400,7 +1561,9 @@
         "type": "JUDICIAL_SCRIVENER",
         "concrete_query": "渡したい相手が受け取らなかった場合にそなえて、予備の指定を入れた遺言を作りたい。",
         "estimated_cost_range": "公証人手数料 数万円＋専門家報酬 10万円〜（目安）"
-      }
+      },
+      "short_title": "放棄の連鎖",
+      "express": false
     },
     {
       "id": "SELF_GIFT_AHEAD_CHECK",
@@ -1444,7 +1607,9 @@
           "贈与税の申告が必要になる場合と、その期限"
         ],
         "in_house_reviewed_at": "2026-09-03"
-      }
+      },
+      "short_title": "生前贈与の種類",
+      "express": false
     },
     {
       "id": "SELF_INSURANCE_NONTAX_FRAME",
@@ -1493,7 +1658,9 @@
           "一時払終身保険などの類型について、年齢と健康状態による加入の可否の目安"
         ],
         "in_house_reviewed_at": "2026-09-03"
-      }
+      },
+      "short_title": "保険の非課税枠",
+      "express": false
     },
     {
       "id": "SELF_TAX_REDUCTION_CONSULT",
@@ -1534,7 +1701,161 @@
           "相談に持っていく資料の一覧として、税理士側から見て足りないものはないか"
         ],
         "in_house_reviewed_at": "2026-09-03"
-      }
+      },
+      "short_title": "残し方の相談",
+      "express": false
+    },
+    {
+      "id": "SELF_POSTMORTEM_MANDATE",
+      "stream": "POST_MORTEM_AFFAIRS",
+      "actor": "SELF",
+      "persona_labels": [
+        "ALL"
+      ],
+      "title": "亡くなった後の事務を、契約で頼んでおく",
+      "today_action": "死亡届の提出、葬儀・納骨、住まいの明け渡し、公共料金や携帯電話の解約などを、誰にどこまで頼むかを書き出し、引き受けてくれる人と契約の形で残す。頼む相手は、業者や公的なサービスに限らず、信頼できる個人でもよい。費用をどう預けるかも、あわせて決めておく。",
+      "why_only_you": "家族がいないと、亡くなった後に誰がこれを行うかは、本人が生きているうちに決めておくほかない。",
+      "exists_if": "condition.no_family_to_rely == true",
+      "absent_note": "亡くなった後を任せられる家族がいるので、この駅は通りません。",
+      "prerequisites": [
+        "SELF_DESIGNATE_OPERATOR"
+      ],
+      "base_urgency": "CAN_WAIT",
+      "priority": 31,
+      "wait": {
+        "nature": "NONE"
+      },
+      "durability": "PERMANENT",
+      "specialist_bridge": {
+        "type": "ADMINISTRATIVE_SCRIVENER",
+        "concrete_query": "頼める家族がいない。死亡届の提出、葬儀・納骨、住まいの明け渡し、各種解約を、知人に頼む死後事務委任契約を作りたい。費用の預け方と、契約を公正証書にするかどうかも相談したい。"
+      },
+      "legal_metadata": {
+        "verification_status": "SELF_REVIEWED",
+        "verified_at": null,
+        "verified_by": null,
+        "source_draft": "民法第643条（委任）・第653条（委任の終了事由）。最高裁平成4年9月22日判決（委任者の死亡後の事務を含む委任は、委任者の死亡によって当然には終了しないとした）。",
+        "needs_check": [
+          "死後事務委任契約で頼める範囲と、相続人がいる場合に相続人の権利とぶつかる範囲",
+          "費用の預け方（預託金）の扱い"
+        ]
+      },
+      "short_title": "死後事務の委任",
+      "express": false
+    },
+    {
+      "id": "SELF_VOLUNTARY_GUARDIAN",
+      "stream": "POST_MORTEM_AFFAIRS",
+      "actor": "SELF",
+      "persona_labels": [
+        "ALL"
+      ],
+      "title": "判断ができなくなったときに頼む人を、契約で決めておく",
+      "today_action": "判断ができなくなったときに、財産の管理や手続を頼む人を決め、公正証書で任意後見契約を結ぶ。契約の相手（任意後見受任者）は、あなたが亡くなったとき、死亡届を出すこともできる。ただし任意後見は、本人が亡くなると終わる。亡くなった後の事務は、別に頼んでおく必要がある。",
+      "why_only_you": "判断ができなくなってからでは、この契約は結べない。",
+      "exists_if": "condition.no_family_to_rely == true",
+      "absent_note": "亡くなった後を任せられる家族がいるので、この駅は通りません。",
+      "prerequisites": [
+        "SELF_INCAPACITY_PLAN"
+      ],
+      "base_urgency": "CAN_WAIT",
+      "priority": 32,
+      "wait": {
+        "nature": "NONE"
+      },
+      "durability": "PERMANENT",
+      "specialist_bridge": {
+        "type": "JUDICIAL_SCRIVENER",
+        "concrete_query": "頼める家族がいない。判断ができなくなったときに備えて、知人と任意後見契約を結びたい。死後事務委任契約とあわせて作れるかも相談したい。"
+      },
+      "legal_metadata": {
+        "verification_status": "SELF_REVIEWED",
+        "verified_at": null,
+        "verified_by": null,
+        "source_draft": "任意後見契約に関する法律 第2条・第3条（公正証書によること）。戸籍法第87条第2項（任意後見人・任意後見受任者による死亡の届出）。民法第653条（委任の終了事由）。",
+        "needs_check": [
+          "任意後見契約が効力を持つ時期（家庭裁判所による任意後見監督人の選任）",
+          "任意後見と死後事務委任を一緒に結ぶ場合の書き方"
+        ]
+      },
+      "short_title": "任意後見の契約",
+      "express": false
+    },
+    {
+      "id": "SELF_NO_HEIR_DESTINATION",
+      "stream": "ESTATE_SUCCESSION",
+      "actor": "SELF",
+      "persona_labels": [
+        "ALL"
+      ],
+      "title": "相続人が一人もいない場合、財産がどうなるかを知っておく",
+      "today_action": "相続人が一人もいないまま遺言もないと、家庭裁判所が選ぶ相続財産清算人が財産を整理する。生前に深い関わりのあった人（特別縁故者）が申し立てれば、家庭裁判所の判断で分けてもらえることがあるが、必ず認められるものではない。残った財産は、最後に国のものになる。渡したい相手がいるなら、手段は遺言である。",
+      "why_only_you": "遺言を書けるのは本人だけである。亡くなった後には、誰も代わりに書けない。",
+      "exists_if": "condition.no_family_to_rely == true",
+      "absent_note": "亡くなった後を任せられる家族がいるので、この駅は通りません。",
+      "prerequisites": [
+        "SELF_HEIR_ESTIMATE"
+      ],
+      "base_urgency": "CAN_WAIT",
+      "priority": 6,
+      "wait": {
+        "nature": "NONE"
+      },
+      "durability": "PERMANENT",
+      "specialist_bridge": {
+        "type": "JUDICIAL_SCRIVENER",
+        "concrete_query": "相続人がいない見込みである。財産を渡したい相手がいるので、公正証書遺言を作りたい。受け取る人が先に亡くなった場合の予備の指定も入れたい。"
+      },
+      "legal_metadata": {
+        "verification_status": "SELF_REVIEWED",
+        "verified_at": null,
+        "verified_by": null,
+        "source_draft": "民法第951条（相続財産法人の成立）・第952条（相続財産清算人の選任）・第958条の2（特別縁故者に対する相続財産の分与）・第959条（残余財産の国庫への帰属）。",
+        "needs_check": [
+          "特別縁故者の申立てができる期間と、認められた例の傾向",
+          "相続人がいるかどうかの確かめ方（兄弟姉妹・甥姪まで）"
+        ]
+      },
+      "short_title": "相続人がいない場合",
+      "express": false
+    },
+    {
+      "id": "SELF_BACKUP_DELEGATE",
+      "stream": "ESTATE_SUCCESSION",
+      "actor": "SELF",
+      "persona_labels": [
+        "ALL"
+      ],
+      "title": "頼んだ人が先にいなくなったときに備える",
+      "today_action": "財産を渡す相手が、あなたより先に亡くなると、遺言のその部分は効力を持たない。頼んだ相手があなたより年上の場合などは、遺言に予備の渡し先を書く、死後の事務や任意後見の契約にも予備の人を考えておく、といった方法がある。どう組むかは、専門家と確かめる。",
+      "why_only_you": "予備を決めておけるのは、本人が元気なうちだけである。",
+      "exists_if": "condition.no_family_to_rely == true",
+      "absent_note": "亡くなった後を任せられる家族がいるので、この駅は通りません。",
+      "prerequisites": [
+        "SELF_NO_HEIR_DESTINATION"
+      ],
+      "base_urgency": "CAN_WAIT",
+      "priority": 33,
+      "wait": {
+        "nature": "NONE"
+      },
+      "durability": "PERMANENT",
+      "specialist_bridge": {
+        "type": "LAWYER",
+        "concrete_query": "遺言で財産を渡す相手と、死後の事務を頼む相手が、自分より年上である。相手が先に亡くなった場合に備えて、予備の渡し先と予備の受任者をどう定めるか相談したい。"
+      },
+      "legal_metadata": {
+        "verification_status": "SELF_REVIEWED",
+        "verified_at": null,
+        "verified_by": null,
+        "source_draft": "民法第994条第1項（受遺者が遺言者より先に死亡したときは、遺贈は効力を生じない）。",
+        "needs_check": [
+          "予備的な遺贈（補充遺贈）の書き方",
+          "契約で予備の受任者を定める方法"
+        ]
+      },
+      "short_title": "頼んだ人が先にいなくなったとき",
+      "express": false
     }
   ]
 }

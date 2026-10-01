@@ -117,6 +117,13 @@ SCENARIOS = {
         "cond": dict(has_spouse=True, children_count=0, has_own_home=True),
         "done": set(),
     },
+    "self-no-family": {
+        # 家族がいない人。亡くなった後のことを、年上の知人に頼みたい。
+        "title": "本人・頼れる家族がいない。亡くなった後のことを知人に頼みたい",
+        "scope": "SELF",
+        "cond": dict(no_family_to_rely=True, has_spouse=False, children_count=0),
+        "done": set(),
+    },
     "self-surplus": {
         # 元気な70歳。年金で暮らしは足りているが、預金を子に多く残したい。
         # 守りではなく攻め。動機がほかの五人と違う。

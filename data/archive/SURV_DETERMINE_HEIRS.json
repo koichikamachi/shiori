@@ -1,0 +1,203 @@
+{
+  "node_id": "SURV_DETERMINE_HEIRS",
+  "archived_at": "2026-09-24T12:09:25+09:00",
+  "search_route": "Gemini × Google 検索",
+  "result": {
+    "action": "UNCHANGED",
+    "reason": "一次資料（.go.jp）に基づく自動照合結果。判定: UNCHANGED（確信度: HIGH）",
+    "summary": "家族の記憶だけに頼って戸籍の確認を省いてしまうと、後から面識のない相続人が見つかって、協議やり直しなどの大きな混乱につながるかもしれない。思い込みで進めず、まずは出生から死亡までの戸籍（戸除籍謄本）を揃えて確認しておきたい。",
+    "details": {
+      "check_id": "SURV_DETERMINE_HEIRS#1",
+      "node_id": "SURV_DETERMINE_HEIRS",
+      "claim": "相続人を確定する　根拠（下書き）: 民法第887条〜第890条（相続人）",
+      "verdict": "UNCHANGED",
+      "confidence": "HIGH",
+      "checked_at": "2026-09-24",
+      "evidence": [
+        {
+          "url": "https://www.courts.go.jp/osaka/saiban/tetuzuki_minji14/kyoubai_touki/index.html",
+          "publisher": "大阪地方裁判所",
+          "page_date": null,
+          "quote": "被相続人の子(第一順位の相続人，民法887条1項)及び配偶者(民法890条)の有無及びその生死を調べてください。そのためには，被相続人の出生から死亡までの戸籍謄本等を取り寄せてください。",
+          "quote_verified": true
+        },
+        {
+          "url": "https://houmukyoku.moj.go.jp/homu/page7_000014.html",
+          "publisher": "法務局",
+          "page_date": "2024-04-01",
+          "quote": "なお、必ず用意する書類のうち、被相続人の出生から亡くなるまでの戸除籍謄本については、こちら（よくあるご質問［PDF：30KB］）を参考にしてください。",
+          "quote_verified": true
+        }
+      ],
+      "proposed_patch": null,
+      "risk_if_wrong": "家族の記憶だけに頼って戸籍の確認を省いてしまうと、後から面識のない相続人が見つかって、協議やり直しなどの大きな混乱につながるかもしれない。思い込みで進めず、まずは出生から死亡までの戸籍（戸除籍謄本）を揃えて確認しておきたい。",
+      "escalation": "古い戸籍謄本が読みづらかったり、親族関係が複雑で自分たちだけでは全員を洗い出せているか不安なときは、市区町村の窓口や司法書士などの専門家に確認してみよう。",
+      "detected_constraints": null,
+      "detected_ambiguities": [],
+      "early_warnings": [
+        "✓ 『moj.go.jp』を選定"
+      ],
+      "rejected": [],
+      "human_review_required": true
+    },
+    "detected_ambiguities": [],
+    "early_warnings": [
+      "✓ 『moj.go.jp』を選定"
+    ],
+    "search_route": "Gemini × Google 検索",
+    "sources_found": 3,
+    "pages_read": 3
+  },
+  "logs": [
+    {
+      "timestamp": "2026-09-24T12:08:44.328778",
+      "role": "System",
+      "action": "✓ 検証開始",
+      "detail": "check_id=SURV_DETERMINE_HEIRS#1"
+    },
+    {
+      "timestamp": "2026-09-24T12:08:48.738283",
+      "role": "Explorer",
+      "action": "🧭 検索クエリを生成",
+      "detail": "相続人 確定 戸籍"
+    },
+    {
+      "timestamp": "2026-09-24T12:08:48.738395",
+      "role": "Explorer",
+      "action": "🔍 Gemini × Google 検索で公的ドメイン（go.jp / lg.jp）を探索中...",
+      "detail": ""
+    },
+    {
+      "timestamp": "2026-09-24T12:09:07.029022",
+      "role": "Explorer",
+      "action": "🌐 houmukyoku.moj.go.jp",
+      "detail": "moj.go.jp"
+    },
+    {
+      "timestamp": "2026-09-24T12:09:07.029104",
+      "role": "Explorer",
+      "action": "🌐 www.moj.go.jp",
+      "detail": "moj.go.jp"
+    },
+    {
+      "timestamp": "2026-09-24T12:09:07.029134",
+      "role": "Explorer",
+      "action": "🌐 www.courts.go.jp",
+      "detail": "courts.go.jp"
+    },
+    {
+      "timestamp": "2026-09-24T12:09:07.029187",
+      "role": "Explorer",
+      "action": "✓ 探索完了",
+      "detail": "公的ページ 3 件（経路: Gemini × Google 検索）"
+    },
+    {
+      "timestamp": "2026-09-24T12:09:07.029201",
+      "role": "Evaluator",
+      "action": "⚖️ 候補を一件ずつ評価し、一次証憑を選定中...",
+      "detail": ""
+    },
+    {
+      "timestamp": "2026-09-24T12:09:09.416033",
+      "role": "Evaluator",
+      "action": "✓ 一次資料（官報・公式ページ） — houmukyoku.moj.go.jp",
+      "detail": "moj.go.jp"
+    },
+    {
+      "timestamp": "2026-09-24T12:09:11.809492",
+      "role": "Evaluator",
+      "action": "✓ 一次資料（官報・公式ページ） — www.moj.go.jp",
+      "detail": "moj.go.jp"
+    },
+    {
+      "timestamp": "2026-09-24T12:09:14.213145",
+      "role": "Evaluator",
+      "action": "✓ 一次資料（官報・公式ページ） — www.courts.go.jp",
+      "detail": "courts.go.jp"
+    },
+    {
+      "timestamp": "2026-09-24T12:09:14.213230",
+      "role": "Evaluator",
+      "action": "📌 一次証憑として選定",
+      "detail": "https://houmukyoku.moj.go.jp/homu/page7_000014.html"
+    },
+    {
+      "timestamp": "2026-09-24T12:09:14.213239",
+      "role": "Evaluator",
+      "action": "✓ 曖昧さの兆候は見つかりませんでした",
+      "detail": ""
+    },
+    {
+      "timestamp": "2026-09-24T12:09:14.213263",
+      "role": "Reader",
+      "action": "📖 公的ページの本文を取得中...",
+      "detail": ""
+    },
+    {
+      "timestamp": "2026-09-24T12:09:14.339616",
+      "role": "Reader",
+      "action": "📄 本文を取得（3,054 字）",
+      "detail": "https://houmukyoku.moj.go.jp/homu/page7_000014.html"
+    },
+    {
+      "timestamp": "2026-09-24T12:09:14.410722",
+      "role": "Reader",
+      "action": "📄 本文を取得（3,358 字）",
+      "detail": "https://www.moj.go.jp/MINJI/minji04_00032.html"
+    },
+    {
+      "timestamp": "2026-09-24T12:09:14.501606",
+      "role": "Reader",
+      "action": "📄 本文を取得（3,075 字）",
+      "detail": "https://www.courts.go.jp/osaka/saiban/tetuzuki_minji14/kyoubai_touki/index.html"
+    },
+    {
+      "timestamp": "2026-09-24T12:09:14.501684",
+      "role": "Reader",
+      "action": "✓ ページ取得完了",
+      "detail": "3 ページ"
+    },
+    {
+      "timestamp": "2026-09-24T12:09:14.501706",
+      "role": "Comparator",
+      "action": "🔄 Comparator: ノードと公的情報を照合中...",
+      "detail": ""
+    },
+    {
+      "timestamp": "2026-09-24T12:09:14.501723",
+      "role": "Disruptor",
+      "action": "🤔 Disruptor: 根拠データを懐疑的に検証中...",
+      "detail": ""
+    },
+    {
+      "timestamp": "2026-09-24T12:09:14.501737",
+      "role": "Writer",
+      "action": "✍️ Writer: CheckResult を生成中...",
+      "detail": ""
+    },
+    {
+      "timestamp": "2026-09-24T12:09:14.512845",
+      "role": "Writer",
+      "action": "🖋️ 文体ルールを読み込み",
+      "detail": "writer_style.md（1,798 字）"
+    },
+    {
+      "timestamp": "2026-09-24T12:09:25.955163",
+      "role": "Writer",
+      "action": "✓ 判定完了: UNCHANGED",
+      "detail": "確信度=HIGH"
+    },
+    {
+      "timestamp": "2026-09-24T12:09:25.955229",
+      "role": "Guards",
+      "action": "🛡️ セキュリティ関門によるバリデーション中...",
+      "detail": ""
+    },
+    {
+      "timestamp": "2026-09-24T12:09:25.958937",
+      "role": "System",
+      "action": "✓ 検証完了",
+      "detail": "verdict=UNCHANGED"
+    }
+  ]
+}

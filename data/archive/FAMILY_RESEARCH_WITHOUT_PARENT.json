@@ -1,0 +1,226 @@
+{
+  "node_id": "FAMILY_RESEARCH_WITHOUT_PARENT",
+  "archived_at": "2026-09-24T15:26:40+09:00",
+  "search_route": "Gemini × Google 検索",
+  "result": {
+    "action": "UNCHANGED",
+    "reason": "一次資料（.go.jp）に基づく自動照合結果。判定: UNCHANGED（確信度: MEDIUM）",
+    "summary": "親から何も聞いていないと、自分では調べられないと思い込んで諦めてしまうかもしれない。誰でも取得できる（登記事項証明書）の存在を知らないままだと、財産の整理が遅れてあとで困りそうだ。",
+    "details": {
+      "check_id": "FAMILY_RESEARCH_WITHOUT_PARENT#1",
+      "node_id": "FAMILY_RESEARCH_WITHOUT_PARENT",
+      "claim": "親が話してくれなくても、自分で調べられること",
+      "verdict": "UNCHANGED",
+      "confidence": "MEDIUM",
+      "checked_at": "2026-09-24",
+      "evidence": [
+        {
+          "url": "https://houmukyoku.moj.go.jp/fukuoka/page000001_00826.html",
+          "publisher": "福岡法務局",
+          "page_date": "2026-07-03",
+          "quote": "登記事項証明書は、誰でも取得することができます。",
+          "quote_verified": true
+        }
+      ],
+      "proposed_patch": null,
+      "risk_if_wrong": "親から何も聞いていないと、自分では調べられないと思い込んで諦めてしまうかもしれない。誰でも取得できる（登記事項証明書）の存在を知らないままだと、財産の整理が遅れてあとで困りそうだ。",
+      "escalation": null,
+      "detected_constraints": null,
+      "detected_ambiguities": [],
+      "early_warnings": [
+        "✓ 『moj.go.jp』を選定"
+      ],
+      "rejected": [],
+      "human_review_required": true
+    },
+    "detected_ambiguities": [],
+    "early_warnings": [
+      "✓ 『moj.go.jp』を選定"
+    ],
+    "search_route": "Gemini × Google 検索",
+    "sources_found": 5,
+    "pages_read": 3
+  },
+  "logs": [
+    {
+      "timestamp": "2026-09-24T15:25:52.664196",
+      "role": "System",
+      "action": "✓ 検証開始",
+      "detail": "check_id=FAMILY_RESEARCH_WITHOUT_PARENT#1"
+    },
+    {
+      "timestamp": "2026-09-24T15:25:56.899955",
+      "role": "Explorer",
+      "action": "🧭 検索クエリを生成",
+      "detail": "登記事項証明書 誰でも 取得"
+    },
+    {
+      "timestamp": "2026-09-24T15:25:56.900063",
+      "role": "Explorer",
+      "action": "🔍 Gemini × Google 検索で公的ドメイン（go.jp / lg.jp）を探索中...",
+      "detail": ""
+    },
+    {
+      "timestamp": "2026-09-24T15:26:11.101474",
+      "role": "Explorer",
+      "action": "🌐 houmukyoku.moj.go.jp",
+      "detail": "moj.go.jp"
+    },
+    {
+      "timestamp": "2026-09-24T15:26:11.101556",
+      "role": "Explorer",
+      "action": "🌐 houmukyoku.moj.go.jp",
+      "detail": "moj.go.jp"
+    },
+    {
+      "timestamp": "2026-09-24T15:26:11.101581",
+      "role": "Explorer",
+      "action": "🌐 www.moj.go.jp",
+      "detail": "moj.go.jp"
+    },
+    {
+      "timestamp": "2026-09-24T15:26:11.101599",
+      "role": "Explorer",
+      "action": "🌐 houmukyoku.moj.go.jp",
+      "detail": "moj.go.jp"
+    },
+    {
+      "timestamp": "2026-09-24T15:26:11.101620",
+      "role": "Explorer",
+      "action": "🌐 www.city.bando.lg.jp",
+      "detail": "bando.lg.jp"
+    },
+    {
+      "timestamp": "2026-09-24T15:26:11.101660",
+      "role": "Explorer",
+      "action": "✓ 探索完了",
+      "detail": "公的ページ 5 件（経路: Gemini × Google 検索）"
+    },
+    {
+      "timestamp": "2026-09-24T15:26:11.101673",
+      "role": "Evaluator",
+      "action": "⚖️ 候補を一件ずつ評価し、一次証憑を選定中...",
+      "detail": ""
+    },
+    {
+      "timestamp": "2026-09-24T15:26:14.797088",
+      "role": "Evaluator",
+      "action": "✓ 一次資料（官報・公式ページ） — houmukyoku.moj.go.jp",
+      "detail": "moj.go.jp"
+    },
+    {
+      "timestamp": "2026-09-24T15:26:18.494497",
+      "role": "Evaluator",
+      "action": "✓ 一次資料（官報・公式ページ） — houmukyoku.moj.go.jp",
+      "detail": "moj.go.jp"
+    },
+    {
+      "timestamp": "2026-09-24T15:26:22.431873",
+      "role": "Evaluator",
+      "action": "✓ 一次資料（官報・公式ページ） — www.moj.go.jp",
+      "detail": "moj.go.jp"
+    },
+    {
+      "timestamp": "2026-09-24T15:26:28.170645",
+      "role": "Evaluator",
+      "action": "✓ 一次資料（官報・公式ページ） — houmukyoku.moj.go.jp",
+      "detail": "moj.go.jp"
+    },
+    {
+      "timestamp": "2026-09-24T15:26:31.717828",
+      "role": "Evaluator",
+      "action": "✓ 一次資料（官報・公式ページ） — www.city.bando.lg.jp",
+      "detail": "bando.lg.jp"
+    },
+    {
+      "timestamp": "2026-09-24T15:26:31.717954",
+      "role": "Evaluator",
+      "action": "📌 一次証憑として選定",
+      "detail": "https://houmukyoku.moj.go.jp/okayama/page000001_00081.html"
+    },
+    {
+      "timestamp": "2026-09-24T15:26:31.717974",
+      "role": "Evaluator",
+      "action": "✓ 曖昧さの兆候は見つかりませんでした",
+      "detail": ""
+    },
+    {
+      "timestamp": "2026-09-24T15:26:31.718039",
+      "role": "Disruptor",
+      "action": "🏘️ 自治体のページが混じっています（国の制度の解説として参考扱い）",
+      "detail": "www.city.bando.lg.jp"
+    },
+    {
+      "timestamp": "2026-09-24T15:26:31.718053",
+      "role": "Reader",
+      "action": "📖 公的ページの本文を取得中...",
+      "detail": ""
+    },
+    {
+      "timestamp": "2026-09-24T15:26:31.778667",
+      "role": "Reader",
+      "action": "📄 本文を取得（638 字）",
+      "detail": "https://houmukyoku.moj.go.jp/okayama/page000001_00081.html"
+    },
+    {
+      "timestamp": "2026-09-24T15:26:31.827084",
+      "role": "Reader",
+      "action": "📄 本文を取得（488 字）",
+      "detail": "https://houmukyoku.moj.go.jp/fukuoka/page000001_00826.html"
+    },
+    {
+      "timestamp": "2026-09-24T15:26:31.924886",
+      "role": "Reader",
+      "action": "📄 本文を取得（17,868 字）",
+      "detail": "https://www.moj.go.jp/MINJI/minji69.html"
+    },
+    {
+      "timestamp": "2026-09-24T15:26:31.924983",
+      "role": "Reader",
+      "action": "✓ ページ取得完了",
+      "detail": "3 ページ"
+    },
+    {
+      "timestamp": "2026-09-24T15:26:31.924996",
+      "role": "Comparator",
+      "action": "🔄 Comparator: ノードと公的情報を照合中...",
+      "detail": ""
+    },
+    {
+      "timestamp": "2026-09-24T15:26:31.925006",
+      "role": "Disruptor",
+      "action": "🤔 Disruptor: 根拠データを懐疑的に検証中...",
+      "detail": ""
+    },
+    {
+      "timestamp": "2026-09-24T15:26:31.925016",
+      "role": "Writer",
+      "action": "✍️ Writer: CheckResult を生成中...",
+      "detail": ""
+    },
+    {
+      "timestamp": "2026-09-24T15:26:31.926834",
+      "role": "Writer",
+      "action": "🖋️ 文体ルールを読み込み",
+      "detail": "writer_style.md（1,798 字）"
+    },
+    {
+      "timestamp": "2026-09-24T15:26:40.049158",
+      "role": "Writer",
+      "action": "✓ 判定完了: UNCHANGED",
+      "detail": "確信度=HIGH"
+    },
+    {
+      "timestamp": "2026-09-24T15:26:40.049214",
+      "role": "Guards",
+      "action": "🛡️ セキュリティ関門によるバリデーション中...",
+      "detail": ""
+    },
+    {
+      "timestamp": "2026-09-24T15:26:40.049670",
+      "role": "System",
+      "action": "✓ 検証完了",
+      "detail": "verdict=UNCHANGED"
+    }
+  ]
+}

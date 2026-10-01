@@ -1,0 +1,226 @@
+{
+  "node_id": "SURV_DEATH_NOTICE",
+  "archived_at": "2026-09-26T23:50:24+09:00",
+  "search_route": "Gemini × Google 検索",
+  "result": {
+    "action": "UNCHANGED",
+    "reason": "一次資料（.go.jp）に基づく自動照合結果。判定: UNCHANGED（確信度: MEDIUM）",
+    "summary": "うっかり7日を過ぎてしまうと、ペナルティ（過料）がかかるんじゃないかと心配になる。でも正当な理由があれば考慮されるらしいので、遅れそうな理由を整理して届ければ焦る必要はなさそうだ。",
+    "details": {
+      "check_id": "SURV_DEATH_NOTICE#1",
+      "node_id": "SURV_DEATH_NOTICE",
+      "claim": "死亡届と火葬許可の申請　起算から 7 日　起算点は「死亡の事実を知った日」　国外で死亡したときは、その事実を知った日から3か月以内。　根拠（下書き）: 戸籍法第86条（届出期間と添付書類）、第87条（届出義務者）",
+      "verdict": "UNCHANGED",
+      "confidence": "MEDIUM",
+      "checked_at": "2026-09-26",
+      "evidence": [
+        {
+          "url": "https://www.shugiin.go.jp/internet/itdb_shitsumon.nsf/html/shitsumon/b212119.htm",
+          "publisher": "衆議院",
+          "page_date": "2023-12-22",
+          "quote": "死亡の届出は、戸籍法（昭和二十二年法律第二百二十四号）第八十七条第一項各号に掲げる者がしなければならないとされ、正当な理由がなくて期間内にすべき届出をしない者は、五万円以下の過料に処するものとされている。",
+          "quote_verified": true
+        }
+      ],
+      "proposed_patch": null,
+      "risk_if_wrong": "うっかり7日を過ぎてしまうと、ペナルティ（過料）がかかるんじゃないかと心配になる。でも正当な理由があれば考慮されるらしいので、遅れそうな理由を整理して届ければ焦る必要はなさそうだ。",
+      "escalation": "自分の状況が「正当な理由」にあてはまるのかな？ 事情があって期限内に出せないときは、提出先の市区町村の戸籍窓口に一度確かめてみよう。",
+      "detected_constraints": null,
+      "detected_ambiguities": [],
+      "early_warnings": [
+        "✓ 『e-gov.go.jp』を選定"
+      ],
+      "rejected": [],
+      "human_review_required": true
+    },
+    "detected_ambiguities": [],
+    "early_warnings": [
+      "✓ 『e-gov.go.jp』を選定"
+    ],
+    "search_route": "Gemini × Google 検索",
+    "sources_found": 5,
+    "pages_read": 3
+  },
+  "logs": [
+    {
+      "timestamp": "2026-09-26T23:49:28.324761",
+      "role": "System",
+      "action": "✓ 検証開始",
+      "detail": "check_id=SURV_DEATH_NOTICE#1"
+    },
+    {
+      "timestamp": "2026-09-26T23:49:32.035902",
+      "role": "Explorer",
+      "action": "🧭 検索クエリを生成",
+      "detail": "死亡届 過料 戸籍法"
+    },
+    {
+      "timestamp": "2026-09-26T23:49:32.036008",
+      "role": "Explorer",
+      "action": "🔍 Gemini × Google 検索で公的ドメイン（go.jp / lg.jp）を探索中...",
+      "detail": ""
+    },
+    {
+      "timestamp": "2026-09-26T23:49:52.119285",
+      "role": "Explorer",
+      "action": "🌐 laws.e-gov.go.jp",
+      "detail": "e-gov.go.jp"
+    },
+    {
+      "timestamp": "2026-09-26T23:49:52.119316",
+      "role": "Explorer",
+      "action": "🌐 www.shugiin.go.jp",
+      "detail": "shugiin.go.jp"
+    },
+    {
+      "timestamp": "2026-09-26T23:49:52.119321",
+      "role": "Explorer",
+      "action": "🌐 www.city.tsuyama.lg.jp",
+      "detail": "tsuyama.lg.jp"
+    },
+    {
+      "timestamp": "2026-09-26T23:49:52.119325",
+      "role": "Explorer",
+      "action": "🌐 www.town.ami.lg.jp",
+      "detail": "ami.lg.jp"
+    },
+    {
+      "timestamp": "2026-09-26T23:49:52.119336",
+      "role": "Explorer",
+      "action": "🌐 www.sangiin.go.jp",
+      "detail": "sangiin.go.jp"
+    },
+    {
+      "timestamp": "2026-09-26T23:49:52.119352",
+      "role": "Explorer",
+      "action": "✓ 探索完了",
+      "detail": "公的ページ 5 件（経路: Gemini × Google 検索）"
+    },
+    {
+      "timestamp": "2026-09-26T23:49:52.119356",
+      "role": "Evaluator",
+      "action": "⚖️ 候補を一件ずつ評価し、一次証憑を選定中...",
+      "detail": ""
+    },
+    {
+      "timestamp": "2026-09-26T23:49:56.828385",
+      "role": "Evaluator",
+      "action": "✓ 一次資料（官報・公式ページ） — laws.e-gov.go.jp",
+      "detail": "e-gov.go.jp"
+    },
+    {
+      "timestamp": "2026-09-26T23:50:00.311228",
+      "role": "Evaluator",
+      "action": "✓ 一次資料（官報・公式ページ） — www.shugiin.go.jp",
+      "detail": "shugiin.go.jp"
+    },
+    {
+      "timestamp": "2026-09-26T23:50:04.029427",
+      "role": "Evaluator",
+      "action": "✓ 一次資料（官報・公式ページ） — www.sangiin.go.jp",
+      "detail": "sangiin.go.jp"
+    },
+    {
+      "timestamp": "2026-09-26T23:50:07.567659",
+      "role": "Evaluator",
+      "action": "✓ 一次資料（官報・公式ページ） — www.city.tsuyama.lg.jp",
+      "detail": "tsuyama.lg.jp"
+    },
+    {
+      "timestamp": "2026-09-26T23:50:11.504749",
+      "role": "Evaluator",
+      "action": "✓ 一次資料（官報・公式ページ） — www.town.ami.lg.jp",
+      "detail": "ami.lg.jp"
+    },
+    {
+      "timestamp": "2026-09-26T23:50:11.504876",
+      "role": "Evaluator",
+      "action": "📌 一次証憑として選定",
+      "detail": "https://laws.e-gov.go.jp/law/322AC0000000224"
+    },
+    {
+      "timestamp": "2026-09-26T23:50:11.504895",
+      "role": "Evaluator",
+      "action": "✓ 曖昧さの兆候は見つかりませんでした",
+      "detail": ""
+    },
+    {
+      "timestamp": "2026-09-26T23:50:11.504971",
+      "role": "Disruptor",
+      "action": "🏘️ 自治体のページが混じっています（国の制度の解説として参考扱い）",
+      "detail": "www.city.tsuyama.lg.jp, www.town.ami.lg.jp"
+    },
+    {
+      "timestamp": "2026-09-26T23:50:11.504985",
+      "role": "Reader",
+      "action": "📖 公的ページの本文を取得中...",
+      "detail": ""
+    },
+    {
+      "timestamp": "2026-09-26T23:50:11.721891",
+      "role": "Reader",
+      "action": "📄 本文を取得（1,661 字）",
+      "detail": "https://www.shugiin.go.jp/internet/itdb_shitsumon.nsf/html/shitsumon/b212119.htm"
+    },
+    {
+      "timestamp": "2026-09-26T23:50:11.803406",
+      "role": "Reader",
+      "action": "📄 本文を取得（2,482 字）",
+      "detail": "https://www.sangiin.go.jp/japanese/joho1/kousei/syuisyo/186/touh/t186140.htm"
+    },
+    {
+      "timestamp": "2026-09-26T23:50:12.080900",
+      "role": "Reader",
+      "action": "📄 本文を取得（1,823 字）",
+      "detail": "https://www.town.ami.lg.jp/0000000417.html"
+    },
+    {
+      "timestamp": "2026-09-26T23:50:12.080940",
+      "role": "Reader",
+      "action": "✓ ページ取得完了",
+      "detail": "3 ページ"
+    },
+    {
+      "timestamp": "2026-09-26T23:50:12.080944",
+      "role": "Comparator",
+      "action": "🔄 Comparator: ノードと公的情報を照合中...",
+      "detail": ""
+    },
+    {
+      "timestamp": "2026-09-26T23:50:12.080947",
+      "role": "Disruptor",
+      "action": "🤔 Disruptor: 根拠データを懐疑的に検証中...",
+      "detail": ""
+    },
+    {
+      "timestamp": "2026-09-26T23:50:12.080951",
+      "role": "Writer",
+      "action": "✍️ Writer: CheckResult を生成中...",
+      "detail": ""
+    },
+    {
+      "timestamp": "2026-09-26T23:50:12.082441",
+      "role": "Writer",
+      "action": "🖋️ 文体ルールを読み込み",
+      "detail": "writer_style.md（2,342 字）"
+    },
+    {
+      "timestamp": "2026-09-26T23:50:24.715820",
+      "role": "Writer",
+      "action": "✓ 判定完了: UNCHANGED",
+      "detail": "確信度=HIGH"
+    },
+    {
+      "timestamp": "2026-09-26T23:50:24.715886",
+      "role": "Guards",
+      "action": "🛡️ セキュリティ関門によるバリデーション中...",
+      "detail": ""
+    },
+    {
+      "timestamp": "2026-09-26T23:50:24.716883",
+      "role": "System",
+      "action": "✓ 検証完了",
+      "detail": "verdict=UNCHANGED"
+    }
+  ]
+}

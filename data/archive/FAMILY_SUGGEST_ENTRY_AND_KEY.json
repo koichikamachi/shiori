@@ -1,0 +1,215 @@
+{
+  "node_id": "FAMILY_SUGGEST_ENTRY_AND_KEY",
+  "archived_at": "2026-09-24T15:44:27+09:00",
+  "search_route": "Gemini × Google 検索",
+  "result": {
+    "action": "UNCHANGED",
+    "reason": "一次資料（.go.jp）に基づく自動照合結果。判定: UNCHANGED（確信度: HIGH）",
+    "summary": "もしスマホのロック解除方法やパスワードが分からないままだと、解約手続きが進まず余計な支払いが残ってしまうかもしれない（デジタル遺品）。万が一のときの鍵の保管場所は、事前に確かめられているだろうか。",
+    "details": {
+      "check_id": "FAMILY_SUGGEST_ENTRY_AND_KEY#1",
+      "node_id": "FAMILY_SUGGEST_ENTRY_AND_KEY",
+      "claim": "親に、入口と鍵の渡し方を伝える",
+      "verdict": "UNCHANGED",
+      "confidence": "HIGH",
+      "checked_at": "2026-09-24",
+      "evidence": [
+        {
+          "url": "https://www.kokusen.go.jp/mimamori/mj_mailmag/mj-shinsen505.html",
+          "publisher": "国民生活センター",
+          "page_date": "2025-02-20",
+          "quote": "万が一の際に、遺族が故人のスマホ等をロック解除できるようにしておく必要があります。",
+          "quote_verified": true
+        },
+        {
+          "url": "https://www.kokusen.go.jp/news/data/n-20241120_1.html",
+          "publisher": "国民生活センター",
+          "page_date": "2024-11-20",
+          "quote": "万が一の際に遺族がスマホやパソコンのロック解除ができるようにしておきましょう。",
+          "quote_verified": true
+        }
+      ],
+      "proposed_patch": null,
+      "risk_if_wrong": "もしスマホのロック解除方法やパスワードが分からないままだと、解約手続きが進まず余計な支払いが残ってしまうかもしれない（デジタル遺品）。万が一のときの鍵の保管場所は、事前に確かめられているだろうか。",
+      "escalation": "親が使っているスマホやサービスの管理方法について、どこまでメモ（スペアキー）を残せているか、一度本人と一緒に整理してみようか。",
+      "detected_constraints": null,
+      "detected_ambiguities": [],
+      "early_warnings": [
+        "✓ 『kokusen.go.jp』を選定"
+      ],
+      "rejected": [],
+      "human_review_required": true
+    },
+    "detected_ambiguities": [],
+    "early_warnings": [
+      "✓ 『kokusen.go.jp』を選定"
+    ],
+    "search_route": "Gemini × Google 検索",
+    "sources_found": 4,
+    "pages_read": 3
+  },
+  "logs": [
+    {
+      "timestamp": "2026-09-24T15:43:40.221637",
+      "role": "System",
+      "action": "✓ 検証開始",
+      "detail": "check_id=FAMILY_SUGGEST_ENTRY_AND_KEY#1"
+    },
+    {
+      "timestamp": "2026-09-24T15:43:45.249825",
+      "role": "Explorer",
+      "action": "🧭 検索クエリを生成",
+      "detail": "高齢の親 終活 鍵"
+    },
+    {
+      "timestamp": "2026-09-24T15:43:45.249930",
+      "role": "Explorer",
+      "action": "🔍 Gemini × Google 検索で公的ドメイン（go.jp / lg.jp）を探索中...",
+      "detail": ""
+    },
+    {
+      "timestamp": "2026-09-24T15:44:01.316173",
+      "role": "Explorer",
+      "action": "🌐 www.kokusen.go.jp",
+      "detail": "kokusen.go.jp"
+    },
+    {
+      "timestamp": "2026-09-24T15:44:01.316263",
+      "role": "Explorer",
+      "action": "🌐 www.kokusen.go.jp",
+      "detail": "kokusen.go.jp"
+    },
+    {
+      "timestamp": "2026-09-24T15:44:01.316287",
+      "role": "Explorer",
+      "action": "🌐 houmukyoku.moj.go.jp",
+      "detail": "moj.go.jp"
+    },
+    {
+      "timestamp": "2026-09-24T15:44:01.316305",
+      "role": "Explorer",
+      "action": "🌐 houmukyoku.moj.go.jp",
+      "detail": "moj.go.jp"
+    },
+    {
+      "timestamp": "2026-09-24T15:44:01.316352",
+      "role": "Explorer",
+      "action": "✓ 探索完了",
+      "detail": "公的ページ 4 件（経路: Gemini × Google 検索）"
+    },
+    {
+      "timestamp": "2026-09-24T15:44:01.316366",
+      "role": "Evaluator",
+      "action": "⚖️ 候補を一件ずつ評価し、一次証憑を選定中...",
+      "detail": ""
+    },
+    {
+      "timestamp": "2026-09-24T15:44:05.274846",
+      "role": "Evaluator",
+      "action": "✓ 一次資料（官報・公式ページ） — www.kokusen.go.jp",
+      "detail": "kokusen.go.jp"
+    },
+    {
+      "timestamp": "2026-09-24T15:44:10.511348",
+      "role": "Evaluator",
+      "action": "✓ 一次資料（官報・公式ページ） — www.kokusen.go.jp",
+      "detail": "kokusen.go.jp"
+    },
+    {
+      "timestamp": "2026-09-24T15:44:14.255672",
+      "role": "Evaluator",
+      "action": "✓ 一次資料（官報・公式ページ） — houmukyoku.moj.go.jp",
+      "detail": "moj.go.jp"
+    },
+    {
+      "timestamp": "2026-09-24T15:44:18.353572",
+      "role": "Evaluator",
+      "action": "✓ 一次資料（官報・公式ページ） — houmukyoku.moj.go.jp",
+      "detail": "moj.go.jp"
+    },
+    {
+      "timestamp": "2026-09-24T15:44:18.353688",
+      "role": "Evaluator",
+      "action": "📌 一次証憑として選定",
+      "detail": "https://www.kokusen.go.jp/news/data/n-20241120_1.html"
+    },
+    {
+      "timestamp": "2026-09-24T15:44:18.353727",
+      "role": "Evaluator",
+      "action": "✓ 曖昧さの兆候は見つかりませんでした",
+      "detail": ""
+    },
+    {
+      "timestamp": "2026-09-24T15:44:18.353738",
+      "role": "Reader",
+      "action": "📖 公的ページの本文を取得中...",
+      "detail": ""
+    },
+    {
+      "timestamp": "2026-09-24T15:44:18.530220",
+      "role": "Reader",
+      "action": "📄 本文を取得（1,771 字）",
+      "detail": "https://www.kokusen.go.jp/news/data/n-20241120_1.html"
+    },
+    {
+      "timestamp": "2026-09-24T15:44:18.569320",
+      "role": "Reader",
+      "action": "📄 本文を取得（1,120 字）",
+      "detail": "https://www.kokusen.go.jp/mimamori/mj_mailmag/mj-shinsen505.html"
+    },
+    {
+      "timestamp": "2026-09-24T15:44:18.625508",
+      "role": "Reader",
+      "action": "📄 本文を取得（1,776 字）",
+      "detail": "https://houmukyoku.moj.go.jp/otsu/page000001_00064.html"
+    },
+    {
+      "timestamp": "2026-09-24T15:44:18.625593",
+      "role": "Reader",
+      "action": "✓ ページ取得完了",
+      "detail": "3 ページ"
+    },
+    {
+      "timestamp": "2026-09-24T15:44:18.625614",
+      "role": "Comparator",
+      "action": "🔄 Comparator: ノードと公的情報を照合中...",
+      "detail": ""
+    },
+    {
+      "timestamp": "2026-09-24T15:44:18.625632",
+      "role": "Disruptor",
+      "action": "🤔 Disruptor: 根拠データを懐疑的に検証中...",
+      "detail": ""
+    },
+    {
+      "timestamp": "2026-09-24T15:44:18.625642",
+      "role": "Writer",
+      "action": "✍️ Writer: CheckResult を生成中...",
+      "detail": ""
+    },
+    {
+      "timestamp": "2026-09-24T15:44:18.627977",
+      "role": "Writer",
+      "action": "🖋️ 文体ルールを読み込み",
+      "detail": "writer_style.md（1,798 字）"
+    },
+    {
+      "timestamp": "2026-09-24T15:44:27.721049",
+      "role": "Writer",
+      "action": "✓ 判定完了: UNCHANGED",
+      "detail": "確信度=HIGH"
+    },
+    {
+      "timestamp": "2026-09-24T15:44:27.721081",
+      "role": "Guards",
+      "action": "🛡️ セキュリティ関門によるバリデーション中...",
+      "detail": ""
+    },
+    {
+      "timestamp": "2026-09-24T15:44:27.721661",
+      "role": "System",
+      "action": "✓ 検証完了",
+      "detail": "verdict=UNCHANGED"
+    }
+  ]
+}

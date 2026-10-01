@@ -59,6 +59,10 @@ class CheckResult(BaseModel):
     escalation: Optional[str] = None
     # UNVERIFIED 検出時の詳細情報（複数自治体ルール等）
     detected_constraints: Optional[dict] = None
+    # Day 5: Stage 2（Evaluator）で検出された曖昧さ（5形態）
+    detected_ambiguities: list[str] = Field(default_factory=list)
+    # Day 5: Stage 2（Evaluator）での早期検知ログ
+    early_warnings: list[str] = Field(default_factory=list)
     # 関門（guards.sanitize）が落としたものの理由。機械が付ける。
     # 捨てると「なぜ根拠や修正案が消えたか」が分からなくなり、直しようがない。
     rejected: list[str] = Field(default_factory=list)

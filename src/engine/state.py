@@ -31,6 +31,7 @@ class UserCondition(BaseModel):
     has_debt_or_guarantee: bool = Field(default=False, description="借入または保証がある")
     wishes_donation: bool = Field(default=False, description="家族以外・団体に渡したい")
     has_unmarried_partner: bool = Field(default=False, description="籍を入れていない相手がいる")
+    no_family_to_rely: bool = Field(default=False, description="亡くなった後を任せられる家族がいない")
     has_will: bool = Field(default=False, description="遺言がある")
     has_pets: bool = Field(default=False, description="ペットがいる")
     # 金額は聞かない。あるかないかだけ。無ければ贈与も保険の枠も検討する意味がない。

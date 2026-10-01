@@ -1,0 +1,166 @@
+{
+  "node_id": "SURV_WARN_DEPOSIT",
+  "archived_at": "2026-09-27T21:04:07+09:00",
+  "search_route": "ノード記載の一次資料",
+  "result": {
+    "action": "UNCHANGED",
+    "reason": "一次資料（.go.jp）に基づく自動照合結果。判定: UNCHANGED（確信度: MEDIUM）",
+    "summary": "良かれと思って葬儀費用を故人の口座から支払ってしまうと、全ての借金を背負う（法定単純承認）とみなされるかもしれない。適切な（仮払制度）の手続きや金額の範囲を事前におさえておけば、放棄できなくなるリスクを防げそうだ。",
+    "details": {
+      "check_id": "SURV_WARN_DEPOSIT#1",
+      "node_id": "SURV_WARN_DEPOSIT",
+      "claim": "故人の預金に触る前に知っておくこと　故人の預貯金は、死亡と同時に相続人全員の共有財産となります（民法第896条・第898条、最高裁平成28年12月19日大法廷決定）。遺産分割協議が整う前に独断でATM等から引き出すと、他の相続人から不当利得返還（民法第703条）や損害賠償を請求されるだけでなく、相続財産を処分したとみなされて借金を含めた全債務を背負う「法定単純承認」（民法第921条第1号）が成立し、後から相続放棄ができなくなる重大なリスクがあります。　根拠（下書き）: 民法第896条（相続の一般的効力）、第898条（遺産の共有）、最高裁平成28年12月19日大法廷決定（預貯金債権は遺産分割の対象となる）。民法第921条第1号（相続財産の処分による法定単純承認）、第703条（不当利得の返還義務）、第906条の2（遺産分割前に処分された財産の取扱い）。葬儀費用の支出が法定単純承認にあたらないとした裁判例として東京高裁平成14年7月3日決定等。／仮払いについては法務省「民法及び家事事件手続法の一部を改正する法律について（相続法の改正）」の『⑵ 遺産分割前の払戻し制度の創設等』より逐語：「単独で払戻しをすることができる額＝（相続開始時の預貯金債権の額）×（３分の１）×（当該払戻しを求める共同相続人の法定相続分）」「同一の金融機関に対する権利行使は，法務省令で定める額（１５０万円）を限度とする。」（民法第909条の2）。注意：この出典が裏づけるのは仮払い制度の部分だけであり、上記の判例・法定単純承認・不当利得の各点は、この出典では確かめられていない。",
+      "verdict": "UNCHANGED",
+      "confidence": "MEDIUM",
+      "checked_at": "2026-09-27",
+      "evidence": [
+        {
+          "url": "https://www.moj.go.jp/MINJI/minji07_00222.html",
+          "publisher": "法務省",
+          "page_date": "2018-07-13",
+          "quote": "各共同相続人は，遺産に属する預貯金債権のうち，各口座ごとに以下の計算式で求められる額（ただし，同一の金融機関に対する権利行使は，法務省令で定める額（１５０万円）を限度とする。）までについては，他の共同相続人の同意がなくても単独で払戻しをすることができる。",
+          "quote_verified": true
+        }
+      ],
+      "proposed_patch": null,
+      "risk_if_wrong": "良かれと思って葬儀費用を故人の口座から支払ってしまうと、全ての借金を背負う（法定単純承認）とみなされるかもしれない。適切な（仮払制度）の手続きや金額の範囲を事前におさえておけば、放棄できなくなるリスクを防げそうだ。",
+      "escalation": "どの費用なら引き出しても安全なのか、自分一人で決めるのは不安になる。口座に手をつける前に、弁護士や法務局、自治体の無料法律相談へ一度確かめてみよう。",
+      "detected_constraints": null,
+      "detected_ambiguities": [],
+      "early_warnings": [
+        "✓ 『故人の預金に触る前に知っておくこと』を選定"
+      ],
+      "rejected": [],
+      "human_review_required": true
+    },
+    "detected_ambiguities": [],
+    "early_warnings": [
+      "✓ 『故人の預金に触る前に知っておくこと』を選定"
+    ],
+    "search_route": "ノード記載の一次資料",
+    "sources_found": 1,
+    "pages_read": 1
+  },
+  "logs": [
+    {
+      "timestamp": "2026-09-27T21:03:25.088493",
+      "role": "System",
+      "action": "✓ 検証開始",
+      "detail": "check_id=SURV_WARN_DEPOSIT#1"
+    },
+    {
+      "timestamp": "2026-09-27T21:03:29.133878",
+      "role": "Explorer",
+      "action": "🧭 検索クエリを生成",
+      "detail": "相続 預貯金 仮払い"
+    },
+    {
+      "timestamp": "2026-09-27T21:03:29.133992",
+      "role": "Explorer",
+      "action": "🔍 Gemini × Google 検索で公的ドメイン（go.jp / lg.jp）を探索中...",
+      "detail": ""
+    },
+    {
+      "timestamp": "2026-09-27T21:03:48.648999",
+      "role": "Explorer",
+      "action": "📎 ノードに記載された一次資料（人が確認済みの URL）へ直接あたります",
+      "detail": "https://www.moj.go.jp/MINJI/minji07_00222.html"
+    },
+    {
+      "timestamp": "2026-09-27T21:03:48.649076",
+      "role": "Explorer",
+      "action": "🌐 www.moj.go.jp",
+      "detail": "故人の預金に触る前に知っておくこと"
+    },
+    {
+      "timestamp": "2026-09-27T21:03:48.649132",
+      "role": "Explorer",
+      "action": "✓ 探索完了",
+      "detail": "公的ページ 1 件（経路: ノード記載の一次資料）"
+    },
+    {
+      "timestamp": "2026-09-27T21:03:48.649147",
+      "role": "Evaluator",
+      "action": "⚖️ 候補を一件ずつ評価し、一次証憑を選定中...",
+      "detail": ""
+    },
+    {
+      "timestamp": "2026-09-27T21:03:52.085050",
+      "role": "Evaluator",
+      "action": "✓ 一次資料（官報・公式ページ） — www.moj.go.jp",
+      "detail": "故人の預金に触る前に知っておくこと"
+    },
+    {
+      "timestamp": "2026-09-27T21:03:52.085192",
+      "role": "Evaluator",
+      "action": "📌 一次証憑として選定",
+      "detail": "https://www.moj.go.jp/MINJI/minji07_00222.html"
+    },
+    {
+      "timestamp": "2026-09-27T21:03:52.085219",
+      "role": "Evaluator",
+      "action": "✓ 曖昧さの兆候は見つかりませんでした",
+      "detail": ""
+    },
+    {
+      "timestamp": "2026-09-27T21:03:52.085262",
+      "role": "Reader",
+      "action": "📖 公的ページの本文を取得中...",
+      "detail": ""
+    },
+    {
+      "timestamp": "2026-09-27T21:03:52.186441",
+      "role": "Reader",
+      "action": "📄 本文を取得（6,781 字）",
+      "detail": "https://www.moj.go.jp/MINJI/minji07_00222.html"
+    },
+    {
+      "timestamp": "2026-09-27T21:03:52.186474",
+      "role": "Reader",
+      "action": "✓ ページ取得完了",
+      "detail": "1 ページ"
+    },
+    {
+      "timestamp": "2026-09-27T21:03:52.186481",
+      "role": "Comparator",
+      "action": "🔄 Comparator: ノードと公的情報を照合中...",
+      "detail": ""
+    },
+    {
+      "timestamp": "2026-09-27T21:03:52.186487",
+      "role": "Disruptor",
+      "action": "🤔 Disruptor: 根拠データを懐疑的に検証中...",
+      "detail": ""
+    },
+    {
+      "timestamp": "2026-09-27T21:03:52.186491",
+      "role": "Writer",
+      "action": "✍️ Writer: CheckResult を生成中...",
+      "detail": ""
+    },
+    {
+      "timestamp": "2026-09-27T21:03:52.188020",
+      "role": "Writer",
+      "action": "🖋️ 文体ルールを読み込み",
+      "detail": "writer_style.md（2,342 字）"
+    },
+    {
+      "timestamp": "2026-09-27T21:04:07.586595",
+      "role": "Writer",
+      "action": "✓ 判定完了: UNCHANGED",
+      "detail": "確信度=HIGH"
+    },
+    {
+      "timestamp": "2026-09-27T21:04:07.586651",
+      "role": "Guards",
+      "action": "🛡️ セキュリティ関門によるバリデーション中...",
+      "detail": ""
+    },
+    {
+      "timestamp": "2026-09-27T21:04:07.591685",
+      "role": "System",
+      "action": "✓ 検証完了",
+      "detail": "verdict=UNCHANGED"
+    }
+  ]
+}

@@ -244,9 +244,18 @@ def test_an_assumed_start_date_is_never_stated_as_fact():
 
 
 def test_the_word_roughly_appears_on_an_assumed_clock():
-    """代用した日数の札には「およそ」が付き、そのわけがパネルに出る。"""
+    """
+    代用した日数には「およそ」が付き、そのわけがパネルに出る。
+
+    2026-09-26 変更：駅の上の札は「知ってから3か月」のように起算点と法定期間だけにし、
+    残り日数は出さない（起算日を聞いていないと断定できないため）。
+    残り日数は、駅をひらいたパネルの側で「およそ」を付けて出す。
+    """
     from tools.render_map_svg import JS
-    assert "およそ あと" in body("surv-day10-nomemo")
+    h = body("surv-day10-nomemo")
+    assert "知ってから3か月" in h
+    assert "およそ あと" not in svg_part(h), "駅の上で残り日数を言っている"
+    assert "(d.assumed?'およそ ':'')" in JS and "'あと '" in JS
     assert "この3か月は、ほんとうは「自分が相続人になったと知った日」から始まります" in JS
     assert "相続人ごとに、別々に進みます" in JS
 
@@ -269,8 +278,10 @@ def test_renunciation_is_not_a_cause_for_representation():
     """放棄は代襲の原因ではない。伝える相手を間違えると、誰も救われない。"""
     import json
     d = json.loads((ROOT / "data/nodes/nodes_survivor.json").read_text(encoding="utf-8"))
-    n = next(x for x in d["nodes"] if x["id"] == "SURV_RENOUNCE_TELL_NEXT")
-    assert "放棄は代襲の原因ではない" in n["caution"]["note"]
+    # 「次順位への通知」駅を削除したので、この注意は「承認か放棄か」の放棄の道に引き継いだ
+    n = next(x for x in d["nodes"] if x["id"] == "SURV_DECIDE_ACCEPT_OR_RENOUNCE")
+    b = next(p for p in n["branches"]["paths"] if p["key"] == "B")
+    assert "放棄は代襲の原因ではない" in b["aside"]
 
 
 def test_extension_is_not_granted_just_by_asking():

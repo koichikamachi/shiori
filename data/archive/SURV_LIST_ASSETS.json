@@ -1,0 +1,233 @@
+{
+  "node_id": "SURV_LIST_ASSETS",
+  "archived_at": "2026-09-25T23:10:11+09:00",
+  "search_route": "Gemini × Google 検索",
+  "result": {
+    "action": "UNCHANGED",
+    "reason": "一次資料（.go.jp）に基づく自動照合結果。判定: UNCHANGED（確信度: HIGH）",
+    "summary": "他市の土地や建物は法務局の新しい制度（所有不動産記録証明制度）で探せるようになったけれど、未登記建物までは載ってこないらしい。固定資産税の課税明細書や現地の家屋台帳も合わせて確認しないと、大事な建物を見落としたままになってしまうだろうか。",
+    "details": {
+      "check_id": "SURV_LIST_ASSETS#1",
+      "node_id": "SURV_LIST_ASSETS",
+      "claim": "財産と負債の一覧を作る",
+      "verdict": "UNCHANGED",
+      "confidence": "HIGH",
+      "checked_at": "2026-09-25",
+      "evidence": [
+        {
+          "url": "https://www.moj.go.jp/MINJI/minji05_00740.html",
+          "publisher": "法務省",
+          "page_date": null,
+          "quote": "令和６年４月１日からの相続登記の義務化に伴い、相続人において被相続人名義の不動産を把握しやすくすることで、相続登記の申請に当たっての当事者の手続的負担を軽減するとともに登記漏れを防止する観点から、登記官において、特定の被相続人が所有権の登記名義人として記録されている不動産について一覧的にリスト化して証明書として交付する制度のことです。",
+          "quote_verified": true
+        },
+        {
+          "url": "https://www.moj.go.jp/MINJI/minji05_00740.html",
+          "publisher": "法務省",
+          "page_date": null,
+          "quote": "検索対象となる不動産は所有権の登記がされている不動産に限られ、土地や建物の表示に関する登記のみの不動産は検索対象となりません。",
+          "quote_verified": true
+        }
+      ],
+      "proposed_patch": null,
+      "risk_if_wrong": "他市の土地や建物は法務局の新しい制度（所有不動産記録証明制度）で探せるようになったけれど、未登記建物までは載ってこないらしい。固定資産税の課税明細書や現地の家屋台帳も合わせて確認しないと、大事な建物を見落としたままになってしまうだろうか。",
+      "escalation": "まずは法務局で全国の登記物件が調べられるか確かめてみよう。その上で、未登記建物がありそうな地域の役所（資産税課）に、未登記家屋の調べ方を一度尋ねてみよう。",
+      "detected_constraints": null,
+      "detected_ambiguities": [],
+      "early_warnings": [
+        "✓ 『moj.go.jp』を選定"
+      ],
+      "rejected": [],
+      "human_review_required": true
+    },
+    "detected_ambiguities": [],
+    "early_warnings": [
+      "✓ 『moj.go.jp』を選定"
+    ],
+    "search_route": "Gemini × Google 検索",
+    "sources_found": 5,
+    "pages_read": 3
+  },
+  "logs": [
+    {
+      "timestamp": "2026-09-25T23:09:12.744157",
+      "role": "System",
+      "action": "✓ 検証開始",
+      "detail": "check_id=SURV_LIST_ASSETS#1"
+    },
+    {
+      "timestamp": "2026-09-25T23:09:18.647784",
+      "role": "Explorer",
+      "action": "🧭 検索クエリを生成",
+      "detail": "相続 不動産 調査"
+    },
+    {
+      "timestamp": "2026-09-25T23:09:18.647850",
+      "role": "Explorer",
+      "action": "🔍 Gemini × Google 検索で公的ドメイン（go.jp / lg.jp）を探索中...",
+      "detail": ""
+    },
+    {
+      "timestamp": "2026-09-25T23:09:39.731461",
+      "role": "Explorer",
+      "action": "🌐 www.moj.go.jp",
+      "detail": "moj.go.jp"
+    },
+    {
+      "timestamp": "2026-09-25T23:09:39.731567",
+      "role": "Explorer",
+      "action": "🌐 www.moj.go.jp",
+      "detail": "moj.go.jp"
+    },
+    {
+      "timestamp": "2026-09-25T23:09:39.731600",
+      "role": "Explorer",
+      "action": "🌐 www.moj.go.jp",
+      "detail": "moj.go.jp"
+    },
+    {
+      "timestamp": "2026-09-25T23:09:39.731626",
+      "role": "Explorer",
+      "action": "🌐 www.tax.metro.tokyo.lg.jp",
+      "detail": "tokyo.lg.jp"
+    },
+    {
+      "timestamp": "2026-09-25T23:09:39.731649",
+      "role": "Explorer",
+      "action": "🌐 www.city.kagoshima.lg.jp",
+      "detail": "kagoshima.lg.jp"
+    },
+    {
+      "timestamp": "2026-09-25T23:09:39.731694",
+      "role": "Explorer",
+      "action": "✓ 探索完了",
+      "detail": "公的ページ 5 件（経路: Gemini × Google 検索）"
+    },
+    {
+      "timestamp": "2026-09-25T23:09:39.731708",
+      "role": "Evaluator",
+      "action": "⚖️ 候補を一件ずつ評価し、一次証憑を選定中...",
+      "detail": ""
+    },
+    {
+      "timestamp": "2026-09-25T23:09:43.526111",
+      "role": "Evaluator",
+      "action": "✓ 一次資料（官報・公式ページ） — www.moj.go.jp",
+      "detail": "moj.go.jp"
+    },
+    {
+      "timestamp": "2026-09-25T23:09:48.168412",
+      "role": "Evaluator",
+      "action": "✓ 一次資料（官報・公式ページ） — www.moj.go.jp",
+      "detail": "moj.go.jp"
+    },
+    {
+      "timestamp": "2026-09-25T23:09:51.484627",
+      "role": "Evaluator",
+      "action": "✓ 一次資料（官報・公式ページ） — www.moj.go.jp",
+      "detail": "moj.go.jp"
+    },
+    {
+      "timestamp": "2026-09-25T23:09:55.185297",
+      "role": "Evaluator",
+      "action": "✓ 一次資料（官報・公式ページ） — www.tax.metro.tokyo.lg.jp",
+      "detail": "tokyo.lg.jp"
+    },
+    {
+      "timestamp": "2026-09-25T23:09:58.336058",
+      "role": "Evaluator",
+      "action": "✓ 一次資料（官報・公式ページ） — www.city.kagoshima.lg.jp",
+      "detail": "kagoshima.lg.jp"
+    },
+    {
+      "timestamp": "2026-09-25T23:09:58.336201",
+      "role": "Evaluator",
+      "action": "📌 一次証憑として選定",
+      "detail": "https://www.moj.go.jp/MINJI/minji05_00740.html"
+    },
+    {
+      "timestamp": "2026-09-25T23:09:58.336247",
+      "role": "Evaluator",
+      "action": "✓ 曖昧さの兆候は見つかりませんでした",
+      "detail": ""
+    },
+    {
+      "timestamp": "2026-09-25T23:09:58.336629",
+      "role": "Disruptor",
+      "action": "🏘️ 自治体のページが混じっています（国の制度の解説として参考扱い）",
+      "detail": "www.city.kagoshima.lg.jp, www.tax.metro.tokyo.lg.jp"
+    },
+    {
+      "timestamp": "2026-09-25T23:09:58.336649",
+      "role": "Reader",
+      "action": "📖 公的ページの本文を取得中...",
+      "detail": ""
+    },
+    {
+      "timestamp": "2026-09-25T23:09:58.527468",
+      "role": "Reader",
+      "action": "📄 本文を取得（6,569 字）",
+      "detail": "https://www.moj.go.jp/MINJI/minji05_00740.html"
+    },
+    {
+      "timestamp": "2026-09-25T23:09:58.597027",
+      "role": "Reader",
+      "action": "📄 本文を取得（5,982 字）",
+      "detail": "https://www.moj.go.jp/MINJI/minji05_00599.html"
+    },
+    {
+      "timestamp": "2026-09-25T23:09:58.650968",
+      "role": "Reader",
+      "action": "📄 本文を取得（1,528 字）",
+      "detail": "https://www.moj.go.jp/KANBOU/KOHOSHI/no91/3.html"
+    },
+    {
+      "timestamp": "2026-09-25T23:09:58.651045",
+      "role": "Reader",
+      "action": "✓ ページ取得完了",
+      "detail": "3 ページ"
+    },
+    {
+      "timestamp": "2026-09-25T23:09:58.651073",
+      "role": "Comparator",
+      "action": "🔄 Comparator: ノードと公的情報を照合中...",
+      "detail": ""
+    },
+    {
+      "timestamp": "2026-09-25T23:09:58.651090",
+      "role": "Disruptor",
+      "action": "🤔 Disruptor: 根拠データを懐疑的に検証中...",
+      "detail": ""
+    },
+    {
+      "timestamp": "2026-09-25T23:09:58.651105",
+      "role": "Writer",
+      "action": "✍️ Writer: CheckResult を生成中...",
+      "detail": ""
+    },
+    {
+      "timestamp": "2026-09-25T23:09:58.660189",
+      "role": "Writer",
+      "action": "🖋️ 文体ルールを読み込み",
+      "detail": "writer_style.md（2,342 字）"
+    },
+    {
+      "timestamp": "2026-09-25T23:10:11.634769",
+      "role": "Writer",
+      "action": "✓ 判定完了: UNCHANGED",
+      "detail": "確信度=HIGH"
+    },
+    {
+      "timestamp": "2026-09-25T23:10:11.634833",
+      "role": "Guards",
+      "action": "🛡️ セキュリティ関門によるバリデーション中...",
+      "detail": ""
+    },
+    {
+      "timestamp": "2026-09-25T23:10:11.641917",
+      "role": "System",
+      "action": "✓ 検証完了",
+      "detail": "verdict=UNCHANGED"
+    }
+  ]
+}

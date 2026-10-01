@@ -122,13 +122,20 @@ def test_rank_shift_warning_does_not_crowd_day_one(engine):
     assert [w["node_id"] for w in r["irreversible_warnings"]] == ["SURV_WARN_DEPOSIT"]
 
 
-def test_telling_the_next_person_appears_after_the_renounce_decision(engine):
-    """裁判所は次順位の人に通知しない。だから自分から伝える道が要る。"""
-    nid = "SURV_RENOUNCE_TELL_NEXT"
-    before = run(engine, done={"SURV_DEATH_NOTICE"}, days_since_death=30)
-    after = run(engine, done=FAR_ALONG, days_since_death=100)
-    assert before["statuses"][nid] == "NOT_READY"
-    assert after["statuses"][nid] == "READY"
+def test_no_station_implies_a_duty_to_notify_the_next_heir(engine):
+    """
+    放棄した人に、次順位の人へ知らせる法律上の義務はない（2026-09-27 方針）。
+    義務のように見える駅は置かず、「承認か放棄か」の参考情報（任意の配慮）として添える。
+    次順位の側には「通知は来ない。知った日から3か月」を明記する。
+    """
+    import json
+    r = run(engine, done=FAR_ALONG, days_since_death=100)
+    assert "SURV_RENOUNCE_TELL_NEXT" not in r["statuses"]
+    d = {n["id"]: n for n in json.loads((ROOT / "data/nodes/nodes_survivor.json").read_text(encoding="utf-8"))["nodes"]}
+    fn = " ".join(d["SURV_DECIDE_ACCEPT_OR_RENOUNCE"]["branches"]["footnotes"])
+    assert "法律上の通知義務はありません" in fn and "任意" in fn
+    note = d["SURV_RANK_SHIFT_NOTICE"]["important_note"]
+    assert "通知が来る法的な仕組みはありません" in note and "民法第915条第1項" in note
 
 
 # ---- 本人の側。子の有無で、打てる手がまったく違う ----

@@ -138,7 +138,7 @@ def test_the_audit_drawer_is_served_with_its_button():
                    'id="drawer-node-title"',
                    'id="drawer-body"',
                    'id="btn-run-check"',
-                   "Gemini で一次資料（.go.jp）を確認する",
+                   "詳しく調べてみます",
                    'id="agent-result-area"'):
         assert needle in html, f"ドロワーの {needle} が欠けている"
 
@@ -189,15 +189,17 @@ def test_the_drawer_carries_the_audit_labels_and_the_process_bar():
     """
     script = _drawer_script(client.get("/map/surv-day1").text)
 
-    assert "公的資料との照合結果" in script
+    assert "【公的文献資料を見た結果はこうです】" in script
     for badge, note in (
         ("【要改訂】制度変更を検知", "公的発表において制度の変更が確認されたため、案内の見直しが必要です。"),
-        ("【整合】公式発表と一致", "現在の案内内容は、指定された公式ページ（一次資料）の記載と合致しています。"),
-        ("【要精査】判断保留・一部未記載", "論点全体の確定には専門家による確認が必要です。"),
-        ("【未検知】該当記述なし", "該当する制度の明確な記述を確認できませんでした。"),
+        ("【個別の確認が必要な項目です】", "各家庭の事情によって対応が分かれることがあります。"),
+        ("【このことにずばり回答するような記述は見出せませんでした】", "該当する制度の明確な記述を確認できませんでした。"),
     ):
         assert badge in script, badge
         assert note in script, note
+
+    # 整合（UNCHANGED）は、資料に当たれたことだけを言う（説明文は出さない。2026-09-24 仕様）
+    assert "【資料に当たることができました】" in script
 
     # 確度は機械の値で持ち、画面には日本語で出す
     assert "照合確度" in script
@@ -238,15 +240,15 @@ def test_the_internal_control_panel_reads_as_a_quality_report():
     """
     script = _drawer_script(client.get("/map/surv-day1").text)
 
-    assert "AIの安全性と品質の検証（内部統制）" in script
+    assert "【AIの安全性と品質の検証は内部的に確認しています】" in script
     for title in ("公式発表への参照限定", "公式原文との完全一致", "更新範囲の厳格な制限",
-                  "専門家承認の必須化", "専門家（人間）による最終確認", "手引きの更新要否"):
+                  "専門家承認の必須化", "【人の確認が前提】", "手引きの更新要否"):
         assert title in script, title
     for note in ("不確かな民間情報を排除しています",
                  "AIによる勝手な要約や歪曲を防ぐため",
                  "あらかじめ定められた項目以外をAIが勝手に改ざんできないよう制限しています。",
                  "AIが自らを「検証済み」へ格上げすることを禁止しています。",
-                 "専門家が目視で確認・承認するまで更新をブロックします。",
+                 "AIの提案だけで手引きが書き換わることはありません。人が目視で確認してから反映します。",
                  "修正案の作成は不要と判断しました。"):
         assert note in script, note
 

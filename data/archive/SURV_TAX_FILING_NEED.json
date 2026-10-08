@@ -1,37 +1,30 @@
 {
   "node_id": "SURV_TAX_FILING_NEED",
-  "archived_at": "2026-09-26T19:27:27+09:00",
+  "archived_at": "2026-10-02T08:55:24+09:00",
   "search_route": "Gemini × Google 検索",
   "result": {
     "action": "UNCHANGED",
-    "reason": "一次資料（.go.jp）に基づく自動照合結果。判定: UNCHANGED（確信度: HIGH）",
-    "summary": "特例を使って税金が0円になるなら申告も要らないと思い込んでいると、後から申告漏れを指摘されてしまうかもしれない（配偶者の税額軽減）。特例を使うこと自体が申告の条件になっている場合もあるので、適用前の金額で判断するルールを押さえておけば困ることはなさそうだ。",
+    "reason": "一次資料（.go.jp）に基づく自動照合結果。判定: UNCHANGED（確信度: MEDIUM）",
+    "summary": "特例を使えば税額がゼロになるからと申告しないでいると、特例そのものが使えなくなってしまうかもしれない。特例を使う前の金額で基礎控除を超えるか確かめておけば、申告漏れで困ることはなさそうだ。",
     "details": {
       "check_id": "SURV_TAX_FILING_NEED#1",
       "node_id": "SURV_TAX_FILING_NEED",
       "claim": "相続税の申告が要るかどうかを判定する　根拠（下書き）: 相続税法第15条（基礎控除）、第27条（申告）",
       "verdict": "UNCHANGED",
-      "confidence": "HIGH",
-      "checked_at": "2026-09-26",
+      "confidence": "MEDIUM",
+      "checked_at": "2026-10-02",
       "evidence": [
-        {
-          "url": "https://www.keisan.nta.go.jp/oshirase/sozoku/yohihantei/yohihantei/haigusha.html",
-          "publisher": "国税庁",
-          "page_date": null,
-          "quote": "配偶者の税額軽減の適用を受けることによって納付すべき相続税額が「０」となる人であっても、配偶者の税額軽減の適用を受けるためには、相続税の申告書に配偶者の税額軽減の適用を受ける旨その他所定の事項を記載するとともに一定の書類を添付して提出する必要があります。",
-          "quote_verified": true
-        },
         {
           "url": "https://www.nta.go.jp/taxes/shiraberu/taxanswer/sozoku/4205.htm",
           "publisher": "国税庁",
-          "page_date": null,
+          "page_date": "2026-04-01",
           "quote": "財産の価額の合計額とは、租税特別措置法第69条の4（小規模宅地等についての相続税の課税価格の計算の特例）および租税特別措置法第69条の5（特定計画山林についての相続税の課税価格の計算の特例）等を適用しない場合における課税価格の合計額をいいます。",
           "quote_verified": true
         }
       ],
       "proposed_patch": null,
-      "risk_if_wrong": "特例を使って税金が0円になるなら申告も要らないと思い込んでいると、後から申告漏れを指摘されてしまうかもしれない（配偶者の税額軽減）。特例を使うこと自体が申告の条件になっている場合もあるので、適用前の金額で判断するルールを押さえておけば困ることはなさそうだ。",
-      "escalation": "うちの場合は特例を使わないと基礎控除を超えるのだろうか？ 必要な書類や申告書の書き方について、税務署の相談窓口や税理士に一度聞いてみよう。",
+      "risk_if_wrong": "特例を使えば税額がゼロになるからと申告しないでいると、特例そのものが使えなくなってしまうかもしれない。特例を使う前の金額で基礎控除を超えるか確かめておけば、申告漏れで困ることはなさそうだ。",
+      "escalation": "特例を適用して申告が必要になるかどうか、自分だけで判断していいのだろうか？ 税務署の窓口や税理士などの専門家に、特例適用の条件と申告の有無を一度尋ねてみよう。",
       "detected_constraints": null,
       "detected_ambiguities": [],
       "early_warnings": [
@@ -45,180 +38,174 @@
       "✓ 『nta.go.jp』を選定"
     ],
     "search_route": "Gemini × Google 検索",
-    "sources_found": 5,
-    "pages_read": 3
+    "sources_found": 4,
+    "pages_read": 2
   },
   "logs": [
     {
-      "timestamp": "2026-09-26T19:26:34.113255",
+      "timestamp": "2026-10-02T08:54:36.123343",
       "role": "System",
       "action": "✓ 検証開始",
       "detail": "check_id=SURV_TAX_FILING_NEED#1"
     },
     {
-      "timestamp": "2026-09-26T19:26:37.471703",
+      "timestamp": "2026-10-02T08:54:39.766471",
       "role": "Explorer",
       "action": "🧭 検索クエリを生成",
       "detail": "相続税 特例 申告義務"
     },
     {
-      "timestamp": "2026-09-26T19:26:37.471758",
+      "timestamp": "2026-10-02T08:54:39.766580",
       "role": "Explorer",
       "action": "🔍 Gemini × Google 検索で公的ドメイン（go.jp / lg.jp）を探索中...",
       "detail": ""
     },
     {
-      "timestamp": "2026-09-26T19:26:54.815996",
+      "timestamp": "2026-10-02T08:54:54.455000",
       "role": "Explorer",
       "action": "🌐 www.nta.go.jp",
       "detail": "nta.go.jp"
     },
     {
-      "timestamp": "2026-09-26T19:26:54.816036",
+      "timestamp": "2026-10-02T08:54:54.455123",
       "role": "Explorer",
       "action": "🌐 www.nta.go.jp",
       "detail": "nta.go.jp"
     },
     {
-      "timestamp": "2026-09-26T19:26:54.816048",
-      "role": "Explorer",
-      "action": "🌐 www.keisan.nta.go.jp",
-      "detail": "nta.go.jp"
-    },
-    {
-      "timestamp": "2026-09-26T19:26:54.816061",
-      "role": "Explorer",
-      "action": "🌐 www.keisan.nta.go.jp",
-      "detail": "nta.go.jp"
-    },
-    {
-      "timestamp": "2026-09-26T19:26:54.816070",
+      "timestamp": "2026-10-02T08:54:54.455152",
       "role": "Explorer",
       "action": "🌐 www.nta.go.jp",
       "detail": "nta.go.jp"
     },
     {
-      "timestamp": "2026-09-26T19:26:54.816086",
+      "timestamp": "2026-10-02T08:54:54.455170",
+      "role": "Explorer",
+      "action": "🌐 www.nta.go.jp",
+      "detail": "nta.go.jp"
+    },
+    {
+      "timestamp": "2026-10-02T08:54:54.455212",
       "role": "Explorer",
       "action": "✓ 探索完了",
-      "detail": "公的ページ 5 件（経路: Gemini × Google 検索）"
+      "detail": "公的ページ 4 件（経路: Gemini × Google 検索）"
     },
     {
-      "timestamp": "2026-09-26T19:26:54.816092",
+      "timestamp": "2026-10-02T08:54:54.455225",
       "role": "Evaluator",
       "action": "⚖️ 候補を一件ずつ評価し、一次証憑を選定中...",
       "detail": ""
     },
     {
-      "timestamp": "2026-09-26T19:26:57.527579",
+      "timestamp": "2026-10-02T08:54:57.717536",
       "role": "Evaluator",
       "action": "✓ 一次資料（官報・公式ページ） — www.nta.go.jp",
       "detail": "nta.go.jp"
     },
     {
-      "timestamp": "2026-09-26T19:27:01.316094",
+      "timestamp": "2026-10-02T08:55:00.925793",
       "role": "Evaluator",
       "action": "✓ 一次資料（官報・公式ページ） — www.nta.go.jp",
       "detail": "nta.go.jp"
     },
     {
-      "timestamp": "2026-09-26T19:27:04.774689",
+      "timestamp": "2026-10-02T08:55:07.607374",
       "role": "Evaluator",
-      "action": "✓ 一次資料（官報・公式ページ） — www.keisan.nta.go.jp",
+      "action": "◎ 権威ある解釈（省庁通知・公式ガイド） — www.nta.go.jp",
       "detail": "nta.go.jp"
     },
     {
-      "timestamp": "2026-09-26T19:27:08.074764",
-      "role": "Evaluator",
-      "action": "✓ 一次資料（官報・公式ページ） — www.keisan.nta.go.jp",
-      "detail": "nta.go.jp"
-    },
-    {
-      "timestamp": "2026-09-26T19:27:11.876014",
+      "timestamp": "2026-10-02T08:55:11.476923",
       "role": "Evaluator",
       "action": "✓ 一次資料（官報・公式ページ） — www.nta.go.jp",
       "detail": "nta.go.jp"
     },
     {
-      "timestamp": "2026-09-26T19:27:11.876077",
+      "timestamp": "2026-10-02T08:55:11.477096",
       "role": "Evaluator",
       "action": "📌 一次証憑として選定",
-      "detail": "https://www.nta.go.jp/taxes/shiraberu/taxanswer/sozoku/4205.htm"
+      "detail": "https://www.nta.go.jp/taxes/shiraberu/taxanswer/sozoku/4124.htm"
     },
     {
-      "timestamp": "2026-09-26T19:27:11.876086",
+      "timestamp": "2026-10-02T08:55:11.477124",
       "role": "Evaluator",
       "action": "✓ 曖昧さの兆候は見つかりませんでした",
       "detail": ""
     },
     {
-      "timestamp": "2026-09-26T19:27:11.876106",
+      "timestamp": "2026-10-02T08:55:11.477182",
       "role": "Reader",
       "action": "📖 公的ページの本文を取得中...",
       "detail": ""
     },
     {
-      "timestamp": "2026-09-26T19:27:11.941460",
-      "role": "Reader",
-      "action": "📄 本文を取得（3,607 字）",
-      "detail": "https://www.nta.go.jp/taxes/shiraberu/taxanswer/sozoku/4205.htm"
-    },
-    {
-      "timestamp": "2026-09-26T19:27:12.020528",
+      "timestamp": "2026-10-02T08:55:11.774352",
       "role": "Reader",
       "action": "📄 本文を取得（8,977 字）",
       "detail": "https://www.nta.go.jp/taxes/shiraberu/taxanswer/sozoku/4124.htm"
     },
     {
-      "timestamp": "2026-09-26T19:27:12.057410",
+      "timestamp": "2026-10-02T08:55:11.912485",
       "role": "Reader",
-      "action": "📄 本文を取得（773 字）",
-      "detail": "https://www.keisan.nta.go.jp/oshirase/sozoku/yohihantei/yohihantei/haigusha.html"
+      "action": "📄 本文を取得（3,607 字）",
+      "detail": "https://www.nta.go.jp/taxes/shiraberu/taxanswer/sozoku/4205.htm"
     },
     {
-      "timestamp": "2026-09-26T19:27:12.057450",
+      "timestamp": "2026-10-02T08:55:11.912602",
+      "role": "Reader",
+      "action": "⏭️ PDF は読み取り対象外のため飛ばします",
+      "detail": "https://www.nta.go.jp/publication/pamph/sozoku/shikata-sozoku2026/pdf/shikata03.pdf"
+    },
+    {
+      "timestamp": "2026-10-02T08:55:11.912629",
+      "role": "Reader",
+      "action": "⏭️ PDF は読み取り対象外のため飛ばします",
+      "detail": "https://www.nta.go.jp/taxes/shiraberu/sozoku-tokushu/sozoku-shinkokukisairei30.pdf"
+    },
+    {
+      "timestamp": "2026-10-02T08:55:11.912662",
       "role": "Reader",
       "action": "✓ ページ取得完了",
-      "detail": "3 ページ"
+      "detail": "2 ページ"
     },
     {
-      "timestamp": "2026-09-26T19:27:12.057457",
+      "timestamp": "2026-10-02T08:55:11.912683",
       "role": "Comparator",
       "action": "🔄 Comparator: ノードと公的情報を照合中...",
       "detail": ""
     },
     {
-      "timestamp": "2026-09-26T19:27:12.057462",
+      "timestamp": "2026-10-02T08:55:11.912700",
       "role": "Disruptor",
       "action": "🤔 Disruptor: 根拠データを懐疑的に検証中...",
       "detail": ""
     },
     {
-      "timestamp": "2026-09-26T19:27:12.057465",
+      "timestamp": "2026-10-02T08:55:11.912715",
       "role": "Writer",
       "action": "✍️ Writer: CheckResult を生成中...",
       "detail": ""
     },
     {
-      "timestamp": "2026-09-26T19:27:12.058414",
+      "timestamp": "2026-10-02T08:55:11.915121",
       "role": "Writer",
       "action": "🖋️ 文体ルールを読み込み",
       "detail": "writer_style.md（2,342 字）"
     },
     {
-      "timestamp": "2026-09-26T19:27:27.431248",
+      "timestamp": "2026-10-02T08:55:24.444563",
       "role": "Writer",
       "action": "✓ 判定完了: UNCHANGED",
       "detail": "確信度=HIGH"
     },
     {
-      "timestamp": "2026-09-26T19:27:27.431310",
+      "timestamp": "2026-10-02T08:55:24.444590",
       "role": "Guards",
       "action": "🛡️ セキュリティ関門によるバリデーション中...",
       "detail": ""
     },
     {
-      "timestamp": "2026-09-26T19:27:27.433850",
+      "timestamp": "2026-10-02T08:55:24.449580",
       "role": "System",
       "action": "✓ 検証完了",
       "detail": "verdict=UNCHANGED"

@@ -1264,7 +1264,7 @@ async function runAgentCheck() {
       </div>`;
     const audit = `
       <details id="audit-details" style="margin-top:14px; border:1px solid #e2dcce; border-radius:8px; padding:8px 12px; background:#faf8f5;">
-        <summary style="font-size:13px; color:#4a5568; cursor:pointer;">▼ 照合プロセスの詳細・監査ログを見る（検証用）</summary>
+        <summary style="font-size:13px; color:#4a5568; cursor:pointer;">照合プロセスの詳細・監査ログを見る（検証用）</summary>
         <div id="agent-log-slot" style="margin-top:10px;"></div>
         ${isDry ? '' : renderProcess(d, result.action)}
         ${isDry ? '' : renderGates(d, result.action)}

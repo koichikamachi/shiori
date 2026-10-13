@@ -782,7 +782,7 @@ def page(key, today, home=None):
             f'<span class="sh-bt"><span class="sh-bn">しおり</span><span class="sh-bs">SHIORI NAVIGATOR</span></span></a>'
             f'<a class="back" href="{home}">← 表紙に戻る</a>'
             f'</div></header>') if home else ""
-    return (f'<!doctype html><html lang="ja"><head><meta charset="utf-8">'
+    return (f'<!doctype html><html lang="ja"><head><meta charset="utf-8"><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2712%27 fill=%27%231E3A5F%27/%3E%3Ctext x=%2732%27 y=%2749%27 text-anchor=%27middle%27 font-size=%2746%27 font-weight=%27700%27 fill=%27%23fff%27 font-family=%27serif%27%3E%E6%A0%9E%3C/text%3E%3C/svg%3E">'
             f'<meta name="viewport" content="width=device-width,initial-scale=1">'
             f'<title>しおり／地図 — {html.escape(sc["title"])}</title>'
             f'<style>{CSS}'

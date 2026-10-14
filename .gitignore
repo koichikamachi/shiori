@@ -31,3 +31,6 @@ $RECYCLE.BIN/
 
 # 刷るためのPDFは、いつでも作り直せるので追跡しない
 docs/print/*.pdf
+
+# 研究・事業化・応募素材の置き場（開発と運用には使わない。GitHub にも Cloud Run にも上げない）
+ShioriCommercialization/

@@ -14,3 +14,4 @@ _ref/
 state.json
 # Writer の文体ルールはイメージに含める（*.md の除外から外す）
 !src/agent/prompts/*.md
+ShioriCommercialization/
